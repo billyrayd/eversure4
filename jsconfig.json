@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "*": ["src/*"],
+      "assets": ["src/assets"],
+      "views": ["src/views"],
+      "helpers": ["src/helpers"],
+      "actions": ["src/actions"],
+      "reducers": ["src/reducers"],
+      "constants": ["src/constants"]
+    }
+  }
+}

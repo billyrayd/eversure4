@@ -1,0 +1,118 @@
+$esBlue: #091c7b;
+$black: #000000;
+
+button,
+button:active,
+button:focus,
+button:active:focus,
+{
+	border: none !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
+
+.sidebar{
+	position: fixed;
+  background-color: #fff;
+  box-shadow: 1px 1px 7px #ddd;
+  height: 100%;
+  width: 200px;
+  z-index: 100;
+  ul{
+  	padding-left: 0;
+  	li{
+  		list-style-type: none;
+  	}
+  	li.logo-li{
+  		img.logo{
+		    width: 170px;
+		    margin-left: 15px;
+		    margin-top: 8px;
+  		}
+  	}
+  	li.nav-link{
+  		padding: 1rem 1rem !important;
+  		a{
+  			color: #222222;
+  			font-size: 15px;
+  			font-weight: bold;
+  			text-transform: uppercase;
+  			.link-icon{
+  				font-size: 20px;
+  				margin-right: 10px;
+  				position: relative;
+  				top: 2px;
+  			}
+  		}
+  		a:hover{
+  			text-decoration: none;
+  		}
+  	}
+  	li.nav-link.active,
+  	li.nav-link:hover,
+  	{
+  		background-color: #e8edff;
+  		a{
+  			color: $esBlue;
+  		}
+  	}
+  	li.app-version{
+  		position: absolute;
+	    bottom: 0;
+	    padding: 15px;
+	    font-size: 13px;
+  	}
+  }
+  .system-type{
+  	margin-bottom: 20px;
+  	margin-top: 25px;
+  	.dropdown-toggle{
+  		font-size: 14px;
+	    border-radius: 17px;
+	    margin-left: 10px;
+	    padding: 0 20px 3px 20px;
+  		background-color: $esBlue !important;
+	    width: 180px;
+  	}
+  	.dropdown-toggle:after{
+  		left: 4px;
+  		position: relative;
+  		top: 4px;
+  	}
+  	.dropdown-menu{
+  		left: 4px !important;
+  		.dropdown-item{
+  			font-size: 14px;
+  		}
+  		.dropdown-item:active{
+  			background-color: $esBlue;
+  		}
+  	}
+  }
+}
+.main-nav{
+	.main-link{
+		color: $esBlue;
+		font-weight: bolder;
+	}
+	.logout{
+		cursor: pointer;
+	}
+	.user-text{
+		margin-right: 20px;
+	}
+}
+.content{
+	background-color: #ececec;
+	padding-left: 200px;
+	.test{
+		background-color: green;
+		margin: 10px;
+		height: 500px;
+	}
+}
+
+/* -- reusable styles -- */
+.black{
+	color: $black;
+}
