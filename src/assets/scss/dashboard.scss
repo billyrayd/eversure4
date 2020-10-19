@@ -1,5 +1,18 @@
 $esBlue: #091c7b;
+$esLightBlue: #e8edff;
 $black: #000000;
+$white: #ffffff;
+
+@mixin esThemeBlue(){
+	color: $esBlue;
+}
+@mixin marginB($value){
+  margin-bottom: $value;
+}
+@mixin subSideBarActive(){
+  background-color: $white;
+  border: 1px solid $esBlue;
+}
 
 button,
 button:active,
@@ -51,9 +64,9 @@ button:active:focus,
   	li.nav-link.active,
   	li.nav-link:hover,
   	{
-  		background-color: #e8edff;
+  		background-color: $esLightBlue;
   		a{
-  			color: $esBlue;
+  			@include esThemeBlue();
   		}
   	}
   	li.app-version{
@@ -92,7 +105,7 @@ button:active:focus,
 }
 .main-nav{
 	.main-link{
-		color: $esBlue;
+		@include esThemeBlue();
 		font-weight: bolder;
 	}
 	.logout{
@@ -111,8 +124,99 @@ button:active:focus,
 		height: 500px;
 	}
 }
+.sub-sidebar{
+  background-color: #eee;
+  float: left;
+  height: 100%;
+  padding: 10px;
+  position: absolute;
+  width: 180px;
+  .ss-add-btn{
+    color: $white;
+  }
+  ul{
+    padding-left: 0;
+    li{
+      list-style-type: none;
+    }
+    li.add-btn-wrap{
+      @include  marginB(20px);
+    }
+    li.page-title{
+      @include  marginB(20px);
+      span{
+        font-size: 30px;
+        font-weight: bold;
+      }
+    }
+    li.nav-link-header{
+      font-size: 16px;
+      font-weight: bold;
+      padding: 10px 1px;
+      pointer-events: none;
+      text-transform: uppercase;
+      a{
+        color: $black;
+      }
+    }
+    li.divider{
+      border-bottom: 1px solid #ababab;
+      margin: 20px 15px 15px;
+    }
+    li.nav-link{
+      background-color: #dcdcdc;
+      border: 1px solid #dcdcdc;
+      border-radius: 3px;
+      cursor: pointer;
+      padding: 1px 15px;
+      margin-bottom: 13px;
+      a{
+        color: #555;
+        font-weight: 600;
+      }
+      a:hover{
+        text-decoration: none;
+      }
+    }
+    li.nav-link.active,
+    li.nav-link:hover
+    {
+      @include subSideBarActive();
+    }
+  }
+}
+.with-subsidebar{
+  padding-left: 235px;
+}
 
-/* -- reusable styles -- */
+/* -- reusable/global styles -- */
 .black{
 	color: $black;
+}
+.esBlue{
+	@include esThemeBlue();
+}
+/*
+*
+scrollbar appearance
+*
+*/
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }

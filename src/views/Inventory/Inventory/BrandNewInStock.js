@@ -13,8 +13,9 @@ import {
 
 import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
+import InventorySubSidebar from 'components/SubSidebars/InventorySubSidebar';
 
-class LandingPage extends React.PureComponent {
+class BrandNewInStock extends React.PureComponent {
 	constructor(props) {
 		super(props);
 	}
@@ -22,13 +23,13 @@ class LandingPage extends React.PureComponent {
 	render() {
 		return (
 			<div>
-				<InventorySidebar component="Landing" />
+				<InventorySidebar component="Inventory" />
 				<div className="content">
 						<NavBar data={this.props}/>
-						<Container fluid>
+						<InventorySubSidebar subpage="/brand_new_in_stock/"/>
+						<Container className="with-subsidebar" fluid>
 							<Row>
 								<Col>
-									<h1>Inventory Landing Page</h1>
 								</Col>
 							</Row>
 						</Container>
@@ -47,4 +48,4 @@ function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, DashboardActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LandingPage);
+export default connect(mapStateToProps, mapDispatchToProps)(BrandNewInStock);

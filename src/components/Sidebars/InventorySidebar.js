@@ -26,12 +26,12 @@ export default class InventorySidebar extends React.PureComponent {
 	render() {
 		let { isOpen } = this.state;
 		let links = [
-			{ name: 'Dashboard', path: '/dashboard/', icon: 'home' },
-			{ name: 'Inventory', path: '/inventory/', icon: 'list' },
-			{ name: 'Payments', path: '/payments/', icon: 'money-bill' },
-			{ name: 'Reports', path: '/reports/', icon: 'chart-line' },
-			{ name: 'Users', path: '/users/', icon: 'users' },
-			{ name: 'Settings', path: '/settings/', icon: 'cogs' },
+			{ name: 'Dashboard', path: '/dashboard/', icon: 'home', visible: true },
+			{ name: 'Inventory', path: '/brand_new_in_stock/', icon: 'list', visible: true },
+			{ name: 'Payments', path: '/payments/', icon: 'money-bill', visible: true },
+			{ name: 'Reports', path: '/reports/', icon: 'chart-line', visible: true },
+			{ name: 'Users', path: '/users/', icon: 'users', visible: true },
+			{ name: 'Settings', path: '/settings/', icon: 'cogs', visible: true },
 		]
 		return (
 			<div className="sidebar">
@@ -47,17 +47,17 @@ export default class InventorySidebar extends React.PureComponent {
 				        Inventory System
 				      </DropdownToggle>
 				      <DropdownMenu>
-				        <DropdownItem>Old Records System</DropdownItem>
-				        <DropdownItem divider />
 				        <DropdownItem>Accounting System</DropdownItem>
+				        <DropdownItem divider />
+				        <DropdownItem>Old Records System</DropdownItem>
 				      </DropdownMenu>
 				    </ButtonDropdown>
 					</li>
 					{
 						links.map((link, key) => {
-							return <li key={key} className={this.props.component == link.name ? "nav-link active" : "nav-link"}>
+							return link.visible ? <li key={key} className={this.props.component == link.name ? "nav-link active" : "nav-link"}>
 											<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} />{link.name}</Link>
-										</li>
+										</li> : null
 						})
 					}
 					<li className="app-version">

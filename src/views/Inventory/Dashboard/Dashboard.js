@@ -12,7 +12,7 @@ import {
 } from 'reactstrap';
 
 import NavBar from 'components/Navbars/NavBar';
-import InventorySidebar from 'components/Sidebars/Inventory';
+import InventorySidebar from 'components/Sidebars/InventorySidebar';
 
 class Dashboard extends React.PureComponent {
 	constructor(props) {
@@ -36,6 +36,11 @@ class Dashboard extends React.PureComponent {
 							<Row>
 								<Col>
 									<h1>Dashboard</h1>
+									{
+										data.map((v, i) => {
+											return <div key={i} className="test">{v.letter}</div>
+										})
+									}
 								</Col>
 							</Row>
 						</Container>

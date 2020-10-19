@@ -2,8 +2,9 @@
 import Login from "views/Login";
 
 /* Inventory */
-import Inventory from "views/Inventory/LandingPage";
-import Dashboard from "views/Inventory/Dashboard";
+import LandingPage from "views/Inventory/LandingPage";
+import Dashboard from "views/Inventory/Dashboard/Dashboard";
+import BrandNewInStock from "views/Inventory/Inventory/BrandNewInStock";
 import Elements from "views/Inventory/Elements";
 
 var unauthenticated = [
@@ -18,13 +19,18 @@ var unauthenticated = [
 var authenticated = [
   {
     path: "/",
-    name: "Inventory",
-    component: Inventory,
+    name: "LandingPage",
+    component: LandingPage,
   },
   {
-    path: "/Dashboard/",
+    path: "/dashboard/",
     name: "Dashboard",
     component: Dashboard,
+  },
+  {
+    path: "/brand_new_in_stock/",
+    name: "In Stock",
+    component: BrandNewInStock,
   },
   {
     path: "/elements/",
