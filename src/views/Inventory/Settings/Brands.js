@@ -19,12 +19,12 @@ import {
 
 import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
-import InventorySubSidebar from 'components/SubSidebars/InventorySubSidebar';
+import SettingsSubSidebar from 'components/SubSidebars/SettingsSubSidebar';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
 
-class BrandNewInStock extends React.PureComponent {
+class Brands extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -37,11 +37,15 @@ class BrandNewInStock extends React.PureComponent {
 	}
 
 	componentDidMount(){
-		$(".bn-in-stock-table").DataTable({
+		var mainTable = $(".users-table").DataTable({
 			"sDom": '<"bottom"<t>ip><"clear">',
 			initComplete: () => {
 			}
 		})
+
+		$('.dt-search').keyup(function () {
+      mainTable.search($(this).val()).draw();
+    });
 	}
 	toggleEdit = () => {
 		let { isOpenEdit } = this.state;
@@ -77,57 +81,36 @@ class BrandNewInStock extends React.PureComponent {
 		let { isOpenEdit, isOpenDelete, isOpenView, value } = this.state;
 		return (
 			<div>
-				<InventorySidebar component="Inventory" />
+				<InventorySidebar component="Settings" />
 				<div className="content">
 						<NavBar data={this.props}/>
-						<InventorySubSidebar subpage="/brand_new_in_stock/"/>
+						<SettingsSubSidebar subpage="/brands/"/>
 						<Container className="with-subsidebar" fluid>
 							<Row className="page-header">
 								<Col>
-									<h3>Units in Stock <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h3>
+									<h3>Motorcycle Brands List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h3>
 								</Col>
 							</Row>
-							<Row>
-								<Col>
-									<Col className="advanced-filter">
-										<h5>Advanced Filter</h5>
-										<Row>
-											<Col md="4"><Input placeholder="Select Date" onChange={(e) => this.handleChange(e)} value={value} /></Col>
-											<Col md="4"><Input placeholder="Enter Brand" /></Col>
-											<Col md="4"><Input placeholder="Enter Model" /></Col>
-										</Row>
-										<div className="space" />
-										<Row>
-											<Col md="4"><Input placeholder="Enter Engine Number" /></Col>
-											<Col md="4"><Input placeholder="Select Branch" /></Col>
-											<Col md="4"><Button className="es-main-btn" color="primary" block onClick={this.advancedFilter}>Apply Filter</Button> </Col>
-										</Row>
-									</Col>
-								</Col>
+							<Row className="one-input-search">
+									<Col md="4"><Input className="dt-search" placeholder="Search Brands" /></Col>
 							</Row>
 							<Row>
 								<br />
 							</Row>
 							<Row>
 								<Col>
-									<Table className="bn-in-stock-table">
+									<Table className="users-table">
 										<thead>
 											<tr>
-												<th>model</th>
-												<th>chassis no.</th>
-												<th>engine no.</th>
-												<th>branch</th>
-												<th>date received</th>
+												<th>no.</th>
+												<th>brand name</th>
 												<th>action</th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr>
-												<td>Fury</td>
-												<td>2334F3H324</td>
-												<td>654F23Q23P</td>
-												<td>silay</td>
-												<td>05/12/19</td>
+												<td>1</td>
+												<td>kawasaki</td>
 												<td>
 													<Button color="primary" size="sm" id="edit" >
 														<FontAwesomeIcon icon="edit"/>
@@ -137,34 +120,6 @@ class BrandNewInStock extends React.PureComponent {
 														<FontAwesomeIcon icon="trash" />
 														<Tooltip target="delete" placement="top" autohide={true} isOpen={isOpenDelete} toggle={this.toggleDelete}>Delete</Tooltip>
 													</Button>
-													<Button color="warning" size="sm" id="view">
-														<FontAwesomeIcon className="text-white" icon="eye" />
-														<Tooltip target="view" placement="top" autohide={true} isOpen={isOpenView} toggle={this.toggleView}>View</Tooltip>
-													</Button>
-												</td>
-											</tr>
-											<tr>
-												<td>Fury</td>
-												<td>2334F3H324</td>
-												<td>654F23Q23P</td>
-												<td>talisay</td>
-												<td>05/12/19</td>
-												<td>
-													<Button color="primary" size="sm"><FontAwesomeIcon icon="edit" /></Button>
-													<Button color="danger" size="sm"><FontAwesomeIcon icon="trash" /></Button>
-													<Button color="warning" size="sm"><FontAwesomeIcon className="text-white" icon="eye" /></Button>
-												</td>
-											</tr>
-											<tr>
-												<td>Fury</td>
-												<td>2334F3H324</td>
-												<td>654F23Q23P</td>
-												<td>bacolod</td>
-												<td>05/12/19</td>
-												<td>
-													<Button color="primary" size="sm"><FontAwesomeIcon icon="edit" /></Button>
-													<Button color="danger" size="sm"><FontAwesomeIcon icon="trash" /></Button>
-													<Button color="warning" size="sm"><FontAwesomeIcon className="text-white" icon="eye" /></Button>
 												</td>
 											</tr>
 										</tbody>
@@ -187,4 +142,4 @@ function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, DashboardActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrandNewInStock);
+export default connect(mapStateToProps, mapDispatchToProps)(Brands);

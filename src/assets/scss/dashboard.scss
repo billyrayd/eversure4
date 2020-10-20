@@ -4,7 +4,10 @@ $black: #000000;
 $white: #ffffff;
 
 @mixin esThemeBlue(){
-	color: $esBlue;
+	color: $esBlue !important;
+}
+@mixin marginT($value){
+  margin-top: $value;
 }
 @mixin marginB($value){
   margin-bottom: $value;
@@ -13,15 +16,28 @@ $white: #ffffff;
   background-color: $white;
   border: 1px solid $esBlue;
 }
+@mixin upperCased(){
+  text-transform: uppercase;
+}
+@mixin noOutline(){
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
 
 button,
 button:active,
 button:focus,
 button:active:focus,
 {
-	border: none !important;
-	box-shadow: none !important;
-	outline: none !important;
+  @include noOutline();
+}
+input,
+input:focus,
+input:visited,
+input:active:focus,
+{
+  @include noOutline();
 }
 
 .sidebar{
@@ -55,6 +71,7 @@ button:active:focus,
   				margin-right: 10px;
   				position: relative;
   				top: 2px;
+          width: 30px;
   			}
   		}
   		a:hover{
@@ -111,7 +128,9 @@ button:active:focus,
 	.logout{
 		cursor: pointer;
 	}
-	.user-text{
+	.user-text,
+  .notification-icon
+  {
 		margin-right: 20px;
 	}
 }
@@ -143,7 +162,7 @@ button:active:focus,
       @include  marginB(20px);
     }
     li.page-title{
-      @include  marginB(20px);
+      @include  marginB(10px);
       span{
         font-size: 30px;
         font-weight: bold;
@@ -186,16 +205,69 @@ button:active:focus,
   }
 }
 .with-subsidebar{
-  padding-left: 235px;
+  padding-left: 185px;
+  padding-top: 70px;
+  .page-header{
+    .es-main-btn{
+      margin-top: -6px;
+      margin-left: 20px;
+    }
+  }
+  .advanced-filter{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  .table{
+    thead{
+      th{
+        @include upperCased();
+      }
+    }
+    tbody{
+      background-color: $white;
+      td{
+        @include upperCased();
+        button.btn{
+          margin-right: 5px;
+          .text-white{
+            color: $white;
+          }
+        }
+      }
+    }
+  }
 }
 
 /* -- reusable/global styles -- */
+.es-main-btn{
+  background-color: $esBlue;
+}
+.es-main-btn:hover,
+.es-main-btn:active,
+.es-main-btn:focus,
+.es-main-btn:active:focus,
+.es-main-btn:not(:disabled):not(.disabled):active,
+{
+  background-color: #1331c5;
+}
+.one-input-search{
+  @include marginT(15px);
+}
 .black{
 	color: $black;
 }
 .esBlue{
 	@include esThemeBlue();
 }
+.font10{
+  font-size: 10px;
+}
+.space{
+  height: 10px;
+}
+
+
 /*
 *
 scrollbar appearance

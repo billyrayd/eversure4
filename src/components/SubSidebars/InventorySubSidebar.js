@@ -34,9 +34,13 @@ export default class InventorySubSidebar extends React.PureComponent {
 					<li className="page-title">
 						<span>Inventory</span>
 					</li>
-					<li className="add-btn-wrap">
-						<Button className="ss-add-btn" color="warning" block>ADD</Button>
-					</li>
+					{
+						/*
+							<li className="add-btn-wrap">
+								<Button className="ss-add-btn" color="warning" block>ADD</Button>
+							</li>
+						*/
+					}
 					{
 						sublinks.map((link, key) => {
 							const className = link.nonLink ? link.className : (this.props.subpage == link.path ? "nav-link active" : "nav-link");

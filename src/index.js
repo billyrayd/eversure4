@@ -6,6 +6,7 @@ import * as serviceWorker from './serviceWorker';
 
 import "bootstrap/dist/css/bootstrap.css";
 import "assets/scss/template.scss";
+import "assets/plugins/datatables/css/datatables.css";
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -22,6 +23,12 @@ import {
   faCogs,
   faList,
   faMoneyBill,
+  faEdit,
+  faTrash,
+  faEye,
+  faBell,
+  faTachometerAlt,
+  faFileAlt,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
@@ -48,6 +55,12 @@ library.add(
   faCogs,
   faList,
   faMoneyBill,
+  faEdit,
+  faTrash,
+  faEye,
+  faBell,
+  faTachometerAlt,
+  faFileAlt,
 )
 
 ReactDOM.render(

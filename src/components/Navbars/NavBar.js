@@ -12,7 +12,8 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  NavbarText
+  NavbarText,
+  Badge,
 } from 'reactstrap';
 
 import { Link } from "react-router-dom";
@@ -36,8 +37,9 @@ const NavBar = (props) => {
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
           </Nav>
-          <NavbarText className="user-text">Admin User Full Name</NavbarText>
-          <NavbarText className="logout"><FontAwesomeIcon icon="sign-out-alt" className="black" /></NavbarText>
+          <NavbarText className="notification-icon"><FontAwesomeIcon className="esBlue" icon="bell" /><Badge color="danger">100</Badge></NavbarText>
+          <NavbarText className="user-text esBlue">Welcome, <b>Admin User Full Name</b></NavbarText>
+          <NavbarText className="logout"><FontAwesomeIcon icon="sign-out-alt" className="esBlue" /></NavbarText>
         </Collapse>
       </Navbar>
     </div>
