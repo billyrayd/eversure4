@@ -65,6 +65,7 @@ input:active:focus,
   			color: #222222;
   			font-size: 15px;
   			font-weight: bold;
+        padding: 15px;
   			text-transform: uppercase;
   			.link-icon{
   				font-size: 20px;
@@ -245,11 +246,16 @@ input:active:focus,
 }
 .es-main-btn:hover,
 .es-main-btn:active,
-.es-main-btn:focus,
 .es-main-btn:active:focus,
 .es-main-btn:not(:disabled):not(.disabled):active,
 {
   background-color: #1331c5;
+}
+.es-main-btn:focus,
+.es-main-btn:disabled,
+.es-main-btn.disabled
+{
+  background-color: $esBlue;
 }
 .one-input-search{
   @include marginT(15px);
@@ -265,6 +271,33 @@ input:active:focus,
 }
 .space{
   height: 10px;
+}
+.spinner-wrap{
+  left: 44%;
+  position: absolute;
+  top: 53px;
+  width: 110px;
+  z-index: 1;
+}
+.tip{
+  display: inline-block;
+  span {
+    display: none
+  }
+}
+.tip:hover span {
+  background: #333;
+  border-radius: 5px;
+  color: #fff;
+  display: block;
+  margin: 10px;
+  padding: 5px;
+  position: absolute;
+  right: 126px;
+  text-align: center;
+  text-decoration: none;
+  top: 10px;
+  z-index: 100;
 }
 
 

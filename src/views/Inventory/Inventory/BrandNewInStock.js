@@ -1,10 +1,14 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+
 //redux
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as DashboardActions from 'actions/dashboard';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import ReactTooltip from 'react-tooltip';
 
 //reactstrap
 import {
@@ -15,45 +19,99 @@ import {
 	Table,
 	Tooltip,
 	Input,
+	Spinner,
 } from 'reactstrap';
 
 import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import InventorySubSidebar from 'components/SubSidebars/InventorySubSidebar';
+import GrowSpinner from 'components/Spinners/GrowSpinner';
+import ConfirmDelete from 'components/Modals/ConfirmDelete';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
+
+const mainTableClass = ".bn-in-stock-table"
 
 class BrandNewInStock extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			isOpenEdit: false,
-			isOpenDelete: false,
-			isOpenView: false,
-			value: ''
+			value: '',
+			spinnerIsVisible: false,
+			dt_data: [],
+			confirmDeleteShown: false,
 		}
 	}
 
 	componentDidMount(){
-		$(".bn-in-stock-table").DataTable({
+		const that = this;
+		let { value, spinnerIsVisible, dt_data } = this.state;
+		var mainTable = $(mainTableClass).DataTable({
+			"data": dt_data,
+			"columnDefs": [
+				{
+					"targets": 0,
+					"visible": false,
+				},
+				{
+					"targets": 6,
+					"width": 150
+				}
+			],
+      "columns": [
+          {title: "DATA OBJECT"},
+          {title: "MODEL"},
+          {title: "CHASSIS NO."},
+          {title: "ENGINE NO."},
+          {title: "BRANCH"},
+          {title: "DATE"},
+          {title: "ACTION", createdCell: (td, cellData, rowData, row, col) => {
+
+						ReactDOM.render(<div>
+										<ReactTooltip />
+										<Button color="primary" size="sm" data-tip="Edit" className="edit">
+											Edit
+											{/* <FontAwesomeIcon icon="edit"/> */}
+										</Button>
+										<Button color="danger" size="sm" data-tip="Delete" className="delete">
+											Delete
+											{/*<FontAwesomeIcon icon="trash" />*/}
+										</Button>
+										<Button color="warning" size="sm" data-tip="View" className="view">
+											View
+											{/*<FontAwesomeIcon className="text-white" icon="eye" />*/}
+										</Button>
+									</div>, td) 
+          }},
+      ],
 			"sDom": '<"bottom"<t>ip><"clear">',
 			initComplete: () => {
+
+			},
+			"drawCallBack": (a,b,c) => {
+				console.log(a)
+				console.log(b)
+				console.log(c)
 			}
 		})
-	}
-	toggleEdit = () => {
-		let { isOpenEdit } = this.state;
-		this.setState({isOpenEdit: !isOpenEdit})
-	}
-	toggleDelete = () => {
-		let { isOpenDelete } = this.state;
-		this.setState({isOpenDelete: !isOpenDelete})
-	}
-	toggleView = () => {
-		let { isOpenView } = this.state;
-		this.setState({isOpenView: !isOpenView})
+
+		$("body").on("click", `${mainTableClass} .edit`, function(){
+			var data = mainTable.row($(this).parents('tr')).data();
+			console.log("edit")
+		})
+
+		$("body").on("click", `${mainTableClass} .delete`, function(){
+			var data = mainTable.row($(this).parents('tr')).data();
+			console.log("delete")
+			that.setState({confirmDeleteShown: true})
+		})
+
+		$("body").on("click", `${mainTableClass} .view`, function(){
+			var data = mainTable.row($(this).parents('tr')).data();
+			console.log("view")
+		})
 	}
 	/* set input characters to uppercase */
 	handleChange = (event) => {
@@ -69,17 +127,60 @@ class BrandNewInStock extends React.PureComponent {
 	}
 
 	advancedFilter = () => {
+		const dt_data = [
+			[
+				[],'fury', '4234234', '567765756', 'silay', '05/23/2020', '',
+			],
+			[
+				[],'raider 115', '87987905', '234234231', 'talisay', '09/23/2020', '',
+			],
+			[
+				[],'sniper 150', '34534006', '653234436', 'bacolod', '08/23/2020', '',
+			]
+		]
+
 		const that = this;
 		let { value } = this.state;
+
+		this.setState({
+			spinnerIsVisible: true
+		})
+
+		$(".dataTables_empty").html("<br />")
+
+		setTimeout(() => {
+			that.setState({spinnerIsVisible: false})
+			$(".dataTables_empty").html("<span>No data available in table</span>")
+			that.reDrawDataTable(dt_data)
+		}, 1000 * 5)
+	}
+
+	reDrawDataTable = (data) => {
+	  const table = $(mainTableClass).DataTable();
+	  table.clear();
+	  table.rows.add(data);
+	  table.draw();
+	}
+
+	closeModal = () => {
+		const that = this;
+
+		that.setState({confirmDeleteShown: false})
+	}
+
+	deleteFunction = () => {
+		console.log('delete function here ...')
 	}
 
 	render() {
-		let { isOpenEdit, isOpenDelete, isOpenView, value } = this.state;
+		let { value, spinnerIsVisible, confirmDeleteShown } = this.state;
 		return (
 			<div>
 				<InventorySidebar component="Inventory" />
+				
 				<div className="content">
 						<NavBar data={this.props}/>
+						<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
 						<InventorySubSidebar subpage="/brand_new_in_stock/"/>
 						<Container className="with-subsidebar" fluid>
 							<Row className="page-header">
@@ -100,7 +201,7 @@ class BrandNewInStock extends React.PureComponent {
 										<Row>
 											<Col md="4"><Input placeholder="Enter Engine Number" /></Col>
 											<Col md="4"><Input placeholder="Select Branch" /></Col>
-											<Col md="4"><Button className="es-main-btn" color="primary" block onClick={this.advancedFilter}>Apply Filter</Button> </Col>
+											<Col md="4"><Button className="es-main-btn" color="primary" block onClick={this.advancedFilter} disabled={spinnerIsVisible}>Apply Filter</Button> </Col>
 										</Row>
 									</Col>
 								</Col>
@@ -110,7 +211,10 @@ class BrandNewInStock extends React.PureComponent {
 							</Row>
 							<Row>
 								<Col>
+									<GrowSpinner visible={spinnerIsVisible} />
 									<Table className="bn-in-stock-table">
+										{
+											/*
 										<thead>
 											<tr>
 												<th>model</th>
@@ -168,6 +272,7 @@ class BrandNewInStock extends React.PureComponent {
 												</td>
 											</tr>
 										</tbody>
+										*/}
 									</Table>
 								</Col>
 							</Row>
