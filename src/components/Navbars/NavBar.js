@@ -31,7 +31,7 @@ const NavBar = (props) => {
 
 	return (
 		<div className="main-nav">
-      <Navbar color="light" light expand="md">
+      <Navbar expand="md">
         <Link to="/" className="main-link"><FontAwesomeIcon icon="caret-left"/> BACK TO MAIN MENU</Link>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>

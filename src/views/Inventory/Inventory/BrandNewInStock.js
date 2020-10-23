@@ -42,6 +42,7 @@ class BrandNewInStock extends React.PureComponent {
 			spinnerIsVisible: false,
 			dt_data: [],
 			confirmDeleteShown: false,
+			noEvent: false,
 		}
 	}
 
@@ -68,7 +69,6 @@ class BrandNewInStock extends React.PureComponent {
           {title: "BRANCH"},
           {title: "DATE"},
           {title: "ACTION", createdCell: (td, cellData, rowData, row, col) => {
-
 						ReactDOM.render(<div>
 										<ReactTooltip />
 										<Button color="primary" size="sm" data-tip="Edit" className="edit">
@@ -83,7 +83,7 @@ class BrandNewInStock extends React.PureComponent {
 											View
 											{/*<FontAwesomeIcon className="text-white" icon="eye" />*/}
 										</Button>
-									</div>, td) 
+									</div>, td)
           }},
       ],
 			"sDom": '<"bottom"<t>ip><"clear">',
@@ -97,18 +97,18 @@ class BrandNewInStock extends React.PureComponent {
 			}
 		})
 
-		$("body").on("click", `${mainTableClass} .edit`, function(){
+		$(`${mainTableClass}`).on("click", ".edit", function(){
 			var data = mainTable.row($(this).parents('tr')).data();
 			console.log("edit")
 		})
 
-		$("body").on("click", `${mainTableClass} .delete`, function(){
+		$(`${mainTableClass}`).on("click", ".delete", function(){
 			var data = mainTable.row($(this).parents('tr')).data();
 			console.log("delete")
 			that.setState({confirmDeleteShown: true})
 		})
 
-		$("body").on("click", `${mainTableClass} .view`, function(){
+		$(`${mainTableClass}`).on("click", ".view", function(){
 			var data = mainTable.row($(this).parents('tr')).data();
 			console.log("view")
 		})
@@ -142,14 +142,12 @@ class BrandNewInStock extends React.PureComponent {
 		const that = this;
 		let { value } = this.state;
 
-		this.setState({
-			spinnerIsVisible: true
-		})
+		this.setState({spinnerIsVisible: true,noEvent: true})
 
 		$(".dataTables_empty").html("<br />")
 
 		setTimeout(() => {
-			that.setState({spinnerIsVisible: false})
+			that.setState({spinnerIsVisible: false, noEvent: false})
 			$(".dataTables_empty").html("<span>No data available in table</span>")
 			that.reDrawDataTable(dt_data)
 		}, 1000 * 5)
@@ -173,7 +171,8 @@ class BrandNewInStock extends React.PureComponent {
 	}
 
 	render() {
-		let { value, spinnerIsVisible, confirmDeleteShown } = this.state;
+		let { value, spinnerIsVisible, confirmDeleteShown, noEvent } = this.state;
+		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
 		return (
 			<div>
 				<InventorySidebar component="Inventory" />
@@ -212,7 +211,7 @@ class BrandNewInStock extends React.PureComponent {
 							<Row>
 								<Col>
 									<GrowSpinner visible={spinnerIsVisible} />
-									<Table className="bn-in-stock-table">
+									<Table className={table_class_name}>
 										{
 											/*
 										<thead>
