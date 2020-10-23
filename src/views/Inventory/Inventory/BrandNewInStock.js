@@ -8,8 +8,6 @@ import * as DashboardActions from 'actions/dashboard';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import ReactTooltip from 'react-tooltip';
-
 //reactstrap
 import {
 	Container,
@@ -70,7 +68,6 @@ class BrandNewInStock extends React.PureComponent {
           {title: "DATE"},
           {title: "ACTION", createdCell: (td, cellData, rowData, row, col) => {
 						ReactDOM.render(<div>
-										<ReactTooltip />
 										<Button color="primary" size="sm" data-tip="Edit" className="edit">
 											Edit
 											{/* <FontAwesomeIcon icon="edit"/> */}
