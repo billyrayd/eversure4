@@ -21,7 +21,7 @@ import {
 } from 'reactstrap';
 
 import NavBar from 'components/Navbars/NavBar';
-import InventorySidebar from 'components/Sidebars/InventorySidebar';
+import AccountingSidebar from 'components/Sidebars/AccountingSidebar';
 import InventorySubSidebar from 'components/SubSidebars/InventorySubSidebar';
 import GrowSpinner from 'components/Spinners/GrowSpinner';
 import ConfirmDelete from 'components/Modals/ConfirmDelete';
@@ -31,7 +31,7 @@ $.DataTable = require('datatables.net');
 
 const mainTableClass = ".bn-in-stock-table"
 
-class BrandNewInStock extends React.PureComponent {
+class BrandnewCustomerCash extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -172,10 +172,10 @@ class BrandNewInStock extends React.PureComponent {
 		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
 		return (
 			<div>
-				<InventorySidebar component="Inventory" />
+				<AccountingSidebar component="Customers" />
 				
 				<div className="content">
-						<NavBar data={this.props} system="Inventory" />
+						<NavBar data={this.props} system="Accounting" />
 						<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
 						<InventorySubSidebar subpage="/brand_new_in_stock/"/>
 						<Container className="with-subsidebar" fluid>
@@ -209,66 +209,6 @@ class BrandNewInStock extends React.PureComponent {
 								<Col>
 									<GrowSpinner visible={spinnerIsVisible} />
 									<Table className={table_class_name}>
-										{
-											/*
-										<thead>
-											<tr>
-												<th>model</th>
-												<th>chassis no.</th>
-												<th>engine no.</th>
-												<th>branch</th>
-												<th>date received</th>
-												<th>action</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>Fury</td>
-												<td>2334F3H324</td>
-												<td>654F23Q23P</td>
-												<td>silay</td>
-												<td>05/12/19</td>
-												<td>
-													<Button color="primary" size="sm" id="edit" >
-														<FontAwesomeIcon icon="edit"/>
-														<Tooltip target="edit" placement="top" autohide={true} isOpen={isOpenEdit} toggle={this.toggleEdit}>Edit</Tooltip>
-													</Button>
-													<Button color="danger" size="sm" id="delete">
-														<FontAwesomeIcon icon="trash" />
-														<Tooltip target="delete" placement="top" autohide={true} isOpen={isOpenDelete} toggle={this.toggleDelete}>Delete</Tooltip>
-													</Button>
-													<Button color="warning" size="sm" id="view">
-														<FontAwesomeIcon className="text-white" icon="eye" />
-														<Tooltip target="view" placement="top" autohide={true} isOpen={isOpenView} toggle={this.toggleView}>View</Tooltip>
-													</Button>
-												</td>
-											</tr>
-											<tr>
-												<td>Fury</td>
-												<td>2334F3H324</td>
-												<td>654F23Q23P</td>
-												<td>talisay</td>
-												<td>05/12/19</td>
-												<td>
-													<Button color="primary" size="sm"><FontAwesomeIcon icon="edit" /></Button>
-													<Button color="danger" size="sm"><FontAwesomeIcon icon="trash" /></Button>
-													<Button color="warning" size="sm"><FontAwesomeIcon className="text-white" icon="eye" /></Button>
-												</td>
-											</tr>
-											<tr>
-												<td>Fury</td>
-												<td>2334F3H324</td>
-												<td>654F23Q23P</td>
-												<td>bacolod</td>
-												<td>05/12/19</td>
-												<td>
-													<Button color="primary" size="sm"><FontAwesomeIcon icon="edit" /></Button>
-													<Button color="danger" size="sm"><FontAwesomeIcon icon="trash" /></Button>
-													<Button color="warning" size="sm"><FontAwesomeIcon className="text-white" icon="eye" /></Button>
-												</td>
-											</tr>
-										</tbody>
-										*/}
 									</Table>
 								</Col>
 							</Row>
@@ -288,4 +228,4 @@ function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, DashboardActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrandNewInStock);
+export default connect(mapStateToProps, mapDispatchToProps)(BrandnewCustomerCash);

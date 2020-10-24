@@ -83,7 +83,7 @@ class UsersList extends React.PureComponent {
 			<div>
 				<InventorySidebar component="Users" />
 				<div className="content">
-						<NavBar data={this.props}/>
+						<NavBar data={this.props} system="Inventory" />
 						<UsersSubSidebar subpage="/users/"/>
 						<Container className="with-subsidebar" fluid>
 							<Row className="page-header">

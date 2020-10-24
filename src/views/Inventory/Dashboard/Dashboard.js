@@ -31,7 +31,7 @@ class Dashboard extends React.PureComponent {
 			<div>
 				<InventorySidebar component="Dashboard" />
 				<div className="content">
-						<NavBar data={this.props}/>
+						<NavBar data={this.props} system="Inventory" />
 						<Container fluid>
 							<Row>
 								<Col>

@@ -29,6 +29,11 @@ import {
   faBell,
   faTachometerAlt,
   faFileAlt,
+  faUserFriends,
+  faBook,
+  faMoneyCheckAlt,
+  faStopwatch,
+  faFileContract,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
@@ -61,6 +66,11 @@ library.add(
   faBell,
   faTachometerAlt,
   faFileAlt,
+  faUserFriends,
+  faBook,
+  faMoneyCheckAlt,
+  faStopwatch,
+  faFileContract,
 )
 
 ReactDOM.render(

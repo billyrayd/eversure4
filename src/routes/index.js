@@ -11,6 +11,11 @@ import UsersList from "views/Inventory/Users/UsersList";
 import Brands from "views/Inventory/Settings/Brands";
 import Elements from "views/Inventory/Elements";
 
+/* Accounting */
+import AccountingLandingPage from "views/Accounting/AccountingLandingPage";
+import BrandnewCustomerCash from "views/Accounting/Customers/BrandnewCustomerCash";
+import BrandnewCustomerInstallment from "views/Accounting/Customers/BrandnewCustomerInstallment";
+
 var unauthenticated = [
   {
     path: "/",
@@ -60,6 +65,21 @@ var authenticated = [
     path: "/elements/",
     name: "Elements",
     component: Elements,
+  },
+  {
+    path: "/accounting/",
+    name: "AccountingLandingPage",
+    component: AccountingLandingPage,
+  },
+  {
+    path: "/brandnew_customer_installment/",
+    name: "BrandnewCustomerInstallment",
+    component: BrandnewCustomerInstallment,
+  },
+  {
+    path: "/brandnew_customer_cash/",
+    name: "BrandnewCustomerCash",
+    component: BrandnewCustomerCash,
   },
 ]
 

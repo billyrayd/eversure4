@@ -30,7 +30,7 @@ class Payments extends React.PureComponent {
 			<div>
 				<InventorySidebar component="Payments" />
 				<div className="content">
-						<NavBar data={this.props}/>
+						<NavBar data={this.props} system="Inventory" />
 						<Container fluid>
 							<Row>
 								<Col>

@@ -79,6 +79,9 @@ input:active:focus,
   				top: 2px;
           width: 30px;
   			}
+        .link-icon.long-text{
+          margin-left: 20px !important;
+        }
   		}
   		a:hover{
   			text-decoration: none;
@@ -119,9 +122,21 @@ input:active:focus,
   		left: 4px !important;
   		.dropdown-item{
   			font-size: 14px;
+        a{
+          color: #333333;
+        }
+        a:hover{
+          text-decoration: none;
+        }
+        a:active{
+          color: $white;
+        }
   		}
   		.dropdown-item:active{
   			background-color: $esBlue;
+        a{
+          color: $white;
+        }
   		}
   	}
   }

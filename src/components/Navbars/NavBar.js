@@ -29,10 +29,13 @@ const NavBar = (props) => {
 		console.log(props.data.authenticated)
 	}
 
+  let { system } = props;
+  const mainLink = system == "Inventory" ? "/" : "/accounting/"
+
 	return (
 		<div className="main-nav">
       <Navbar expand="md">
-        <Link to="/" className="main-link"><FontAwesomeIcon icon="caret-left"/> BACK TO MAIN MENU</Link>
+        <Link to={mainLink} className="main-link"><FontAwesomeIcon icon="caret-left"/> BACK TO MAIN MENU</Link>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>

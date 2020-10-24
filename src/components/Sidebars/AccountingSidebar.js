@@ -1,15 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import EversureLogo from 'assets/logo/eversure_logo.png'
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
-export default class AccountingSidebar extends React.PureComponent {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import EversureLogo from 'assets/logo/eversure_logo.png';
+
+export default class InventorySidebar extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			isOpen: false
+		}
+	}
+
+	toggle = () => {
+		let { isOpen } = this.state;
+
+		this.setState({isOpen: !isOpen})
 	}
 
 	render() {
+		let { isOpen } = this.state;
+		let links = [
+			{ name: 'Customers', path: '/brandnew_customer_installment/', icon: 'user-friends', visible: true },
+			{ name: 'Reports', path: '/accounting_total_paid/', icon: 'file-alt', visible: true },
+			{ name: 'Ledgers', path: '/ledgers/', icon: 'book', visible: true },
+			{ name: 'Financial Statement', path: '/financial_statement/', icon: 'money-check-alt', visible: true, longText: true },
+			{ name: 'Overdue', path: '/overdue/', icon: 'stopwatch', visible: true },
+			{ name: 'Accounts', path: '/accounts_payable/', icon: 'file-contract', visible: true },
+		]
 		return (
 			<div className="sidebar">
 				<ul>
@@ -18,20 +41,33 @@ export default class AccountingSidebar extends React.PureComponent {
 							<img src={EversureLogo} alt="logo" className="logo" />
 						</Link>
 					</li>
-					<li>
-						<Link to='/dashboard/'>
-							Dashboard
-						</Link>
+					<li className="system-type">
+						<ButtonDropdown isOpen={isOpen} toggle={this.toggle}>
+				      <DropdownToggle caret>
+				        Accounting System
+				      </DropdownToggle>
+				      <DropdownMenu>
+				        <DropdownItem>
+				        	<Link to="/">Inventory System</Link>
+				        </DropdownItem>
+				        <DropdownItem divider />
+				        <DropdownItem>Old Records System</DropdownItem>
+				      </DropdownMenu>
+				    </ButtonDropdown>
 					</li>
-					<li>
-						<Link to='/inventory/'>
-							Inventory
-						</Link>
-					</li>
-					<li>
-						<Link to='/reports/'>
-							Reports
-						</Link>
+					{
+						links.map((link, key) => {
+							return link.visible ? link.longText ? 
+										<li key={key} className={this.props.component == link.name ? "nav-link active" : "nav-link"}>
+											<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} />{link.name}</Link>
+										</li> : 
+										<li key={key} className={this.props.component == link.name ? "nav-link active" : "nav-link"}>
+											<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} />{link.name}</Link>
+										</li> : null
+						})
+					}
+					<li className="app-version">
+						<span>Eversure v4.0.0</span>
 					</li>
 				</ul>
 			</div>

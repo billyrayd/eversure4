@@ -83,7 +83,7 @@ class BrandNewUnsold extends React.PureComponent {
 			<div>
 				<InventorySidebar component="Reports" />
 				<div className="content">
-						<NavBar data={this.props}/>
+						<NavBar data={this.props} system="Inventory" />
 						<ReportsSubSidebar subpage="/brand_new_unsold/"/>
 						<Container className="with-subsidebar" fluid>
 							<Row className="page-header">
