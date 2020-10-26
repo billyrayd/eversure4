@@ -28,7 +28,7 @@ class Ledgers extends React.PureComponent {
 						<Container fluid>
 							<Row>
 								<Col>
-									<h1>Financial Statement</h1>
+									<h1>Ledgers</h1>
 								</Col>
 							</Row>
 						</Container>

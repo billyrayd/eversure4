@@ -13,6 +13,7 @@ import {
 
 import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
+import NoAccess from 'components/CustomComponents/NoAccess';
 
 class Dashboard extends React.PureComponent {
 	constructor(props) {
@@ -27,23 +28,32 @@ class Dashboard extends React.PureComponent {
 			{ letter: 'D' },
 			{ letter: 'E' },
 		];
+
+		const permission = !true;
 		return (
 			<div>
 				<InventorySidebar component="Dashboard" />
 				<div className="content">
-						<NavBar data={this.props} system="Inventory" />
-						<Container fluid>
-							<Row>
-								<Col>
-									<h1>Dashboard</h1>
-									{
-										data.map((v, i) => {
-											return <div key={i} className="test">{v.letter}</div>
-										})
-									}
-								</Col>
-							</Row>
-						</Container>
+					{
+						permission ?
+						<div>
+							<NavBar data={this.props} system="Inventory" />
+							<Container fluid>
+								<Row>
+									<Col>
+										<h1>Dashboard</h1>
+										{
+											data.map((v, i) => {
+												return <div key={i} className="test">{v.letter}</div>
+											})
+										}
+									</Col>
+								</Row>
+							</Container>
+						</div> :
+						<NoAccess />
+					}
+						
 				</div>
 			</div>
 		);

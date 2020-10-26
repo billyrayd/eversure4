@@ -331,6 +331,20 @@ input:active:focus,
   opacity: 0.7;
   pointer-events: none;
 }
+.fourZeroFour{
+  margin: 100px auto;
+  text-align: center;
+  width: 300px;
+  img{
+    margin-bottom: 30px;
+  }
+}
+.align-center{
+  text-align: center;
+}
+.fontSize100{
+  @include fontSize(100px);
+}
 
 
 /*

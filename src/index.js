@@ -34,6 +34,8 @@ import {
   faMoneyCheckAlt,
   faStopwatch,
   faFileContract,
+  faExclamationCircle,
+  faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
@@ -71,6 +73,8 @@ library.add(
   faMoneyCheckAlt,
   faStopwatch,
   faFileContract,
+  faExclamationCircle,
+  faExclamationTriangle,
 )
 
 ReactDOM.render(
