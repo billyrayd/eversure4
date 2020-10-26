@@ -32,7 +32,7 @@ $.DataTable = require('datatables.net');
 const mainTableClass = ".bn-in-stock-table"
 const mainTableClassName = "bn-in-stock-table"
 
-class BrandnewCustomerCash extends React.PureComponent {
+class SecondhandCustomerCash extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -176,11 +176,11 @@ class BrandnewCustomerCash extends React.PureComponent {
 				<div className="content">
 						<NavBar data={this.props} system="Accounting" />
 						<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
-						<CustomersSubSidebar subpage="/brandnew_customer_cash/"/>
+						<CustomersSubSidebar subpage="/secondhand_customer_cash/"/>
 						<Container className="with-subsidebar" fluid>
 							<Row className="page-header">
 								<Col>
-									<h4>Customers with Brand New Units (Cash) <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+									<h4>Customers with Secondhand Units (Cash) <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 								</Col>
 							</Row>
 							<Row>
@@ -220,4 +220,4 @@ function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, DashboardActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrandnewCustomerCash);
+export default connect(mapStateToProps, mapDispatchToProps)(SecondhandCustomerCash);

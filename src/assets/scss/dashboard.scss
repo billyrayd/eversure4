@@ -25,6 +25,9 @@ $white: #ffffff;
   box-shadow: none !important;
   outline: none !important;
 }
+@mixin fontSize($value){
+  font-size: $value;
+}
 
 body{
   background-color: $esGray;
@@ -106,7 +109,8 @@ input:active:focus,
   	margin-bottom: 20px;
   	margin-top: 25px;
   	.dropdown-toggle{
-  		font-size: 14px;
+      @include fontSize(14px);
+      font-weight: 600;
 	    border-radius: 17px;
 	    margin-left: 10px;
 	    padding: 0 20px 3px 20px;
@@ -121,9 +125,10 @@ input:active:focus,
   	.dropdown-menu{
   		left: 4px !important;
   		.dropdown-item{
-  			font-size: 14px;
+  			@include fontSize(14px);
         a{
           color: #333333;
+          font-weight: 600;
         }
         a:hover{
           text-decoration: none;
@@ -168,8 +173,9 @@ input:active:focus,
   background-color: #eee;
   float: left;
   height: 100%;
-  padding: 10px;
-  position: absolute;
+  overflow: scroll;
+  padding: 10px 10px 70px 10px;
+  position: fixed;
   width: 180px;
   .ss-add-btn{
     color: $white;
@@ -207,7 +213,6 @@ input:active:focus,
       background-color: #dcdcdc;
       border: 1px solid #dcdcdc;
       border-radius: 3px;
-      cursor: pointer;
       padding: 1px 15px;
       margin-bottom: 13px;
       a{
@@ -299,6 +304,9 @@ input:active:focus,
   width: 110px;
   z-index: 1;
 }
+.secondText{
+  margin-left: 55px;
+}
 .tip{
   display: inline-block;
   span {
@@ -331,12 +339,12 @@ scrollbar appearance
 *
 */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 7px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1; 
+  background: $esGray; 
 }
  
 /* Handle */
@@ -347,5 +355,5 @@ scrollbar appearance
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #aaa; 
 }

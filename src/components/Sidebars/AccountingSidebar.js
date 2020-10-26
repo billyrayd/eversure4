@@ -27,17 +27,17 @@ export default class InventorySidebar extends React.PureComponent {
 		let { isOpen } = this.state;
 		let links = [
 			{ name: 'Customers', path: '/brandnew_customer_installment/', icon: 'user-friends', visible: true },
-			{ name: 'Reports', path: '/accounting_total_paid/', icon: 'file-alt', visible: true },
-			{ name: 'Ledgers', path: '/ledgers/', icon: 'book', visible: true },
-			{ name: 'Financial Statement', path: '/financial_statement/', icon: 'money-check-alt', visible: true, longText: true },
+			{ name: 'Reports', path: '/reports_total_paid/', icon: 'file-alt', visible: true },
 			{ name: 'Overdue', path: '/overdue/', icon: 'stopwatch', visible: true },
+			{ name: 'Financial', secondText: 'Statement', path: '/financial_statement/', icon: 'money-check-alt', visible: true, longText: true },
+			{ name: 'Ledgers', path: '/ledgers/', icon: 'book', visible: true },
 			{ name: 'Accounts', path: '/accounts_payable/', icon: 'file-contract', visible: true },
 		]
 		return (
 			<div className="sidebar">
 				<ul>
 					<li className="logo-li">
-						<Link to='/'>
+						<Link to='/accounting/'>
 							<img src={EversureLogo} alt="logo" className="logo" />
 						</Link>
 					</li>
@@ -51,7 +51,9 @@ export default class InventorySidebar extends React.PureComponent {
 				        	<Link to="/">Inventory System</Link>
 				        </DropdownItem>
 				        <DropdownItem divider />
-				        <DropdownItem>Old Records System</DropdownItem>
+				        <DropdownItem>
+				        	<Link to="/old_records/">Old Records System</Link>
+				        </DropdownItem>
 				      </DropdownMenu>
 				    </ButtonDropdown>
 					</li>
@@ -59,7 +61,7 @@ export default class InventorySidebar extends React.PureComponent {
 						links.map((link, key) => {
 							return link.visible ? link.longText ? 
 										<li key={key} className={this.props.component == link.name ? "nav-link active" : "nav-link"}>
-											<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} />{link.name}</Link>
+											<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} /><span>{link.name}</span> <span className="secondText">{link.secondText}</span></Link>
 										</li> : 
 										<li key={key} className={this.props.component == link.name ? "nav-link active" : "nav-link"}>
 											<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} />{link.name}</Link>

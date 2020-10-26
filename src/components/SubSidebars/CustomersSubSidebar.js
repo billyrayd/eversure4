@@ -16,15 +16,15 @@ export default class CustomersSubSidebar extends React.PureComponent {
 		let sublinks = [
 			{ name: 'Brand New', path: '/', visible: true, className: "nav-link-header", nonLink: true },
 			{ name: 'Installment', path: '/brandnew_customer_installment/', visible: true },
-			{ name: 'Cash', path: '/brand_new_sold/', visible: true },
-			{ name: 'Fully Paid', path: '/transfer/', visible: true },
-			{ name: 'Repossessed', path: '/outgoing/', visible: true },
+			{ name: 'Cash', path: '/brandnew_customer_cash/', visible: true },
+			{ name: 'Fully Paid', path: '/brandnew_customer_fully_paid/', visible: true },
+			{ name: 'Repossessed', path: '/brandnew_customer_repossessed/', visible: true },
 			{ name: 'divider', path: '/', visible: true, className: 'divider', nonLink: true },
 			{ name: 'Secondhand', path: '/', visible: true, className: "nav-link-header", nonLink: true },
-			{ name: 'Installment', path: '/brand_new_in_stock/', visible: true },
-			{ name: 'Cash', path: '/brand_new_sold/', visible: true },
-			{ name: 'Fully Paid', path: '/transfer/', visible: true },
-			{ name: 'Repossessed', path: '/outgoing/', visible: true },
+			{ name: 'Installment', path: '/secondhand_customer_installment/', visible: true },
+			{ name: 'Cash', path: '/secondhand_customer_cash/', visible: true },
+			{ name: 'Fully Paid', path: '/secondhand_customer_fully_paid/', visible: true },
+			{ name: 'Repossessed', path: '/secondhand_customer_repossessed/', visible: true },
 		]
 		return (
 			<div className="sub-sidebar">

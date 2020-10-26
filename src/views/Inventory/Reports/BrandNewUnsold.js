@@ -88,11 +88,11 @@ class BrandNewUnsold extends React.PureComponent {
 						<Container className="with-subsidebar" fluid>
 							<Row className="page-header">
 								<Col>
-									<h3>Unsold Units Report List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h3>
+									<h4>Unsold Units Report List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 								</Col>
 							</Row>
 							<Row className="one-input-search">
-									<Col md="4"><Input className="dt-search" placeholder="Search Reports" /></Col>
+									<Col md="6"><Input className="dt-search" placeholder="Search Reports" /></Col>
 							</Row>
 							<Row>
 								<br />

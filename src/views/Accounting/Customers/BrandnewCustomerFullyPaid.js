@@ -29,10 +29,10 @@ import ConfirmDelete from 'components/Modals/ConfirmDelete';
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
 
-const mainTableClass = ".bn-in-stock-table"
-const mainTableClassName = "bn-in-stock-table"
+const mainTableClass = ".bn-customer-installment-table"
+const mainTableClassName = "bn-customer-installment-table"
 
-class BrandnewCustomerCash extends React.PureComponent {
+class BrandnewCustomerFullyPaid extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -56,19 +56,19 @@ class BrandnewCustomerCash extends React.PureComponent {
 					"visible": false,
 				},
 				{
-					"targets": 7,
-					"width": 100
+					"targets": 6,
+					"width": 100,
+					"orderable": false,
 				}
 			],
       "columns": [
           {title: "DATA OBJECT"},
           {title: "name"},
-          {title: "area"},
-          {title: "model"},
-          {title: "engine"},
-          {title: "date purchased"},
-          {title: "payment"},
-          {title: "action", createdCell: (td, cellData, rowData, row, col) => {
+          {title: "account no."},
+          {title: "address"},
+          {title: "contact no."},
+          {title: "balance"},
+          {title: "ACTION", createdCell: (td, cellData, rowData, row, col) => {
 						ReactDOM.render(<div>
 										<Button color="warning" size="sm" data-tip="View" className="view">
 											View
@@ -84,9 +84,6 @@ class BrandnewCustomerCash extends React.PureComponent {
 
 			},
 			"drawCallBack": (a,b,c) => {
-				console.log(a)
-				console.log(b)
-				console.log(c)
 			}
 		})
 
@@ -108,7 +105,6 @@ class BrandnewCustomerCash extends React.PureComponent {
 	}
 	/* set input characters to uppercase */
 	handleChange = (event) => {
-		const that = this;
 	  const input = event.target;
 	  const start = input.selectionStart;
 	  const end = input.selectionEnd;
@@ -118,20 +114,18 @@ class BrandnewCustomerCash extends React.PureComponent {
 	    {value: uppercasedValue},
 	    () => input.setSelectionRange(start, end)
 	  );
-
-	  that.advancedFilter()
 	}
 
 	advancedFilter = () => {
 		const dt_data = [
 			[
-				[],'torres, mary grace x', 'bacolod', 'barako 175', '47745745', '05/23/2020', '90,000', ''
+				[],'cruz, mario x', 'an4234234', 'brgy 1', '09091231234', '80,000', '',
 			],
 			[
-				[],'lim, marcus x', 'bacolod', 'ct 100', '456456456', '09/23/2020', '80,000', ''
+				[],'perez, jelai x', 'an8798f905', 'brgy 4', '09991231234', '30,000', '',
 			],
 			[
-				[],'salvador, jedidiah x', 'silay', 'raider 115', '85675656', '08/23/2020', '78,000', ''
+				[],'moran, mario x', 'an345s34006', 'brgy 12', '09991231235', '54,000', '',
 			]
 		]
 
@@ -146,7 +140,7 @@ class BrandnewCustomerCash extends React.PureComponent {
 			that.setState({spinnerIsVisible: false, noEvent: false})
 			$(".dataTables_empty").html("<span>No data available in table</span>")
 			that.reDrawDataTable(dt_data)
-		}, 1000 * 3)
+		}, 1000 * 5)
 	}
 
 	reDrawDataTable = (data) => {
@@ -168,7 +162,7 @@ class BrandnewCustomerCash extends React.PureComponent {
 
 	render() {
 		let { value, spinnerIsVisible, confirmDeleteShown, noEvent } = this.state;
-		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
+		let table_class_name = noEvent ? mainTableClassName : mainTableClassName;
 		return (
 			<div>
 				<AccountingSidebar component="Customers" />
@@ -176,11 +170,11 @@ class BrandnewCustomerCash extends React.PureComponent {
 				<div className="content">
 						<NavBar data={this.props} system="Accounting" />
 						<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
-						<CustomersSubSidebar subpage="/brandnew_customer_cash/"/>
+						<CustomersSubSidebar subpage="/brandnew_customer_fully_paid/"/>
 						<Container className="with-subsidebar" fluid>
 							<Row className="page-header">
 								<Col>
-									<h4>Customers with Brand New Units (Cash) <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+									<h4>Customers with Fully Paid Accounts (Brand New Units) <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 								</Col>
 							</Row>
 							<Row>
@@ -189,6 +183,7 @@ class BrandnewCustomerCash extends React.PureComponent {
 										<h5>Filter</h5>
 										<Row>
 											<Col md="4"><Input placeholder="Enter Customer Name" onChange={(e) => this.handleChange(e)} value={value} /></Col>
+											<Col md="4"><Input placeholder="Enter Account Number" /></Col>
 											<Col md="4"><Button className="es-main-btn" color="primary" block onClick={this.advancedFilter} disabled={spinnerIsVisible}>Search</Button> </Col>
 										</Row>
 									</Col>
@@ -220,4 +215,4 @@ function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, DashboardActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrandnewCustomerCash);
+export default connect(mapStateToProps, mapDispatchToProps)(BrandnewCustomerFullyPaid);

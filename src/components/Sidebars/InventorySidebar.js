@@ -51,7 +51,9 @@ export default class InventorySidebar extends React.PureComponent {
 				        	<Link to="/accounting/">Accounting System</Link>
 				        </DropdownItem>
 				        <DropdownItem divider />
-				        <DropdownItem>Old Records System</DropdownItem>
+				        <DropdownItem>
+				        	<Link to="/old_records/">Old Records System</Link>
+				        </DropdownItem>
 				      </DropdownMenu>
 				    </ButtonDropdown>
 					</li>

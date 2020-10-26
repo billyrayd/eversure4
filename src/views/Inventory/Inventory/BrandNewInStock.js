@@ -181,7 +181,7 @@ class BrandNewInStock extends React.PureComponent {
 						<Container className="with-subsidebar" fluid>
 							<Row className="page-header">
 								<Col>
-									<h3>Units in Stock <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h3>
+									<h4>Units in Stock <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 								</Col>
 							</Row>
 							<Row>

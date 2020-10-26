@@ -88,11 +88,11 @@ class Brands extends React.PureComponent {
 						<Container className="with-subsidebar" fluid>
 							<Row className="page-header">
 								<Col>
-									<h3>Motorcycle Brands List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h3>
+									<h4>Motorcycle Brands List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 								</Col>
 							</Row>
 							<Row className="one-input-search">
-									<Col md="4"><Input className="dt-search" placeholder="Search Brands" /></Col>
+									<Col md="6"><Input className="dt-search" placeholder="Search Brands" /></Col>
 							</Row>
 							<Row>
 								<br />

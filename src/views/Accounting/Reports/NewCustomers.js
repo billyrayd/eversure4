@@ -22,17 +22,17 @@ import {
 
 import NavBar from 'components/Navbars/NavBar';
 import AccountingSidebar from 'components/Sidebars/AccountingSidebar';
-import CustomersSubSidebar from 'components/SubSidebars/CustomersSubSidebar';
+import AccReportsSubSidebar from 'components/SubSidebars/AccReportsSubSidebar';
 import GrowSpinner from 'components/Spinners/GrowSpinner';
 import ConfirmDelete from 'components/Modals/ConfirmDelete';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
 
-const mainTableClass = ".bn-in-stock-table"
-const mainTableClassName = "bn-in-stock-table"
+const mainTableClass = ".bn-customer-installment-table"
+const mainTableClassName = "bn-customer-installment-table"
 
-class BrandnewCustomerCash extends React.PureComponent {
+class ReportsNewCustomers extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -56,25 +56,23 @@ class BrandnewCustomerCash extends React.PureComponent {
 					"visible": false,
 				},
 				{
-					"targets": 7,
-					"width": 100
+					"targets": 4,
+					"width": 100,
+					"orderable": false,
 				}
 			],
       "columns": [
           {title: "DATA OBJECT"},
-          {title: "name"},
-          {title: "area"},
-          {title: "model"},
-          {title: "engine"},
-          {title: "date purchased"},
-          {title: "payment"},
-          {title: "action", createdCell: (td, cellData, rowData, row, col) => {
+          {title: "title"},
+          {title: "date"},
+          {title: "created by"},
+          {title: "ACTION", createdCell: (td, cellData, rowData, row, col) => {
 						ReactDOM.render(<div>
-										<Button color="warning" size="sm" data-tip="View" className="view">
+										<Button color="warning" size="sm" className="view">
 											View
 										</Button>
-										<Button color="primary" size="sm" data-tip="Edit" className="edit">
-											Edit
+										<Button color="danger" size="sm" className="delete">
+											Delete
 										</Button>
 									</div>, td)
           }},
@@ -84,9 +82,6 @@ class BrandnewCustomerCash extends React.PureComponent {
 
 			},
 			"drawCallBack": (a,b,c) => {
-				console.log(a)
-				console.log(b)
-				console.log(c)
 			}
 		})
 
@@ -108,7 +103,6 @@ class BrandnewCustomerCash extends React.PureComponent {
 	}
 	/* set input characters to uppercase */
 	handleChange = (event) => {
-		const that = this;
 	  const input = event.target;
 	  const start = input.selectionStart;
 	  const end = input.selectionEnd;
@@ -118,20 +112,18 @@ class BrandnewCustomerCash extends React.PureComponent {
 	    {value: uppercasedValue},
 	    () => input.setSelectionRange(start, end)
 	  );
-
-	  that.advancedFilter()
 	}
 
 	advancedFilter = () => {
 		const dt_data = [
 			[
-				[],'torres, mary grace x', 'bacolod', 'barako 175', '47745745', '05/23/2020', '90,000', ''
+				[],'cruz, mario x', 'an4234234', 'brgy 1', '09091231234', '80,000', '',
 			],
 			[
-				[],'lim, marcus x', 'bacolod', 'ct 100', '456456456', '09/23/2020', '80,000', ''
+				[],'perez, jelai x', 'an8798f905', 'brgy 4', '09991231234', '30,000', '',
 			],
 			[
-				[],'salvador, jedidiah x', 'silay', 'raider 115', '85675656', '08/23/2020', '78,000', ''
+				[],'moran, mario x', 'an345s34006', 'brgy 12', '09991231235', '54,000', '',
 			]
 		]
 
@@ -146,7 +138,7 @@ class BrandnewCustomerCash extends React.PureComponent {
 			that.setState({spinnerIsVisible: false, noEvent: false})
 			$(".dataTables_empty").html("<span>No data available in table</span>")
 			that.reDrawDataTable(dt_data)
-		}, 1000 * 3)
+		}, 1000 * 5)
 	}
 
 	reDrawDataTable = (data) => {
@@ -168,31 +160,23 @@ class BrandnewCustomerCash extends React.PureComponent {
 
 	render() {
 		let { value, spinnerIsVisible, confirmDeleteShown, noEvent } = this.state;
-		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
+		let table_class_name = noEvent ? mainTableClassName : mainTableClassName;
 		return (
 			<div>
-				<AccountingSidebar component="Customers" />
+				<AccountingSidebar component="Reports" />
 				
 				<div className="content">
 						<NavBar data={this.props} system="Accounting" />
 						<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
-						<CustomersSubSidebar subpage="/brandnew_customer_cash/"/>
+						<AccReportsSubSidebar subpage="/reports_new_customers/"/>
 						<Container className="with-subsidebar" fluid>
 							<Row className="page-header">
 								<Col>
-									<h4>Customers with Brand New Units (Cash) <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+									<h4>New Customers Reports <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Create</Button> </h4>
 								</Col>
 							</Row>
-							<Row>
-								<Col>
-									<Col className="advanced-filter">
-										<h5>Filter</h5>
-										<Row>
-											<Col md="4"><Input placeholder="Enter Customer Name" onChange={(e) => this.handleChange(e)} value={value} /></Col>
-											<Col md="4"><Button className="es-main-btn" color="primary" block onClick={this.advancedFilter} disabled={spinnerIsVisible}>Search</Button> </Col>
-										</Row>
-									</Col>
-								</Col>
+							<Row className="one-input-search">
+								<Col md="6"><Input placeholder="Search Reports" onChange={(e) => this.handleChange(e)} value={value} /></Col>
 							</Row>
 							<Row>
 								<br />
@@ -220,4 +204,4 @@ function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, DashboardActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrandnewCustomerCash);
+export default connect(mapStateToProps, mapDispatchToProps)(ReportsNewCustomers);

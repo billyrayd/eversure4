@@ -1,37 +1,70 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import EversureLogo from 'assets/logo/eversure_logo.png'
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import EversureLogo from 'assets/logo/eversure_logo.png';
 
 export default class OldRecordsSidebar extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			isOpen: false
+		}
+	}
+
+	toggle = () => {
+		let { isOpen } = this.state;
+
+		this.setState({isOpen: !isOpen})
 	}
 
 	render() {
+		let { isOpen } = this.state;
+		let links = [
+			{ name: 'Customers', path: '/old_records/', icon: 'user-friends', visible: true, title: 'Landing' },
+		]
 		return (
 			<div className="sidebar">
 				<ul>
 					<li className="logo-li">
-						<Link to='/'>
+						<Link to='/old_records/'>
 							<img src={EversureLogo} alt="logo" className="logo" />
 						</Link>
 					</li>
-					<li>
-						<Link to='/dashboard/'>
-							Dashboard
-						</Link>
+					<li className="system-type">
+						<ButtonDropdown isOpen={isOpen} toggle={this.toggle}>
+				      <DropdownToggle caret>
+				        Old Records System
+				      </DropdownToggle>
+				      <DropdownMenu>
+				        <DropdownItem>
+				        	<Link to="/">Inventory System</Link>
+				        </DropdownItem>
+				        <DropdownItem divider />
+				        <DropdownItem>
+				        	<Link to="/accounting/">Accounting System</Link>
+				        </DropdownItem>
+				      </DropdownMenu>
+				    </ButtonDropdown>
 					</li>
-					<li>
-						<Link to='/inventory/'>
-							Inventory
-						</Link>
-					</li>
-					<li>
-						<Link to='/reports/'>
-							Reports
-						</Link>
+					{
+						links.map((link, key) => {
+							return link.visible ? link.longText ? 
+										<li key={key} className={this.props.component == link.title ? "nav-link active" : "nav-link"}>
+											<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} /><span>{link.name}</span> <span className="secondText">{link.secondText}</span></Link>
+										</li> : 
+										<li key={key} className={this.props.component == link.title ? "nav-link active" : "nav-link"}>
+											<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} />{link.name}</Link>
+										</li> : null
+						})
+					}
+					<li className="app-version">
+						<span>Eversure v4.0.0</span>
 					</li>
 				</ul>
 			</div>
