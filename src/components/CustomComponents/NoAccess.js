@@ -15,6 +15,8 @@ export default class NoAccess extends React.PureComponent {
 	}
 
 	render() {
+		const noPermission = "You do not have the right permissions to access this page";
+		const accessDenied = "Access Denied"
 		return (
 			<Container>
 				<Row>
@@ -28,7 +30,7 @@ export default class NoAccess extends React.PureComponent {
 						<br />
 						<br />
 						<FontAwesomeIcon icon="exclamation-circle" className="fontSize100" />
-						<h1>You do not have the right permissions to access this page</h1>
+						<h1>{accessDenied}</h1>
 					</Col>
 					<Col md="2" />
 				</Row>

@@ -20,6 +20,7 @@ import {
 import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import ReportsSubSidebar from 'components/SubSidebars/ReportsSubSidebar';
+import NoAccess from 'components/CustomComponents/NoAccess';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -79,56 +80,63 @@ class BrandNewUnsold extends React.PureComponent {
 
 	render() {
 		let { isOpenEdit, isOpenDelete, isOpenView, value } = this.state;
+		const permission = true;
 		return (
 			<div>
 				<InventorySidebar component="Reports" />
 				<div className="content">
 						<NavBar data={this.props} system="Inventory" />
-						<ReportsSubSidebar subpage="/brand_new_unsold/"/>
-						<Container className="with-subsidebar" fluid>
-							<Row className="page-header">
-								<Col>
-									<h4>Unsold Units Report List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
-								</Col>
-							</Row>
-							<Row className="one-input-search">
-									<Col md="6"><Input className="dt-search" placeholder="Search Reports" /></Col>
-							</Row>
-							<Row>
-								<br />
-							</Row>
-							<Row>
-								<Col>
-									<Table className="bn-unsold-table">
-										<thead>
-											<tr>
-												<th>title</th>
-												<th>date created</th>
-												<th>created by</th>
-												<th>action</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>unsold units october 2020</td>
-												<td>10/20/2020</td>
-												<td>admin user</td>
-												<td>
-													<Button color="warning" size="sm" id="view">
-														<FontAwesomeIcon className="text-white" icon="eye" />
-														<Tooltip target="view" placement="top" autohide={true} isOpen={isOpenView} toggle={this.toggleView}>View</Tooltip>
-													</Button>
-													<Button color="danger" size="sm" id="delete">
-														<FontAwesomeIcon icon="trash" />
-														<Tooltip target="delete" placement="top" autohide={true} isOpen={isOpenDelete} toggle={this.toggleDelete}>Delete</Tooltip>
-													</Button>
-												</td>
-											</tr>
-										</tbody>
-									</Table>
-								</Col>
-							</Row>
-						</Container>
+						{
+							permission ?
+							<div>
+								<ReportsSubSidebar subpage="/brand_new_unsold/"/>
+								<Container className="with-subsidebar" fluid>
+								<Row className="page-header">
+									<Col>
+										<h4>Unsold Units Report List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+									</Col>
+								</Row>
+								<Row className="one-input-search">
+										<Col md="6"><Input className="dt-search" placeholder="Search Reports" /></Col>
+								</Row>
+								<Row>
+									<br />
+								</Row>
+								<Row>
+									<Col>
+										<Table className="bn-unsold-table">
+											<thead>
+												<tr>
+													<th>title</th>
+													<th>date created</th>
+													<th>created by</th>
+													<th>action</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>unsold units october 2020</td>
+													<td>10/20/2020</td>
+													<td>admin user</td>
+													<td>
+														<Button color="warning" size="sm" id="view">
+															<FontAwesomeIcon className="text-white" icon="eye" />
+															<Tooltip target="view" placement="top" autohide={true} isOpen={isOpenView} toggle={this.toggleView}>View</Tooltip>
+														</Button>
+														<Button color="danger" size="sm" id="delete">
+															<FontAwesomeIcon icon="trash" />
+															<Tooltip target="delete" placement="top" autohide={true} isOpen={isOpenDelete} toggle={this.toggleDelete}>Delete</Tooltip>
+														</Button>
+													</td>
+												</tr>
+											</tbody>
+										</Table>
+									</Col>
+								</Row>
+							</Container>
+							</div> :
+							<NoAccess />
+						}
 				</div>
 			</div>
 		);

@@ -25,6 +25,7 @@ import AccountingSidebar from 'components/Sidebars/AccountingSidebar';
 import AccReportsSubSidebar from 'components/SubSidebars/AccReportsSubSidebar';
 import GrowSpinner from 'components/Spinners/GrowSpinner';
 import ConfirmDelete from 'components/Modals/ConfirmDelete';
+import NoAccess from 'components/CustomComponents/NoAccess';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -161,34 +162,40 @@ class ReportsCustomerListPerArea extends React.PureComponent {
 	render() {
 		let { value, spinnerIsVisible, confirmDeleteShown, noEvent } = this.state;
 		let table_class_name = noEvent ? mainTableClassName : mainTableClassName;
+		const permission = !true;
 		return (
 			<div>
 				<AccountingSidebar component="Reports" />
-				
 				<div className="content">
-						<NavBar data={this.props} system="Accounting" />
-						<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
-						<AccReportsSubSidebar subpage="/reports_customer_list_per_area/"/>
-						<Container className="with-subsidebar" fluid>
-							<Row className="page-header">
-								<Col>
-									<h4>Customer List Per Area Reports <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Create</Button> </h4>
-								</Col>
-							</Row>
-							<Row className="one-input-search">
-								<Col md="6"><Input placeholder="Search Reports" onChange={(e) => this.handleChange(e)} value={value} /></Col>
-							</Row>
-							<Row>
-								<br />
-							</Row>
-							<Row>
-								<Col>
-									<GrowSpinner visible={spinnerIsVisible} />
-									<Table className={mainTableClassName}>
-									</Table>
-								</Col>
-							</Row>
-						</Container>
+					<NavBar data={this.props} system="Accounting" />
+					<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
+					{
+						permission ?
+						<div>
+							<AccReportsSubSidebar subpage="/reports_customer_list_per_area/"/>
+							<Container className="with-subsidebar" fluid>
+								<Row className="page-header">
+									<Col>
+										<h4>Customer List Per Area Reports <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Create</Button> </h4>
+									</Col>
+								</Row>
+								<Row className="one-input-search">
+									<Col md="6"><Input placeholder="Search Reports" onChange={(e) => this.handleChange(e)} value={value} /></Col>
+								</Row>
+								<Row>
+									<br />
+								</Row>
+								<Row>
+									<Col>
+										<GrowSpinner visible={spinnerIsVisible} />
+										<Table className={mainTableClassName}>
+										</Table>
+									</Col>
+								</Row>
+							</Container>
+						</div> :
+						<NoAccess />
+					}
 				</div>
 			</div>
 		);

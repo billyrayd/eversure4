@@ -13,6 +13,7 @@ import {
 
 import NavBar from 'components/Navbars/NavBar';
 import AccountingSidebar from 'components/Sidebars/AccountingSidebar';
+import NoAccess from 'components/CustomComponents/NoAccess';
 
 class AccountsPayable extends React.PureComponent {
 	constructor(props) {
@@ -20,18 +21,25 @@ class AccountsPayable extends React.PureComponent {
 	}
 
 	render() {
+		const permission = !true;
 		return (
 			<div>
 				<AccountingSidebar component="Accounts" />
 				<div className="content">
 						<NavBar data={this.props} system="Accounting" />
-						<Container fluid>
-							<Row>
-								<Col>
-									<h1>Accounts Payable</h1>
-								</Col>
-							</Row>
-						</Container>
+						{
+							permission ?
+							<div>
+								<Container fluid>
+									<Row>
+										<Col>
+											<h1>Accounts Payable</h1>
+										</Col>
+									</Row>
+								</Container>
+							</div> :
+							<NoAccess />
+						}
 				</div>
 			</div>
 		);

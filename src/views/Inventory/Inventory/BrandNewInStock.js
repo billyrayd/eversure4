@@ -25,6 +25,7 @@ import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import InventorySubSidebar from 'components/SubSidebars/InventorySubSidebar';
 import GrowSpinner from 'components/Spinners/GrowSpinner';
 import ConfirmDelete from 'components/Modals/ConfirmDelete';
+import NoAccess from 'components/CustomComponents/NoAccess';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -170,109 +171,55 @@ class BrandNewInStock extends React.PureComponent {
 	render() {
 		let { value, spinnerIsVisible, confirmDeleteShown, noEvent } = this.state;
 		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
+
+		const permission = true;
 		return (
 			<div>
 				<InventorySidebar component="Inventory" />
-				
 				<div className="content">
 						<NavBar data={this.props} system="Inventory" />
 						<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
-						<InventorySubSidebar subpage="/brand_new_in_stock/"/>
-						<Container className="with-subsidebar" fluid>
-							<Row className="page-header">
-								<Col>
-									<h4>Units in Stock <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
-								</Col>
-							</Row>
-							<Row>
-								<Col>
-									<Col className="advanced-filter">
-										<h5>Advanced Filter</h5>
-										<Row>
-											<Col md="4"><Input placeholder="Select Date" onChange={(e) => this.handleChange(e)} value={value} /></Col>
-											<Col md="4"><Input placeholder="Enter Brand" /></Col>
-											<Col md="4"><Input placeholder="Enter Model" /></Col>
-										</Row>
-										<div className="space" />
-										<Row>
-											<Col md="4"><Input placeholder="Enter Engine Number" /></Col>
-											<Col md="4"><Input placeholder="Select Branch" /></Col>
-											<Col md="4"><Button className="es-main-btn" color="primary" block onClick={this.advancedFilter} disabled={spinnerIsVisible}>Apply Filter</Button> </Col>
-										</Row>
-									</Col>
-								</Col>
-							</Row>
-							<Row>
-								<br />
-							</Row>
-							<Row>
-								<Col>
-									<GrowSpinner visible={spinnerIsVisible} />
-									<Table className={table_class_name}>
-										{
-											/*
-										<thead>
-											<tr>
-												<th>model</th>
-												<th>chassis no.</th>
-												<th>engine no.</th>
-												<th>branch</th>
-												<th>date received</th>
-												<th>action</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>Fury</td>
-												<td>2334F3H324</td>
-												<td>654F23Q23P</td>
-												<td>silay</td>
-												<td>05/12/19</td>
-												<td>
-													<Button color="primary" size="sm" id="edit" >
-														<FontAwesomeIcon icon="edit"/>
-														<Tooltip target="edit" placement="top" autohide={true} isOpen={isOpenEdit} toggle={this.toggleEdit}>Edit</Tooltip>
-													</Button>
-													<Button color="danger" size="sm" id="delete">
-														<FontAwesomeIcon icon="trash" />
-														<Tooltip target="delete" placement="top" autohide={true} isOpen={isOpenDelete} toggle={this.toggleDelete}>Delete</Tooltip>
-													</Button>
-													<Button color="warning" size="sm" id="view">
-														<FontAwesomeIcon className="text-white" icon="eye" />
-														<Tooltip target="view" placement="top" autohide={true} isOpen={isOpenView} toggle={this.toggleView}>View</Tooltip>
-													</Button>
-												</td>
-											</tr>
-											<tr>
-												<td>Fury</td>
-												<td>2334F3H324</td>
-												<td>654F23Q23P</td>
-												<td>talisay</td>
-												<td>05/12/19</td>
-												<td>
-													<Button color="primary" size="sm"><FontAwesomeIcon icon="edit" /></Button>
-													<Button color="danger" size="sm"><FontAwesomeIcon icon="trash" /></Button>
-													<Button color="warning" size="sm"><FontAwesomeIcon className="text-white" icon="eye" /></Button>
-												</td>
-											</tr>
-											<tr>
-												<td>Fury</td>
-												<td>2334F3H324</td>
-												<td>654F23Q23P</td>
-												<td>bacolod</td>
-												<td>05/12/19</td>
-												<td>
-													<Button color="primary" size="sm"><FontAwesomeIcon icon="edit" /></Button>
-													<Button color="danger" size="sm"><FontAwesomeIcon icon="trash" /></Button>
-													<Button color="warning" size="sm"><FontAwesomeIcon className="text-white" icon="eye" /></Button>
-												</td>
-											</tr>
-										</tbody>
-										*/}
-									</Table>
-								</Col>
-							</Row>
-						</Container>
+						{
+							permission ?
+							<div>
+								<InventorySubSidebar subpage="/brand_new_in_stock/"/>
+								<Container className="with-subsidebar" fluid>
+									<Row className="page-header">
+										<Col>
+											<h4>Units in Stock <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+										</Col>
+									</Row>
+									<Row>
+										<Col>
+											<Col className="advanced-filter">
+												<h5>Advanced Filter</h5>
+												<Row>
+													<Col md="4"><Input placeholder="Select Date" onChange={(e) => this.handleChange(e)} value={value} /></Col>
+													<Col md="4"><Input placeholder="Enter Brand" /></Col>
+													<Col md="4"><Input placeholder="Enter Model" /></Col>
+												</Row>
+												<div className="space" />
+												<Row>
+													<Col md="4"><Input placeholder="Enter Engine Number" /></Col>
+													<Col md="4"><Input placeholder="Select Branch" /></Col>
+													<Col md="4"><Button className="es-main-btn" color="primary" block onClick={this.advancedFilter} disabled={spinnerIsVisible}>Apply Filter</Button> </Col>
+												</Row>
+											</Col>
+										</Col>
+									</Row>
+									<Row>
+										<br />
+									</Row>
+									<Row>
+										<Col>
+											<GrowSpinner visible={spinnerIsVisible} />
+											<Table className={table_class_name} />
+										</Col>
+									</Row>
+								</Container>
+							</div> :
+							<NoAccess />
+						}
 				</div>
 			</div>
 		);

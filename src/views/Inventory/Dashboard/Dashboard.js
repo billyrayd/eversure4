@@ -29,15 +29,15 @@ class Dashboard extends React.PureComponent {
 			{ letter: 'E' },
 		];
 
-		const permission = !true;
+		const permission = true;
 		return (
 			<div>
 				<InventorySidebar component="Dashboard" />
 				<div className="content">
+					<NavBar data={this.props} system="Inventory" />
 					{
 						permission ?
 						<div>
-							<NavBar data={this.props} system="Inventory" />
 							<Container fluid>
 								<Row>
 									<Col>

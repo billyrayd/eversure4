@@ -25,6 +25,7 @@ import AccountingSidebar from 'components/Sidebars/AccountingSidebar';
 import CustomersSubSidebar from 'components/SubSidebars/CustomersSubSidebar';
 import GrowSpinner from 'components/Spinners/GrowSpinner';
 import ConfirmDelete from 'components/Modals/ConfirmDelete';
+import NoAccess from 'components/CustomComponents/NoAccess';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -163,43 +164,49 @@ class SecondhandCustomerInstallment extends React.PureComponent {
 	render() {
 		let { value, spinnerIsVisible, confirmDeleteShown, noEvent } = this.state;
 		let table_class_name = noEvent ? mainTableClassName : mainTableClassName;
+		const permission = true;
 		return (
 			<div>
 				<AccountingSidebar component="Customers" />
-				
 				<div className="content">
-						<NavBar data={this.props} system="Accounting" />
-						<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
-						<CustomersSubSidebar subpage="/secondhand_customer_installment/"/>
-						<Container className="with-subsidebar" fluid>
-							<Row className="page-header">
-								<Col>
-									<h4>Customers with Secondhand Units (Installment) <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
-								</Col>
-							</Row>
-							<Row>
-								<Col>
-									<Col className="advanced-filter">
-										<h5>Filter</h5>
-										<Row>
-											<Col md="4"><Input placeholder="Enter Customer Name" onChange={(e) => this.handleChange(e)} value={value} /></Col>
-											<Col md="4"><Input placeholder="Enter Account Number" /></Col>
-											<Col md="4"><Button className="es-main-btn" color="primary" block onClick={this.advancedFilter} disabled={spinnerIsVisible}>Search</Button> </Col>
-										</Row>
+					<NavBar data={this.props} system="Accounting" />
+					<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
+					{
+						permission ?
+						<div>
+							<CustomersSubSidebar subpage="/secondhand_customer_installment/"/>
+							<Container className="with-subsidebar" fluid>
+								<Row className="page-header">
+									<Col>
+										<h4>Customers with Secondhand Units (Installment) <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 									</Col>
-								</Col>
-							</Row>
-							<Row>
-								<br />
-							</Row>
-							<Row>
-								<Col>
-									<GrowSpinner visible={spinnerIsVisible} />
-									<Table className={mainTableClassName}>
-									</Table>
-								</Col>
-							</Row>
-						</Container>
+								</Row>
+								<Row>
+									<Col>
+										<Col className="advanced-filter">
+											<h5>Filter</h5>
+											<Row>
+												<Col md="4"><Input placeholder="Enter Customer Name" onChange={(e) => this.handleChange(e)} value={value} /></Col>
+												<Col md="4"><Input placeholder="Enter Account Number" /></Col>
+												<Col md="4"><Button className="es-main-btn" color="primary" block onClick={this.advancedFilter} disabled={spinnerIsVisible}>Search</Button> </Col>
+											</Row>
+										</Col>
+									</Col>
+								</Row>
+								<Row>
+									<br />
+								</Row>
+								<Row>
+									<Col>
+										<GrowSpinner visible={spinnerIsVisible} />
+										<Table className={mainTableClassName}>
+										</Table>
+									</Col>
+								</Row>
+							</Container>
+						</div> :
+						<NoAccess />
+					}
 				</div>
 			</div>
 		);

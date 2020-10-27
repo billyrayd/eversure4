@@ -20,6 +20,7 @@ import {
 import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import UsersSubSidebar from 'components/SubSidebars/UsersSubSidebar';
+import NoAccess from 'components/CustomComponents/NoAccess';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -79,62 +80,69 @@ class UsersList extends React.PureComponent {
 
 	render() {
 		let { isOpenEdit, isOpenDelete, isOpenView, value } = this.state;
+		const permission = true;
 		return (
 			<div>
 				<InventorySidebar component="Users" />
 				<div className="content">
 						<NavBar data={this.props} system="Inventory" />
-						<UsersSubSidebar subpage="/users/"/>
-						<Container className="with-subsidebar" fluid>
-							<Row className="page-header">
-								<Col>
-									<h4>System Users List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
-								</Col>
-							</Row>
-							<Row className="one-input-search">
-									<Col md="6"><Input className="dt-search" placeholder="Search Users" /></Col>
-							</Row>
-							<Row>
-								<br />
-							</Row>
-							<Row>
-								<Col>
-									<Table className="users-table">
-										<thead>
-											<tr>
-												<th>name</th>
-												<th>username</th>
-												<th>role</th>
-												<th>branch</th>
-												<th>action</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>john doe</td>
-												<td>superadmin</td>
-												<td>Super Admin</td>
-												<td>main</td>
-												<td>
-													<Button color="warning" size="sm" id="view">
-														<FontAwesomeIcon className="text-white" icon="eye" />
-														<Tooltip target="view" placement="top" autohide={true} isOpen={isOpenView} toggle={this.toggleView}>View</Tooltip>
-													</Button>
-													<Button color="primary" size="sm" id="edit" >
-														<FontAwesomeIcon icon="edit"/>
-														<Tooltip target="edit" placement="top" autohide={true} isOpen={isOpenEdit} toggle={this.toggleEdit}>Edit</Tooltip>
-													</Button>
-													<Button color="danger" size="sm" id="delete">
-														<FontAwesomeIcon icon="trash" />
-														<Tooltip target="delete" placement="top" autohide={true} isOpen={isOpenDelete} toggle={this.toggleDelete}>Delete</Tooltip>
-													</Button>
-												</td>
-											</tr>
-										</tbody>
-									</Table>
-								</Col>
-							</Row>
-						</Container>
+						{
+							permission ?
+							<div>
+								<UsersSubSidebar subpage="/users/"/>
+								<Container className="with-subsidebar" fluid>
+									<Row className="page-header">
+										<Col>
+											<h4>System Users List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+										</Col>
+									</Row>
+									<Row className="one-input-search">
+											<Col md="6"><Input className="dt-search" placeholder="Search Users" /></Col>
+									</Row>
+									<Row>
+										<br />
+									</Row>
+									<Row>
+										<Col>
+											<Table className="users-table">
+												<thead>
+													<tr>
+														<th>name</th>
+														<th>username</th>
+														<th>role</th>
+														<th>branch</th>
+														<th>action</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>john doe</td>
+														<td>superadmin</td>
+														<td>Super Admin</td>
+														<td>main</td>
+														<td>
+															<Button color="warning" size="sm" id="view">
+																<FontAwesomeIcon className="text-white" icon="eye" />
+																<Tooltip target="view" placement="top" autohide={true} isOpen={isOpenView} toggle={this.toggleView}>View</Tooltip>
+															</Button>
+															<Button color="primary" size="sm" id="edit" >
+																<FontAwesomeIcon icon="edit"/>
+																<Tooltip target="edit" placement="top" autohide={true} isOpen={isOpenEdit} toggle={this.toggleEdit}>Edit</Tooltip>
+															</Button>
+															<Button color="danger" size="sm" id="delete">
+																<FontAwesomeIcon icon="trash" />
+																<Tooltip target="delete" placement="top" autohide={true} isOpen={isOpenDelete} toggle={this.toggleDelete}>Delete</Tooltip>
+															</Button>
+														</td>
+													</tr>
+												</tbody>
+											</Table>
+										</Col>
+									</Row>
+								</Container>
+							</div> :
+							<NoAccess />
+						}
 				</div>
 			</div>
 		);

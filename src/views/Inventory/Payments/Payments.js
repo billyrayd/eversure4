@@ -19,6 +19,7 @@ import {
 
 import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
+import NoAccess from 'components/CustomComponents/NoAccess';
 
 class Payments extends React.PureComponent {
 	constructor(props) {
@@ -26,18 +27,26 @@ class Payments extends React.PureComponent {
 	}
 
 	render() {
+		const permission = true;
+
 		return (
 			<div>
 				<InventorySidebar component="Payments" />
 				<div className="content">
 						<NavBar data={this.props} system="Inventory" />
-						<Container fluid>
-							<Row>
-								<Col>
-									<h1>Payments</h1>
-								</Col>
-							</Row>
-						</Container>
+						{
+							permission ?
+							<div>
+								<Container fluid>
+									<Row>
+										<Col>
+											<h1>Payments</h1>
+										</Col>
+									</Row>
+								</Container>
+							</div> :
+							<NoAccess />
+						}
 				</div>
 			</div>
 		);
