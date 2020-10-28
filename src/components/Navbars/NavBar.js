@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-	Button,
+  Button,
   Collapse,
   Navbar,
   NavbarToggler,
@@ -20,33 +20,55 @@ import { Link } from "react-router-dom";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const NavBar = (props) => {
+import EversureLogo from 'assets/logo/eversure_logo.png';
 
-	const [isOpen, setIsOpen] = useState(false);
-	const toggle = () => setIsOpen(!isOpen);
+var $ = require( 'jquery' );
 
-	const test = () => {
-		console.log(props.data.authenticated)
-	}
+export default class NavBar extends React.PureComponent {
 
-  let { system } = props;
-  const mainLink = system == "Inventory" ? "/" : "/accounting/"
+  constructor(props) {
+    super(props);
 
-	return (
-		<div className="main-nav">
-      <Navbar expand="md">
-        <Link to={mainLink} className="main-link"><FontAwesomeIcon icon="caret-left"/> BACK TO MAIN MENU</Link>
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav className="mr-auto" navbar>
-          </Nav>
-          <NavbarText className="notification-icon"><FontAwesomeIcon className="esBlue" icon="bell" /><Badge color="danger">100</Badge></NavbarText>
-          <NavbarText className="user-text esBlue">Welcome, <b>Admin User Full Name</b></NavbarText>
-          <NavbarText className="logout"><FontAwesomeIcon icon="sign-out-alt" className="esBlue" /></NavbarText>
-        </Collapse>
-      </Navbar>
-    </div>
-	);
+    this.state = {
+      isOpen: false
+    }
+  }
+
+  toggleSidebar = () => {
+    console.log('toggle')
+
+    $(".sidebar").toggle();
+  }
+
+  toggle = () => {
+    let { isOpen } = this.state;
+    this.setState({isOpen: !isOpen})
+  }
+
+  toggleMenu = () => {
+    
+  }
+
+  render() {
+    let { isOpen } = this.state;
+    let { system } = this.props;
+    const mainLink = system == "Inventory" ? "/" : "/accounting/";
+    return (
+      <div className="main-nav">
+        <Navbar expand="md">
+          <FontAwesomeIcon className="toggle-sidebar" icon="bars" onClick={this.toggleSidebar} />
+          <img src={EversureLogo} alt="logo" className="logo" />
+          <Link to={mainLink} className="main-link"><FontAwesomeIcon icon="caret-left"/> BACK TO MAIN MENU</Link>
+          <FontAwesomeIcon className="toggle-menu" icon="ellipsis-v" onClick={this.toggleMenu} />
+          <Collapse isOpen={isOpen} navbar>
+            <Nav className="mr-auto" navbar>
+            </Nav>
+            <NavbarText className="notification-icon"><FontAwesomeIcon className="esBlue" icon="bell" /><Badge color="danger">100</Badge></NavbarText>
+            <NavbarText className="user-text esBlue">Welcome, <b>Admin User Full Name</b></NavbarText>
+            <NavbarText className="logout"><FontAwesomeIcon icon="sign-out-alt" className="esBlue" /></NavbarText>
+          </Collapse>
+        </Navbar>
+      </div>
+    );
+  }
 }
-
-export default NavBar;

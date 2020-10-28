@@ -5,22 +5,41 @@ import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reac
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import PerfectScrollbar from 'perfect-scrollbar';
+
 import EversureLogo from 'assets/logo/eversure_logo.png';
+
+var $ = require( 'jquery' );
+
+var ps;
 
 export default class InventorySidebar extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
+    this.sideBar = React.createRef();
 
 		this.state = {
 			isOpen: false
 		}
 	}
 
+	componentDidMount(){
+    // ps = new PerfectScrollbar(this.sideBar.current, {
+    //   suppressScrollX: true,
+    //   suppressScrollY: false,
+    //   minScrollbarLength: 10
+    // });
+	}
+
 	toggle = () => {
 		let { isOpen } = this.state;
 
 		this.setState({isOpen: !isOpen})
+	}
+
+	closeSidebar = () => {
+		$(".sidebar").toggle();
 	}
 
 	render() {
@@ -37,6 +56,7 @@ export default class InventorySidebar extends React.PureComponent {
 			<div className="sidebar">
 				<ul>
 					<li className="logo-li">
+						<FontAwesomeIcon className="dismiss-sidebar" icon="times" onClick={this.closeSidebar} />
 						<Link to='/'>
 							<img src={EversureLogo} alt="logo" className="logo" />
 						</Link>

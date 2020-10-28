@@ -49,10 +49,11 @@ input:active:focus,
 }
 
 .sidebar{
-	position: fixed;
   background-color: #fff;
   box-shadow: 1px 1px 7px #ddd;
   height: 100%;
+  overflow: hidden;
+  position: fixed;
   width: 200px;
   z-index: 100;
   ul{
@@ -66,6 +67,9 @@ input:active:focus,
 		    margin-left: 15px;
 		    margin-top: 8px;
   		}
+      .dismiss-sidebar{
+        display: none;
+      }
   	}
   	li.nav-link{
   		padding: 1rem 1rem !important;
@@ -99,10 +103,11 @@ input:active:focus,
   		}
   	}
   	li.app-version{
-  		position: absolute;
-	    bottom: 0;
-	    padding: 15px;
-	    font-size: 13px;
+      bottom: 0;
+      font-size: 13px;
+      padding: 15px;
+      position: fixed;
+      width: 200px;
   	}
   }
   .system-type{
@@ -159,21 +164,30 @@ input:active:focus,
   {
 		margin-right: 20px;
 	}
+  .toggle-sidebar,
+  img.logo,
+  .toggle-menu
+  {
+    display: none;
+  }
 }
 .content{
-	background-color: $esGray;
-	padding-left: 200px;
+  background-color: $esGray;
+  float: right;
+  overflow: hidden;
+  position: relative;
+  width: calc(100% - 200px);
 	.test{
-		background-color: green;
-		margin: 10px;
-		height: 500px;
+    background-color: green;
+    height: 500px;
+    margin: 10px;
 	}
 }
 .sub-sidebar{
   background-color: #eee;
   float: left;
   height: 100%;
-  overflow: scroll;
+  overflow-y: auto;
   padding: 10px 10px 70px 10px;
   position: fixed;
   width: 180px;
@@ -268,6 +282,7 @@ input:active:focus,
 /* -- reusable/global styles -- */
 .es-main-btn{
   background-color: $esBlue;
+  font-weight: 600;
 }
 .es-main-btn:hover,
 .es-main-btn:active,
@@ -345,29 +360,88 @@ input:active:focus,
 .fontSize100{
   @include fontSize(100px);
 }
-
+.main-panel{
+  overflow: hidden;
+  position: relative;
+}
 
 /*
 *
 scrollbar appearance
 *
 */
-::-webkit-scrollbar {
-  width: 7px;
-}
+// ::-webkit-scrollbar {
+//   width: 7px;
+// }
 
 /* Track */
-::-webkit-scrollbar-track {
-  background: $esGray; 
-}
+// ::-webkit-scrollbar-track {
+//   background: $esGray; 
+// }
  
 /* Handle */
-::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 4px;
-}
+// ::-webkit-scrollbar-thumb {
+//   background: #ccc;
+//   border-radius: 4px;
+// }
 
 /* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #aaa; 
+// ::-webkit-scrollbar-thumb:hover {
+//   background: #aaa; 
+// }
+
+
+@media screen and (max-width: 415px) {
+  .sidebar{
+    display: none;
+    .logo-li{
+      .logo{
+        display: inline-block;
+        width: 110px !important;
+        position: absolute;
+        left: 40px;
+        top: 2px;
+        height: 23px;
+      }
+      .dismiss-sidebar{
+        display: inline-block !important;
+        font-size: 18px;
+        left: 22px;
+        position: relative;
+        top: 10px;
+      }
+    }
+    .system-type{
+      .dropdown-menu{
+        left: 2px !important;
+      }
+    }
+  }
+  .main-nav{
+    padding: 5px;
+    .main-link{
+      display: none;
+    }
+    .toggle-sidebar,
+    .toggle-menu
+    {
+      display: inline-block;
+    }
+    img.logo{
+      display: inline-block;
+      left: 50px;
+      position: absolute;
+      width: 110px;
+    }
+  }
+  .content{
+    width: 100%;
+    .sub-sidebar{
+      display: none;
+    }
+    .with-subsidebar{
+      padding-left: 15px;
+      padding-top: 20px;
+    }
+  }
 }

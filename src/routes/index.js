@@ -1,5 +1,6 @@
 
 import Login from "views/Login";
+import ResetPassword from "views/ResetPassword";
 
 /* --- Inventory --- */
 import LandingPage from "views/Inventory/LandingPage";
@@ -50,9 +51,14 @@ var unauthenticated = [
   {
     path: "/",
     name: "Login",
-    icon: "nc-icon nc-bank",
     component: Login,
   },
+  {
+    path: "/reset_password/",
+    name: "ResetPassword",
+    component: ResetPassword,
+  },
+
 ]
 
 var authenticated = [

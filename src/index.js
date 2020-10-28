@@ -36,6 +36,9 @@ import {
   faFileContract,
   faExclamationCircle,
   faExclamationTriangle,
+  faBars,
+  faEllipsisV,
+  faTimes,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
@@ -75,6 +78,9 @@ library.add(
   faFileContract,
   faExclamationCircle,
   faExclamationTriangle,
+  faBars,
+  faEllipsisV,
+  faTimes,
 )
 
 ReactDOM.render(

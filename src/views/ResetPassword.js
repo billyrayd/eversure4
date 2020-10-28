@@ -20,7 +20,7 @@ import PageFooter from 'components/CustomComponents/PageFooter';
 
 import EversureLogo from 'assets/logo/eversure_logo.png';
 
-class Login extends React.PureComponent {
+class ResetPassword extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -29,8 +29,12 @@ class Login extends React.PureComponent {
 		}
 	}
 
-	login = () => {
-		this.props.actions.Authenticate(true)
+	resetPassword = () => {
+		console.log('Hello')
+	}
+
+	cancelRequest = () => {
+		this.props.history.push("/")
 	}
 
 	render() {
@@ -44,23 +48,22 @@ class Login extends React.PureComponent {
 									<img src={EversureLogo} alt="logo" className="logo" />
 								</FormGroup>
 								<FormGroup className="title-wrap">
-									<h3>Welcome!</h3>
-									<h6>Login to your account</h6>
+									<h3>Forgot Password?</h3>
+									<h6>Enter your email below and we'll send you a new password</h6>
 								</FormGroup>
 								<div className="space" />
 								<FormGroup>
-									<Input placeholder="Enter Username" />
+									<Input placeholder="Enter Email" />
 								</FormGroup>
 								<FormGroup>
-									<Input type="password" placeholder="Enter Password" />
-								</FormGroup>
-								<FormGroup>
-									<Button color="primary" className="es-main-btn" block onClick={this.login}>
-										Login
+									<Button color="primary" className="es-main-btn" block onClick={this.resetPassword}>
+										Reset
 									</Button>
 								</FormGroup>
 								<FormGroup>
-									<Link to="/reset_password/">Forgot Password?</Link>
+									<Button block onClick={this.cancelRequest}>
+										Cancel
+									</Button>
 								</FormGroup>
 							</div>
 						</div>
@@ -81,4 +84,4 @@ function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, AuthActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(ResetPassword);

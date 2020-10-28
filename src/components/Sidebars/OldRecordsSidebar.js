@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import EversureLogo from 'assets/logo/eversure_logo.png';
 
+var $ = require( 'jquery' );
+
 export default class OldRecordsSidebar extends React.PureComponent {
 
 	constructor(props) {
@@ -23,6 +25,10 @@ export default class OldRecordsSidebar extends React.PureComponent {
 		this.setState({isOpen: !isOpen})
 	}
 
+	closeSidebar = () => {
+		$(".sidebar").toggle();
+	}
+
 	render() {
 		let { isOpen } = this.state;
 		let links = [
@@ -32,6 +38,7 @@ export default class OldRecordsSidebar extends React.PureComponent {
 			<div className="sidebar">
 				<ul>
 					<li className="logo-li">
+						<FontAwesomeIcon className="dismiss-sidebar" icon="times" onClick={this.closeSidebar} />
 						<Link to='/old_records/'>
 							<img src={EversureLogo} alt="logo" className="logo" />
 						</Link>

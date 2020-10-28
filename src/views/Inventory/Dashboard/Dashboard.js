@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as DashboardActions from 'actions/dashboard';
 
+import PerfectScrollbar from "perfect-scrollbar";
+
 //reactstrap
 import {
 	Container,
@@ -15,10 +17,22 @@ import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
 
+var ps;
+
 class Dashboard extends React.PureComponent {
 	constructor(props) {
 		super(props);
+
+		this.mainContent = React.createRef();
 	}
+	componentDidMount(){
+    ps = new PerfectScrollbar(this.mainContent.current);
+    document.body.classList.toggle("perfect-scrollbar-on");
+	}
+  componentWillUnmount() {
+    ps.destroy();
+    document.body.classList.toggle("perfect-scrollbar-on");
+  }
 
 	render() {
 		var data = [
@@ -33,11 +47,11 @@ class Dashboard extends React.PureComponent {
 		return (
 			<div>
 				<InventorySidebar component="Dashboard" />
-				<div className="content">
+				<div className="content" ref={this.mainContent}>
 					<NavBar data={this.props} system="Inventory" />
 					{
 						permission ?
-						<div>
+						<div className="main-panel">
 							<Container fluid>
 								<Row>
 									<Col>

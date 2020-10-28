@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as AuthActions from 'actions/auth';
 
-import FourZeroFour from 'views/FourZeroFour';
+import FourZeroFour from 'components/CustomComponents/FourZeroFour';
 
 import Routes from './routes';
 let {authenticated, unauthenticated} = Routes()
@@ -20,7 +20,7 @@ class App extends React.PureComponent{
     return(
       <div className="">
         <Switch>
-          {!this.props.authenticated ? AuthenticatedPages : UnAuthenticatedPages}
+          {this.props.authenticated ? AuthenticatedPages : UnAuthenticatedPages}
           <Route component={FourZeroFour} />
         </Switch>
       </div>
