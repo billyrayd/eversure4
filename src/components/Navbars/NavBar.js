@@ -35,9 +35,9 @@ export default class NavBar extends React.PureComponent {
   }
 
   toggleSidebar = () => {
-    console.log('toggle')
-
     $(".sidebar").toggle();
+    $(".sidebar-wrap").toggleClass("es-overlay");
+    document.body.classList.toggle("disable-scroll");
   }
 
   toggle = () => {
@@ -46,7 +46,7 @@ export default class NavBar extends React.PureComponent {
   }
 
   toggleMenu = () => {
-    
+
   }
 
   render() {
@@ -59,7 +59,11 @@ export default class NavBar extends React.PureComponent {
           <FontAwesomeIcon className="toggle-sidebar" icon="bars" onClick={this.toggleSidebar} />
           <img src={EversureLogo} alt="logo" className="logo" />
           <Link to={mainLink} className="main-link"><FontAwesomeIcon icon="caret-left"/> BACK TO MAIN MENU</Link>
+          <div className="current-user"><b>Super Admin</b></div>
           <FontAwesomeIcon className="toggle-menu" icon="ellipsis-v" onClick={this.toggleMenu} />
+          <div className="notification-count">
+            <Badge color="danger">29</Badge>
+          </div>
           <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar>
             </Nav>

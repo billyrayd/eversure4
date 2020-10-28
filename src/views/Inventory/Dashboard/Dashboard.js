@@ -26,12 +26,9 @@ class Dashboard extends React.PureComponent {
 		this.mainContent = React.createRef();
 	}
 	componentDidMount(){
-    ps = new PerfectScrollbar(this.mainContent.current);
-    document.body.classList.toggle("perfect-scrollbar-on");
+    document.body.classList.remove("disable-scroll");
 	}
   componentWillUnmount() {
-    ps.destroy();
-    document.body.classList.toggle("perfect-scrollbar-on");
   }
 
 	render() {

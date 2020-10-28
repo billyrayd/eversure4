@@ -40,6 +40,9 @@ export default class InventorySidebar extends React.PureComponent {
 
 	closeSidebar = () => {
 		$(".sidebar").toggle();
+		$(".sidebar-wrap").toggleClass("es-overlay");
+    document.body.classList.toggle("disable-scroll");
+		
 	}
 
 	render() {
@@ -53,41 +56,43 @@ export default class InventorySidebar extends React.PureComponent {
 			{ name: 'Settings', path: '/brands/', icon: 'cogs', visible: true },
 		]
 		return (
-			<div className="sidebar">
-				<ul>
-					<li className="logo-li">
-						<FontAwesomeIcon className="dismiss-sidebar" icon="times" onClick={this.closeSidebar} />
-						<Link to='/'>
-							<img src={EversureLogo} alt="logo" className="logo" />
-						</Link>
-					</li>
-					<li className="system-type">
-						<ButtonDropdown isOpen={isOpen} toggle={this.toggle}>
-				      <DropdownToggle caret>
-				        Inventory System
-				      </DropdownToggle>
-				      <DropdownMenu>
-				        <DropdownItem>
-				        	<Link to="/accounting/">Accounting System</Link>
-				        </DropdownItem>
-				        <DropdownItem divider />
-				        <DropdownItem>
-				        	<Link to="/old_records/">Old Records System</Link>
-				        </DropdownItem>
-				      </DropdownMenu>
-				    </ButtonDropdown>
-					</li>
-					{
-						links.map((link, key) => {
-							return link.visible ? <li key={key} className={this.props.component == link.name ? "nav-link active" : "nav-link"}>
-											<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} />{link.name}</Link>
-										</li> : null
-						})
-					}
-					<li className="app-version">
-						<span>Eversure v4.0.0</span>
-					</li>
-				</ul>
+			<div className="sidebar-wrap">
+				<div className="sidebar">
+					<ul>
+						<li className="logo-li">
+							<FontAwesomeIcon className="dismiss-sidebar" icon="times" onClick={this.closeSidebar} />
+							<Link to='/'>
+								<img src={EversureLogo} alt="logo" className="logo" />
+							</Link>
+						</li>
+						<li className="system-type">
+							<ButtonDropdown isOpen={isOpen} toggle={this.toggle}>
+					      <DropdownToggle caret>
+					        Inventory System
+					      </DropdownToggle>
+					      <DropdownMenu>
+					        <DropdownItem>
+					        	<Link to="/accounting/">Accounting System</Link>
+					        </DropdownItem>
+					        <DropdownItem divider />
+					        <DropdownItem>
+					        	<Link to="/old_records/">Old Records System</Link>
+					        </DropdownItem>
+					      </DropdownMenu>
+					    </ButtonDropdown>
+						</li>
+						{
+							links.map((link, key) => {
+								return link.visible ? <li key={key} className={this.props.component == link.name ? "nav-link active" : "nav-link"}>
+												<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} />{link.name}</Link>
+											</li> : null
+							})
+						}
+						<li className="app-version">
+							<span>Eversure v4.0.0</span>
+						</li>
+					</ul>
+				</div>
 			</div>
 		);
 	}

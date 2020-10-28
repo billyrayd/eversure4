@@ -118,7 +118,7 @@ input:active:focus,
       font-weight: 600;
 	    border-radius: 17px;
 	    margin-left: 10px;
-	    padding: 0 20px 3px 20px;
+	    padding: 3px 20px;
   		background-color: $esBlue !important;
 	    width: 180px;
   	}
@@ -168,6 +168,12 @@ input:active:focus,
   img.logo,
   .toggle-menu
   {
+    display: none;
+  }
+  .current-user{
+    display: none;
+  }
+  .notification-count{
     display: none;
   }
 }
@@ -364,6 +370,9 @@ input:active:focus,
   overflow: hidden;
   position: relative;
 }
+.allowScrollX{
+  overflow-x: scroll;
+}
 
 /*
 *
@@ -392,28 +401,40 @@ scrollbar appearance
 
 
 @media screen and (max-width: 415px) {
+  .es-overlay{
+    width: 100%;
+    background-color: rgba(0,0,0,0.2);
+    position: fixed;
+    height: 100%;
+    z-index: 3;
+  }
+  .disable-scroll{
+    overflow: hidden;
+  }
   .sidebar{
     display: none;
-    .logo-li{
-      .logo{
-        display: inline-block;
-        width: 110px !important;
-        position: absolute;
-        left: 40px;
-        top: 2px;
-        height: 23px;
+    ul{
+      li.logo-li{
+        img.logo{
+          display: inline-block;
+          width: 110px;
+          position: absolute;
+          left: 40px;
+          top: 2px;
+          height: 23px;
+        }
+        .dismiss-sidebar{
+          display: inline-block !important;
+          font-size: 18px;
+          left: 22px;
+          position: relative;
+          top: 10px;
+        }
       }
-      .dismiss-sidebar{
-        display: inline-block !important;
-        font-size: 18px;
-        left: 22px;
-        position: relative;
-        top: 10px;
-      }
-    }
-    .system-type{
-      .dropdown-menu{
-        left: 2px !important;
+      .system-type{
+        .dropdown-menu{
+          left: 2px !important;
+        }
       }
     }
   }
@@ -429,9 +450,33 @@ scrollbar appearance
     }
     img.logo{
       display: inline-block;
+      height: 23px;
       left: 50px;
       position: absolute;
       width: 110px;
+    }
+    .current-user{
+      display: block;
+      font-size: 12px;
+      max-width: 100px;
+      overflow: hidden;
+      position: absolute;
+      right: 35px;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100px;
+    }
+    .notification-count{
+      display: block;
+      height: 30px;
+      position: absolute;
+      right: -3px;
+      top: -7px;
+      width: 30px;
+      span{
+        font-size: 10px;
+      }
     }
   }
   .content{

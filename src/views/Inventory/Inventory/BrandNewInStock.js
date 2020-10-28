@@ -211,7 +211,7 @@ class BrandNewInStock extends React.PureComponent {
 										<br />
 									</Row>
 									<Row>
-										<Col>
+										<Col className="allowScrollX">
 											<GrowSpinner visible={spinnerIsVisible} />
 											<Table className={table_class_name} />
 										</Col>
