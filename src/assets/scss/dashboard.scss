@@ -29,8 +29,24 @@ $white: #ffffff;
   font-size: $value;
 }
 
+@font-face {
+  font-family: 'Oxygen';
+  src: url('../fonts/Oxygen/Oxygen-Bold.ttf');
+  src: url('../fonts/Oxygen/Oxygen-Light.ttf');
+  src: url('../fonts/Oxygen/Oxygen-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  src: url('../fonts/Noto_Sans/NotoSans-BoldItalic.ttf');
+  src: url('../fonts/Noto_Sans/NotoSans-Bold.ttf');
+  src: url('../fonts/Noto_Sans/NotoSans-Italic.ttf');
+  src: url('../fonts/Noto_Sans/NotoSans-Regular.ttf');
+}
+
 body{
   background-color: $esGray;
+  font-family: 'Oxygen';
 }
 
 button,
@@ -105,7 +121,7 @@ input:active:focus,
   	li.app-version{
       bottom: 0;
       font-size: 13px;
-      padding: 15px;
+      padding: 15px 15px 15px 30px;
       position: fixed;
       width: 200px;
   	}
@@ -288,7 +304,7 @@ input:active:focus,
 /* -- reusable/global styles -- */
 .es-main-btn{
   background-color: $esBlue;
-  font-weight: 600;
+  // font-weight: 600;
 }
 .es-main-btn:hover,
 .es-main-btn:active,
@@ -412,7 +428,10 @@ scrollbar appearance
     overflow: hidden;
   }
   .sidebar{
-    display: none;
+    // display: none;
+    transition: 0.3s;
+    width: 0px;
+    z-index: 4;
     ul{
       li.logo-li{
         img.logo{
@@ -435,6 +454,10 @@ scrollbar appearance
         .dropdown-menu{
           left: 2px !important;
         }
+      }
+      li.app-version{
+        bottom: -35px;
+        transition: 0.1s;
       }
     }
   }

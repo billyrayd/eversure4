@@ -34,9 +34,11 @@ export default class NavBar extends React.PureComponent {
     }
   }
 
-  toggleSidebar = () => {
-    $(".sidebar").toggle();
-    $(".sidebar-wrap").toggleClass("es-overlay");
+  openSidebar = () => {
+    // $(".sidebar").toggle();
+    document.getElementById("sideBar").style.width = "200px";
+    document.getElementById("appVersion").style.bottom = "0px";
+    $(".sidebar-wrap").addClass("es-overlay");
     document.body.classList.toggle("disable-scroll");
   }
 
@@ -56,7 +58,7 @@ export default class NavBar extends React.PureComponent {
     return (
       <div className="main-nav">
         <Navbar expand="md">
-          <FontAwesomeIcon className="toggle-sidebar" icon="bars" onClick={this.toggleSidebar} />
+          <FontAwesomeIcon className="toggle-sidebar" icon="bars" onClick={this.openSidebar} />
           <img src={EversureLogo} alt="logo" className="logo" />
           <Link to={mainLink} className="main-link"><FontAwesomeIcon icon="caret-left"/> BACK TO MAIN MENU</Link>
           <div className="current-user"><b>Super Admin</b></div>

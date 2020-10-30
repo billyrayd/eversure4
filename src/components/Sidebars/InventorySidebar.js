@@ -30,6 +30,17 @@ export default class InventorySidebar extends React.PureComponent {
     //   suppressScrollY: false,
     //   minScrollbarLength: 10
     // });
+
+    const that = this;
+
+    $("body").on("click", function(e){
+    	if(typeof e.target.className === "string"){
+    		if(e.target.className.split(" ")[0] == "sidebar-wrap"){
+    			that.closeSidebar()
+    		}
+    	}
+    	
+    })
 	}
 
 	toggle = () => {
@@ -39,8 +50,11 @@ export default class InventorySidebar extends React.PureComponent {
 	}
 
 	closeSidebar = () => {
-		$(".sidebar").toggle();
-		$(".sidebar-wrap").toggleClass("es-overlay");
+		// $(".sidebar").toggle();
+
+    document.getElementById("sideBar").style.width = "0px";
+    document.getElementById("appVersion").style.bottom = "-35px";
+		$(".sidebar-wrap").removeClass("es-overlay");
     document.body.classList.toggle("disable-scroll");
 		
 	}
@@ -57,7 +71,7 @@ export default class InventorySidebar extends React.PureComponent {
 		]
 		return (
 			<div className="sidebar-wrap">
-				<div className="sidebar">
+				<div className="sidebar" id="sideBar">
 					<ul>
 						<li className="logo-li">
 							<FontAwesomeIcon className="dismiss-sidebar" icon="times" onClick={this.closeSidebar} />
@@ -88,7 +102,7 @@ export default class InventorySidebar extends React.PureComponent {
 											</li> : null
 							})
 						}
-						<li className="app-version">
+						<li className="app-version" id="appVersion">
 							<span>Eversure v4.0.0</span>
 						</li>
 					</ul>
