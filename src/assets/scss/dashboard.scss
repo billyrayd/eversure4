@@ -46,7 +46,7 @@ $white: #ffffff;
 
 body{
   background-color: $esGray;
-  font-family: 'Oxygen';
+  font-family: 'Noto Sans';
 }
 
 button,
@@ -70,6 +70,7 @@ input:active:focus,
   height: 100%;
   overflow: hidden;
   position: fixed;
+  transition: 0.3s;
   width: 200px;
   z-index: 100;
   ul{
@@ -192,6 +193,9 @@ input:active:focus,
   .notification-count{
     display: none;
   }
+  .custom-menu{
+    display: none;
+  }
 }
 .content{
   background-color: $esGray;
@@ -301,6 +305,36 @@ input:active:focus,
   }
 }
 
+.landing-page{
+  .landing-link{
+    cursor: pointer;
+    div.link-wrap{
+      background: $esBlue;
+      padding: 40px;
+      text-align: center;
+      border-radius: 7px;
+      .landing-icon{
+        @include fontSize(50px);
+        color: $white;
+        margin-bottom: 20px;
+      }
+      span{
+        @include upperCased();
+        color: $white;
+      }
+    }
+  }
+  .space1{
+    height: 40px;
+  }
+  .space2{
+    height: 30px;
+  }
+}
+.main-link.mobile{
+  display: none;
+}
+
 /* -- reusable/global styles -- */
 .es-main-btn{
   background-color: $esBlue;
@@ -387,8 +421,17 @@ input:active:focus,
   position: relative;
 }
 .allowScrollX{
-  overflow-x: scroll;
+  overflow-x: auto;
 }
+.text-upppercase{
+  @include upperCased();
+}
+.page-title{
+  @include fontSize(30px);
+  font-weight: 600;
+}
+
+
 
 /*
 *
@@ -501,6 +544,46 @@ scrollbar appearance
         font-size: 10px;
       }
     }
+    .custom-menu{
+      background: #fff;
+      border-radius: 3px;
+      box-shadow: -1px 1px 1px #ccc;
+      display: none;
+      padding: 5px 0;
+      position: absolute;
+      right: 5px;
+      top: 30px;
+      width: 200px;
+      z-index: 4;
+      &.open{
+        display: block;
+      }
+      ul{
+        margin-bottom: 0;
+        padding-left: 0;
+        li{
+          list-style-type: none;
+          margin: 10px 0;
+          padding: 5px 10px;
+          &:active,
+          &:focus,
+          &:active:focus
+          {
+            background-color: $esBlue;
+            span{
+              color: $white;
+            }
+          }
+        }
+        li.notifications-link{
+          .badge{
+            float: right;
+            position: relative;
+            top: 3px;
+          }
+        }
+      }
+    }
   }
   .content{
     width: 100%;
@@ -510,6 +593,33 @@ scrollbar appearance
     .with-subsidebar{
       padding-left: 15px;
       padding-top: 20px;
+    }
+  }
+  .main-link.mobile{
+    @include fontSize(13px);
+    @include upperCased();
+    color: $esBlue;
+    display: block;
+    float: right;
+    font-weight: 600;
+    position: relative;
+    top: 10px;
+  }
+  .landing-page{
+    .landing-link{
+      .link-wrap{
+        margin-bottom: 20px;
+      }
+      &:last-child
+      {
+        margin-bottom: 40px;
+      }
+    }
+    .space1{
+      height: 20px;
+    }
+    .space2{
+      height: 0;
     }
   }
 }

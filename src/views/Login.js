@@ -29,6 +29,9 @@ class Login extends React.PureComponent {
 		}
 	}
 
+	componentDidMount(){
+	}
+
 	login = () => {
 		this.props.actions.Authenticate(true)
 	}
