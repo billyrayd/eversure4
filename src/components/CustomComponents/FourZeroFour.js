@@ -31,7 +31,7 @@ export default class FourZeroFour extends React.PureComponent {
 						<h1 className="text-danger">404</h1>
 						<h2 className="text-danger">Page Not Found</h2>
 						<br />
-						<h6 onClick={() => this.props.history.goBack()}><FontAwesomeIcon icon="caret-left" /> GO BACK</h6>
+						<h6 style={{cursor: 'pointer'}} onClick={() => this.props.history.goBack()}><FontAwesomeIcon icon="caret-left" /> GO BACK</h6>
 					</div>
 				</Container>
 				<PageFooter />

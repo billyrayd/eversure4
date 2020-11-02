@@ -39,8 +39,9 @@ export default class InventorySidebar extends React.PureComponent {
     			that.closeSidebar()
     		}
     	}
-    	
     })
+
+    $("body").removeClass("disable-scroll");
 	}
 
 	toggle = () => {
@@ -53,9 +54,10 @@ export default class InventorySidebar extends React.PureComponent {
 		// $(".sidebar").toggle();
 
     document.getElementById("sideBar").style.width = "0px";
-    document.getElementById("appVersion").style.bottom = "-35px";
+    document.getElementById("appVersion").style.bottom = "-55px";
 		$(".sidebar-wrap").removeClass("es-overlay");
-    document.body.classList.toggle("disable-scroll");
+    // document.body.classList.toggle("disable-scroll");
+    $("body").removeClass("disable-scroll");
 		
 	}
 

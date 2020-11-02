@@ -34,7 +34,13 @@ class Dashboard extends React.PureComponent {
   componentWillUnmount() {
   }
 	logOut = () => {
+		const that = this;
 		this.props.actions.Authenticate(false)
+		.then((res) => {
+			if(res){
+				that.props.history.push("/")
+			}
+		})
 	}
 
 	render() {

@@ -46,14 +46,24 @@ export default class NavBar extends React.PureComponent {
         }
       }
     })
+
+    // console.log(!this.props.data.authenticated)
   }
+
+  componentDidUpdate(){
+    if(!this.props.data.authenticated){
+      this.props.history.push("/")
+    }
+  }
+
   openSidebar = () => {
     // $(".sidebar").toggle();
     document.getElementById("sideBar").style.width = "200px";
     document.getElementById("appVersion").style.bottom = "0px";
     $("#customMenu").removeClass("open");
     $(".sidebar-wrap").addClass("es-overlay");
-    document.body.classList.toggle("disable-scroll");
+    // document.body.classList.toggle("disable-scroll");
+    $("body").addClass("disable-scroll");
   }
   toggle = () => {
     let { isOpen } = this.state;

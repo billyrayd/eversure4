@@ -50,10 +50,8 @@ class LandingPage extends React.PureComponent {
 						<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut} />
 						<Container fluid>
 							<Row>
-								<Col xs="6" md="10">
-									<h1 className="page-title"></h1>
-								</Col>
-								<Col xs="6" md="2">
+								<Col xs="12" md="10">
+									<h1 className="page-title landing-page">Inventory System</h1>
 								</Col>
 							</Row>
 							<Row className="landing-page">

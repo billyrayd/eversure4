@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as DashboardActions from 'actions/dashboard';
+import * as AuthActions from 'actions/auth';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -104,6 +105,15 @@ class BrandnewCustomerRepossessed extends React.PureComponent {
 			console.log("view")
 		})
 	}
+	logOut = () => {
+		const that = this;
+		this.props.actions.Authenticate(false)
+		.then((res) => {
+			if(res){
+				that.props.history.push("/")
+			}
+		})
+	}
 	/* set input characters to uppercase */
 	handleChange = (event) => {
 	  const input = event.target;
@@ -169,7 +179,7 @@ class BrandnewCustomerRepossessed extends React.PureComponent {
 			<div>
 				<AccountingSidebar component="Customers" />
 				<div className="content">
-					<NavBar data={this.props} system="Accounting" />
+					<NavBar data={this.props} system="Accounting" history={this.props.history} logout={this.logOut}/>
 					<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
 					{
 						permission ?
@@ -219,7 +229,7 @@ const mapStateToProps = state => ({
 });
 
 function mapDispatchToProps(dispatch) {
-   return { actions: bindActionCreators(Object.assign({}, DashboardActions), dispatch) }
+   return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BrandnewCustomerRepossessed);

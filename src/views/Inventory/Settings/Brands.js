@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as DashboardActions from 'actions/dashboard';
+import * as AuthActions from 'actions/auth';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -48,6 +49,15 @@ class Brands extends React.PureComponent {
       mainTable.search($(this).val()).draw();
     });
 	}
+	logOut = () => {
+		const that = this;
+		this.props.actions.Authenticate(false)
+		.then((res) => {
+			if(res){
+				that.props.history.push("/")
+			}
+		})
+	}
 	toggleEdit = () => {
 		let { isOpenEdit } = this.state;
 		this.setState({isOpenEdit: !isOpenEdit})
@@ -85,7 +95,7 @@ class Brands extends React.PureComponent {
 			<div>
 				<InventorySidebar component="Settings" />
 				<div className="content">
-						<NavBar data={this.props} system="Inventory" />
+					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{
 							permission ?
 							<div>
@@ -147,7 +157,7 @@ const mapStateToProps = state => ({
 });
 
 function mapDispatchToProps(dispatch) {
-   return { actions: bindActionCreators(Object.assign({}, DashboardActions), dispatch) }
+   return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Brands);

@@ -75,6 +75,9 @@ input:active:focus,
   z-index: 100;
   ul{
   	padding-left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding-bottom: 70px;
   	li{
   		list-style-type: none;
   	}
@@ -120,6 +123,8 @@ input:active:focus,
   		}
   	}
   	li.app-version{
+      background-color: $white;
+      border-top: 1px solid #eee;
       bottom: 0;
       font-size: 13px;
       padding: 15px 15px 15px 30px;
@@ -145,7 +150,7 @@ input:active:focus,
   		top: 4px;
   	}
   	.dropdown-menu{
-  		left: 4px !important;
+  		// left: 4px !important;
   		.dropdown-item{
   			@include fontSize(14px);
         a{
@@ -208,6 +213,9 @@ input:active:focus,
     height: 500px;
     margin: 10px;
 	}
+  .mobile-subsidebar{
+    display: none;
+  }
 }
 .sub-sidebar{
   background-color: #eee;
@@ -368,6 +376,9 @@ input:active:focus,
 .space{
   height: 10px;
 }
+.space20{
+  height: 20px;
+}
 .spinner-wrap{
   left: 44%;
   position: absolute;
@@ -429,6 +440,12 @@ input:active:focus,
 .page-title{
   @include fontSize(30px);
   font-weight: 600;
+  &.landing-page{
+    display: none;
+  }
+}
+.dropdown-item.active{
+  background-color: $esBlue;
 }
 
 
@@ -460,6 +477,10 @@ scrollbar appearance
 
 
 @media screen and (max-width: 415px) {
+  .container-fluid{
+    min-height: calc(100vh - 50px);
+    padding-top: 10px;
+  }
   .es-overlay{
     width: 100%;
     background-color: rgba(0,0,0,0.2);
@@ -472,7 +493,7 @@ scrollbar appearance
   }
   .sidebar{
     // display: none;
-    transition: 0.3s;
+    transition: 0.2s;
     width: 0px;
     z-index: 4;
     ul{
@@ -482,7 +503,7 @@ scrollbar appearance
           width: 110px;
           position: absolute;
           left: 40px;
-          top: 2px;
+          top: 5px;
           height: 23px;
         }
         .dismiss-sidebar{
@@ -490,7 +511,7 @@ scrollbar appearance
           font-size: 18px;
           left: 22px;
           position: relative;
-          top: 10px;
+          top: 15px;
         }
       }
       .system-type{
@@ -499,7 +520,7 @@ scrollbar appearance
         }
       }
       li.app-version{
-        bottom: -35px;
+        bottom: -55px;
         transition: 0.1s;
       }
     }
@@ -592,7 +613,40 @@ scrollbar appearance
     }
     .with-subsidebar{
       padding-left: 15px;
-      padding-top: 20px;
+      padding-top: 10px;
+    }
+    .mobile-subsidebar{
+      display: block;
+      .btn-group{
+        border: 1px solid $esBlue;
+        border-radius: 3px;
+        width: 100%;
+        .dropdown-toggle{
+          background-color: $white;
+          color: #111;
+          text-align: left;
+          &:after{
+            float: right;
+            position: relative;
+            top: 10px;
+          }
+          &:active:focus,
+          &:active,
+          &:focus
+          {
+            background-color: $white;
+            color: #111;
+          }
+        }
+        .dropdown-menu{
+          width: 100%;
+          button{
+            a{
+              color: #111;
+            }
+          }
+        }
+      }
     }
   }
   .main-link.mobile{
@@ -605,10 +659,27 @@ scrollbar appearance
     position: relative;
     top: 10px;
   }
+  .page-title.landing-page{
+    text-align: center;
+    margin-top: 20px;
+  }
   .landing-page{
     .landing-link{
-      .link-wrap{
+      .link-wrap{ 
         margin-bottom: 20px;
+        height: 130px;
+        .col-6{
+          float: left;
+        }
+        .col-6:last-child{
+          span{
+            position: relative;
+            top: 15px;
+          }
+          span.financial{
+            top: 0;
+          }
+        }
       }
       &:last-child
       {
@@ -622,4 +693,13 @@ scrollbar appearance
       height: 0;
     }
   }
+  .advanced-filter{
+    input{
+      margin-bottom: 10px;
+    }
+    .space{
+      height: 0;
+    }
+  }
+
 }

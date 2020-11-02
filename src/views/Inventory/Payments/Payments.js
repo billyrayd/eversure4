@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as DashboardActions from 'actions/dashboard';
+import * as AuthActions from 'actions/auth';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -25,6 +26,15 @@ class Payments extends React.PureComponent {
 	constructor(props) {
 		super(props);
 	}
+	logOut = () => {
+		const that = this;
+		this.props.actions.Authenticate(false)
+		.then((res) => {
+			if(res){
+				that.props.history.push("/")
+			}
+		})
+	}
 
 	render() {
 		const permission = true;
@@ -33,7 +43,7 @@ class Payments extends React.PureComponent {
 			<div>
 				<InventorySidebar component="Payments" />
 				<div className="content">
-						<NavBar data={this.props} system="Inventory" />
+					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{
 							permission ?
 							<div>
@@ -59,7 +69,7 @@ const mapStateToProps = state => ({
 });
 
 function mapDispatchToProps(dispatch) {
-   return { actions: bindActionCreators(Object.assign({}, DashboardActions), dispatch) }
+   return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Payments);

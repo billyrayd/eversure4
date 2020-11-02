@@ -5,8 +5,10 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as DashboardActions from 'actions/dashboard';
+import * as AuthActions from 'actions/auth';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 
 //reactstrap
 import {
@@ -18,6 +20,10 @@ import {
 	Tooltip,
 	Input,
 	Spinner,
+	ButtonDropdown,
+	DropdownToggle,
+	DropdownMenu,
+	DropdownItem,
 } from 'reactstrap';
 
 import NavBar from 'components/Navbars/NavBar';
@@ -42,6 +48,7 @@ class BrandNewInStock extends React.PureComponent {
 			dt_data: [],
 			confirmDeleteShown: false,
 			noEvent: false,
+			isOpen: false,
 		}
 	}
 
@@ -111,6 +118,15 @@ class BrandNewInStock extends React.PureComponent {
 			console.log("view")
 		})
 	}
+	logOut = () => {
+		const that = this;
+		this.props.actions.Authenticate(false)
+		.then((res) => {
+			if(res){
+				that.props.history.push("/")
+			}
+		})
+	}
 	/* set input characters to uppercase */
 	handleChange = (event) => {
 	  const input = event.target;
@@ -123,7 +139,6 @@ class BrandNewInStock extends React.PureComponent {
 	    () => input.setSelectionRange(start, end)
 	  );
 	}
-
 	advancedFilter = () => {
 		const dt_data = [
 			[
@@ -150,40 +165,96 @@ class BrandNewInStock extends React.PureComponent {
 			that.reDrawDataTable(dt_data)
 		}, 1000 * 5)
 	}
-
 	reDrawDataTable = (data) => {
 	  const table = $(mainTableClass).DataTable();
 	  table.clear();
 	  table.rows.add(data);
 	  table.draw();
 	}
-
 	closeModal = () => {
 		const that = this;
 
 		that.setState({confirmDeleteShown: false})
 	}
-
 	deleteFunction = () => {
 		console.log('delete function here ...')
 	}
+	toggleSubSidebar = () => {
+		let { isOpen } = this.state;
+
+		this.setState({isOpen: !isOpen})
+	}
 
 	render() {
-		let { value, spinnerIsVisible, confirmDeleteShown, noEvent } = this.state;
+		let { value, spinnerIsVisible, confirmDeleteShown, noEvent, isOpen } = this.state;
 		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
+
+		let sublinks = [
+			{ name: 'Brand New', path: '/', visible: true, className: "nav-link-header custom-disabled text-uppercase", nonLink: true },
+			{ name: 'In Stock', path: '/brand_new_in_stock/', visible: true },
+			{ name: 'Sold', path: '/brand_new_sold/', visible: true },
+			{ name: 'Transfer', path: '/transfer/', visible: true },
+			{ name: 'Outgoing', path: '/outgoing/', visible: true },
+			{ name: 'Incoming', path: '/incoming/', visible: true },
+			{ name: 'divider', path: '/', visible: true, className: 'divider custom-disabled', nonLink: true, divider: true },
+			{ name: 'Secondhand', path: '/', visible: true, className: "nav-link-header custom-disabled text-uppercase", nonLink: true },
+			{ name: 'In Stock', path: '/secondhand_in_stock/', visible: true },
+			{ name: 'Sold', path: '/secondhand_sold/', visible: true },
+			{ name: 'divider', path: '/', visible: true, className: 'divider custom-disabled', nonLink: true, divider: true },
+			{ name: 'Search D.R.', path: '/search_dr/', visible: true },
+			{ name: 'Duplicate Entries', path: '/duplicate_entries/', visible: true },
+		]
+
+		const currentPage = ["In Stock","/brand_new_in_stock/"];
 
 		const permission = true;
 		return (
 			<div>
 				<InventorySidebar component="Inventory" />
 				<div className="content">
-						<NavBar data={this.props} system="Inventory" />
+					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
 						{
 							permission ?
 							<div>
 								<InventorySubSidebar subpage="/brand_new_in_stock/"/>
 								<Container className="with-subsidebar" fluid>
+									<Row>
+										<Col xs="6">
+											<h1 className="page-title">Inventory</h1>
+										</Col>
+										<Col xs="6" md="3">
+											<Link to="/" className="main-link mobile"><FontAwesomeIcon icon="caret-left"/> main menu</Link>
+										</Col>
+									</Row>
+									<Row>
+										<Col>
+											<div className="space20" />
+										</Col>
+									</Row>
+									<Row className="mobile-subsidebar">
+										<Col md="12">
+											<ButtonDropdown isOpen={isOpen} toggle={this.toggleSubSidebar}>
+									      <DropdownToggle caret>
+									        {currentPage[0]}
+									      </DropdownToggle>
+									      <DropdownMenu>
+									      	{
+									      		sublinks.map((link, key) => {
+															const className = link.nonLink ? link.className : (currentPage[1] == link.path ? "active" : "");
+
+									      			return link.visible ? <DropdownItem className={className} key={key} onClick={() => link.nonLink ? null : this.props.history.push(link.path)}>
+									      				{link.divider ? <hr /> : link.name}
+									      			</DropdownItem> : null
+									      		})
+									      	}
+									      </DropdownMenu>
+									    </ButtonDropdown>
+										</Col>
+										<Col md="12">
+											<div className="space20" />
+										</Col>
+									</Row>
 									<Row className="page-header">
 										<Col>
 											<h4>Units in Stock <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
@@ -232,7 +303,7 @@ const mapStateToProps = state => ({
 });
 
 function mapDispatchToProps(dispatch) {
-   return { actions: bindActionCreators(Object.assign({}, DashboardActions), dispatch) }
+   return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BrandNewInStock);

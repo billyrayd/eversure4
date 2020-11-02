@@ -7,11 +7,12 @@ import {
 
 export const Authenticate = (status) => {
 	return (dispatch, getState) => {
-		console.log("authenticate")
 
 		dispatch({
 			type: AUTHENTICATED,
 			status: status
 		})
+
+		return Promise.resolve(true)
 	}
 }
