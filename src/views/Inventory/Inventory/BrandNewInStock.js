@@ -221,7 +221,7 @@ class BrandNewInStock extends React.PureComponent {
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">
-											<h1 className="page-title">Inventory</h1>
+											<h1 className="page-title inner">Inventory</h1>
 										</Col>
 										<Col xs="6" md="3">
 											<Link to="/" className="main-link mobile"><FontAwesomeIcon icon="caret-left"/> main menu</Link>
@@ -229,7 +229,7 @@ class BrandNewInStock extends React.PureComponent {
 									</Row>
 									<Row>
 										<Col>
-											<div className="space20" />
+											<div className="space" />
 										</Col>
 									</Row>
 									<Row className="mobile-subsidebar">

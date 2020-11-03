@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import * as DashboardActions from 'actions/dashboard';
 import * as AuthActions from 'actions/auth';
 
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 //reactstrap
@@ -19,7 +20,13 @@ import {
 	Tooltip,
 	Input,
 	Spinner,
+	ButtonDropdown,
+	DropdownToggle,
+	DropdownMenu,
+	DropdownItem,
 } from 'reactstrap';
+
+import { customer_sub_links } from 'helpers/sublinks/Accounting/';
 
 import NavBar from 'components/Navbars/NavBar';
 import AccountingSidebar from 'components/Sidebars/AccountingSidebar';
@@ -44,6 +51,7 @@ class BrandnewCustomerCash extends React.PureComponent {
 			dt_data: [],
 			confirmDeleteShown: false,
 			noEvent: false,
+			isOpen: false,
 		}
 	}
 
@@ -132,7 +140,6 @@ class BrandnewCustomerCash extends React.PureComponent {
 
 	  that.advancedFilter()
 	}
-
 	advancedFilter = () => {
 		const dt_data = [
 			[
@@ -159,28 +166,31 @@ class BrandnewCustomerCash extends React.PureComponent {
 			that.reDrawDataTable(dt_data)
 		}, 1000 * 3)
 	}
-
 	reDrawDataTable = (data) => {
 	  const table = $(mainTableClass).DataTable();
 	  table.clear();
 	  table.rows.add(data);
 	  table.draw();
 	}
-
 	closeModal = () => {
 		const that = this;
 
 		that.setState({confirmDeleteShown: false})
 	}
-
 	deleteFunction = () => {
 		console.log('delete function here ...')
 	}
+	toggleSubSidebar = () => {
+		let { isOpen } = this.state;
+
+		this.setState({isOpen: !isOpen})
+	}
 
 	render() {
-		let { value, spinnerIsVisible, confirmDeleteShown, noEvent } = this.state;
+		let { value, spinnerIsVisible, confirmDeleteShown, noEvent, isOpen } = this.state;
 		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
-		const permission = !true;
+		const permission = true;
+		const currentPage = ["Brand New (Cash)","/brandnew_customer_cash/"];
 		return (
 			<div>
 				<AccountingSidebar component="Customers" />
@@ -192,9 +202,45 @@ class BrandnewCustomerCash extends React.PureComponent {
 						<div>
 							<CustomersSubSidebar subpage="/brandnew_customer_cash/"/>
 							<Container className="with-subsidebar" fluid>
+								<Row>
+									<Col xs="6">
+										<h1 className="page-title inner">Customers</h1>
+									</Col>
+									<Col xs="6" md="3">
+										<Link to="/" className="main-link mobile"><FontAwesomeIcon icon="caret-left"/> main menu</Link>
+									</Col>
+								</Row>
+								<Row>
+									<Col>
+										<div className="space" />
+									</Col>
+								</Row>
+								<Row className="mobile-subsidebar">
+									<Col md="12">
+										<ButtonDropdown isOpen={isOpen} toggle={this.toggleSubSidebar}>
+								      <DropdownToggle caret>
+								        {currentPage[0]}
+								      </DropdownToggle>
+								      <DropdownMenu>
+								      	{
+								      		customer_sub_links.map((link, key) => {
+														const className = link.nonLink ? link.className : (currentPage[1] == link.path ? "active" : "");
+
+								      			return link.visible ? <DropdownItem className={className} key={key} onClick={() => link.nonLink ? null : this.props.history.push(link.path)}>
+								      				{link.divider ? <hr /> : link.name}
+								      			</DropdownItem> : null
+								      		})
+								      	}
+								      </DropdownMenu>
+								    </ButtonDropdown>
+									</Col>
+									<Col md="12">
+										<div className="space20" />
+									</Col>
+								</Row>
 								<Row className="page-header">
 									<Col>
-										<h4>Customers with Brand New Units (Cash) <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+										<h4>Customers with Brand New Units <small>(Cash)</small> <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 									</Col>
 								</Row>
 								<Row>
@@ -212,7 +258,7 @@ class BrandnewCustomerCash extends React.PureComponent {
 									<br />
 								</Row>
 								<Row>
-									<Col>
+									<Col className="allowScrollX">
 										<GrowSpinner visible={spinnerIsVisible} />
 										<Table className={mainTableClassName}>
 										</Table>

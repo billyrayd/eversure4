@@ -280,7 +280,7 @@ input:active:focus,
 }
 .with-subsidebar{
   padding-left: 185px;
-  padding-top: 70px;
+  padding-top: 50px;
   .page-header{
     .es-main-btn{
       margin-top: -6px;
@@ -443,6 +443,9 @@ input:active:focus,
   &.landing-page{
     display: none;
   }
+  &.inner{
+    display: none;
+  }
 }
 .dropdown-item.active{
   background-color: $esBlue;
@@ -521,7 +524,7 @@ scrollbar appearance
       }
       li.app-version{
         bottom: -55px;
-        transition: 0.1s;
+        transition: 0.2s;
       }
     }
   }
@@ -659,9 +662,15 @@ scrollbar appearance
     position: relative;
     top: 10px;
   }
-  .page-title.landing-page{
-    text-align: center;
-    margin-top: 20px;
+  .page-title{
+    &.landing-page{
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+    }
+    &.inner{
+      display: block;
+    }
   }
   .landing-page{
     .landing-link{

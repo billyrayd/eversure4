@@ -20,7 +20,6 @@ export default class InventorySidebar extends React.PureComponent {
 	}
 	
 	componentDidMount(){
-
     const that = this;
 
     $("body").on("click", function(e){
@@ -29,8 +28,9 @@ export default class InventorySidebar extends React.PureComponent {
     			that.closeSidebar()
     		}
     	}
-    	
     })
+
+    $("body").removeClass("disable-scroll");
 	}
 
 	toggle = () => {

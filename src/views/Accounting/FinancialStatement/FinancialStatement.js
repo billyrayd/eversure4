@@ -3,6 +3,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as DashboardActions from 'actions/dashboard';
+import * as AuthActions from 'actions/auth';
+
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 //reactstrap
 import {
@@ -19,21 +23,33 @@ class FinancialStatement extends React.PureComponent {
 	constructor(props) {
 		super(props);
 	}
+	logOut = () => {
+		const that = this;
+		this.props.actions.Authenticate(false)
+		.then((res) => {
+			if(res){
+				that.props.history.push("/")
+			}
+		})
+	}
 
 	render() {
-		const permission = !true;
+		const permission = true;
 		return (
 			<div>
 				<AccountingSidebar component="Financial" />
 				<div className="content">
-						<NavBar data={this.props} system="Accounting" />
+					<NavBar data={this.props} system="Accounting" history={this.props.history} logout={this.logOut}/>
 						{
 							permission ?
 							<div>
 								<Container fluid>
 									<Row>
-										<Col>
-											<h1>Financial Statement</h1>
+										<Col xs="6" md="9">
+											<h1 className="page-title">Financial Statement</h1>
+										</Col>
+										<Col xs="6" md="3">
+											<Link to="/" className="main-link mobile"><FontAwesomeIcon icon="caret-left"/> main menu</Link>
 										</Col>
 									</Row>
 								</Container>
@@ -52,7 +68,7 @@ const mapStateToProps = state => ({
 });
 
 function mapDispatchToProps(dispatch) {
-   return { actions: bindActionCreators(Object.assign({}, DashboardActions), dispatch) }
+   return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FinancialStatement);
