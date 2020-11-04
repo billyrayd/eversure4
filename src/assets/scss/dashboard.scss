@@ -185,6 +185,13 @@ input:active:focus,
   .notification-icon
   {
 		margin-right: 20px;
+    .badge{
+      @include fontSize(10px);
+      border: 2px solid $esGray;
+      left: -9px;
+      position: relative;
+      top: -15px;
+    }
 	}
   .toggle-sidebar,
   img.logo,
@@ -238,6 +245,7 @@ input:active:focus,
     }
     li.page-title{
       @include  marginB(10px);
+      margin-top: -7px;
       span{
         font-size: 30px;
         font-weight: bold;
@@ -437,6 +445,13 @@ input:active:focus,
 .text-upppercase{
   @include upperCased();
 }
+
+.container-fluid:not(.with-subsidebar){
+  .page-title{
+    margin-top: 8px;
+  }
+}
+
 .page-title{
   @include fontSize(30px);
   font-weight: 600;
@@ -519,7 +534,7 @@ scrollbar appearance
       }
       .system-type{
         .dropdown-menu{
-          left: 2px !important;
+          left: 1px !important;
         }
       }
       li.app-version{

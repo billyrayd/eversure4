@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import * as DashboardActions from 'actions/dashboard';
 import * as AuthActions from 'actions/auth';
 
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 //reactstrap
@@ -49,8 +50,11 @@ class Payments extends React.PureComponent {
 							<div>
 								<Container fluid>
 									<Row>
-										<Col>
-											<h1>Payments</h1>
+										<Col xs="6" md="9">
+											<h1 className="page-title">Payments</h1>
+										</Col>
+										<Col xs="6" md="3">
+											<Link to="/" className="main-link mobile"><FontAwesomeIcon icon="caret-left"/> main menu</Link>
 										</Col>
 									</Row>
 								</Container>

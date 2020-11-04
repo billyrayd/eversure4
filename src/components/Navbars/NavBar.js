@@ -32,7 +32,8 @@ export default class NavBar extends React.PureComponent {
 
     this.state = {
       isOpen: false,
-      tooltipOpen: false
+      tooltipOpen: false,
+      notifTooltipOpen: false,
     }
   }
 
@@ -78,15 +79,20 @@ export default class NavBar extends React.PureComponent {
   logOut = () => {
     this.props.logout();
   }
-  toggleTooltip = () => {
+  logoutTooltip = () => {
     let { tooltipOpen } = this.state;
     this.setState({tooltipOpen: !tooltipOpen})
   }
+  notifTooltip = () => {
+    let { notifTooltipOpen } = this.state;
+    this.setState({notifTooltipOpen: !notifTooltipOpen})
+  }
 
   render() {
-    let { isOpen,tooltipOpen } = this.state;
+    let { isOpen,tooltipOpen,notifTooltipOpen } = this.state;
     let { system } = this.props;
     const mainLink = system == "Inventory" ? "/" : "/accounting/";
+    const notifCount = "99+"
     return (
       <div className="main-nav">
         <Navbar expand="md">
@@ -97,20 +103,28 @@ export default class NavBar extends React.PureComponent {
           <span onClick={this.toggleMenu} >
             <FontAwesomeIcon className="toggle-menu" icon="ellipsis-v"/>
             <div className="notification-count">
-              <Badge color="danger">29</Badge>
+              <Badge color="danger">{notifCount}</Badge>
             </div>
           </span>
           <div className="custom-menu" id="customMenu">
             <ul>
-              <li className="notifications-link" onClick={() => this.goTo("/reset_password_notifications/")}><span>Notifications <Badge color="danger">29</Badge></span></li>
+              <li className="notifications-link" onClick={() => this.goTo("/reset_password_notifications/")}><span>Notifications <Badge color="danger">{notifCount}</Badge></span></li>
               <li onClick={this.logOut}><span>Logout</span></li>
             </ul>
           </div>
           <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar>
             </Nav>
-            <NavbarText className="notification-icon">
-              <FontAwesomeIcon className="esBlue" icon="bell" /><Badge color="danger">100</Badge>
+            <NavbarText id="notif" className="notification-icon" onClick={() => this.goTo("/reset_password_notifications/")} style={{cursor: 'pointer'}}>
+              <FontAwesomeIcon className="esBlue" icon="bell" /><Badge color="danger">{notifCount}</Badge>
+              <Tooltip
+                placement="left"
+                isOpen={notifTooltipOpen}
+                target={"notif"}
+                toggle={this.notifTooltip}
+              >
+                Notifications
+              </Tooltip>
             </NavbarText>
             <NavbarText className="user-text esBlue">
               Welcome, <b>Admin User Full Name</b>
@@ -121,7 +135,7 @@ export default class NavBar extends React.PureComponent {
                 placement="left"
                 isOpen={tooltipOpen}
                 target={"logout"}
-                toggle={this.toggleTooltip}
+                toggle={this.logoutTooltip}
               >
                 Logout
               </Tooltip>

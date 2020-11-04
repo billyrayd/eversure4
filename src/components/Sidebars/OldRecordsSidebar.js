@@ -43,7 +43,7 @@ export default class OldRecordsSidebar extends React.PureComponent {
 		// $(".sidebar").toggle();
 
     document.getElementById("sideBar").style.width = "0px";
-    document.getElementById("appVersion").style.bottom = "-35px";
+    document.getElementById("appVersion").style.bottom = "-55px";
 		$(".sidebar-wrap").removeClass("es-overlay");
     document.body.classList.toggle("disable-scroll");
 	}
