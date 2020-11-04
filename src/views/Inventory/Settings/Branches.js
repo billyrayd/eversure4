@@ -34,10 +34,10 @@ import NoAccess from 'components/CustomComponents/NoAccess';
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
 
-const mainTableClass = ".brands-table";
-const mainTableClassName = "brands-table";
+const mainTableClass = ".branches-table";
+const mainTableClassName = "branches-table";
 
-class Brands extends React.PureComponent {
+class Branches extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -73,7 +73,7 @@ class Brands extends React.PureComponent {
       "columns": [
           {title: "DATA OBJECT"},
           {title: "no."},
-          {title: "brand name"},
+          {title: "branch name"},
           {title: "action", createdCell: (td, cellData, rowData, row, col) => {
 						ReactDOM.render(<div>
 										<Button color="primary" size="sm" className="edit">
@@ -107,17 +107,14 @@ class Brands extends React.PureComponent {
 	loadModels = () => {
 		const dt_data = [
 			[
-				[], 1, 'kawasaki', '',
+				[], 1, 'silay', '',
 			],
 			[
-				[], 2, 'suzuki', '',
+				[], 2, 'talisay', '',
 			],
 			[
-				[], 3, 'yamaha', '',
-			],
-			[
-				[], 3, 'kymco', '',
-			],
+				[], 3, 'bacolod', '',
+			]
 		]
 
 		this.reDrawDataTable(dt_data);
@@ -166,7 +163,7 @@ class Brands extends React.PureComponent {
 		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen } = this.state;
 		const permission = true;
 
-		const currentPage = ["Brands","/brands/"];
+		const currentPage = ["Branches","/branches/"];
 		return (
 			<div>
 				<InventorySidebar component="Settings" />
@@ -175,7 +172,7 @@ class Brands extends React.PureComponent {
 						{
 							permission ?
 							<div>
-								<SettingsSubSidebar subpage="/brands/"/>
+								<SettingsSubSidebar subpage="/branches/"/>
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">
@@ -215,11 +212,11 @@ class Brands extends React.PureComponent {
 									</Row>
 									<Row className="page-header">
 										<Col>
-											<h4>Motorcycle Brands List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+											<h4>Branch List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 										</Col>
 									</Row>
 									<Row className="one-input-search">
-											<Col md="6"><Input className="dt-search" placeholder="Search Brands" /></Col>
+											<Col md="6"><Input className="dt-search" placeholder="Search Branch" /></Col>
 									</Row>
 									<Row>
 										<br />
@@ -248,4 +245,4 @@ function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Brands);
+export default connect(mapStateToProps, mapDispatchToProps)(Branches);

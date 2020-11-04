@@ -34,10 +34,10 @@ import NoAccess from 'components/CustomComponents/NoAccess';
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
 
-const mainTableClass = ".brands-table";
-const mainTableClassName = "brands-table";
+const mainTableClass = ".users-table";
+const mainTableClassName = "users-table";
 
-class Brands extends React.PureComponent {
+class Models extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -66,13 +66,14 @@ class Brands extends React.PureComponent {
 				},
 				{
 					"orderable": false,
-					"targets": 3,
+					"targets": 4,
 					"width": 100
 				}
 			],
       "columns": [
           {title: "DATA OBJECT"},
           {title: "no."},
+          {title: "model name"},
           {title: "brand name"},
           {title: "action", createdCell: (td, cellData, rowData, row, col) => {
 						ReactDOM.render(<div>
@@ -107,17 +108,14 @@ class Brands extends React.PureComponent {
 	loadModels = () => {
 		const dt_data = [
 			[
-				[], 1, 'kawasaki', '',
+				[], 1, 'fury', 'kawasaki', '',
 			],
 			[
-				[], 2, 'suzuki', '',
+				[], 2, 'raider 115', 'suzuki', '',
 			],
 			[
-				[], 3, 'yamaha', '',
-			],
-			[
-				[], 3, 'kymco', '',
-			],
+				[], 3, 'sniper 150', 'yamaha', '',
+			]
 		]
 
 		this.reDrawDataTable(dt_data);
@@ -166,7 +164,7 @@ class Brands extends React.PureComponent {
 		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen } = this.state;
 		const permission = true;
 
-		const currentPage = ["Brands","/brands/"];
+		const currentPage = ["Models","/models/"];
 		return (
 			<div>
 				<InventorySidebar component="Settings" />
@@ -175,7 +173,7 @@ class Brands extends React.PureComponent {
 						{
 							permission ?
 							<div>
-								<SettingsSubSidebar subpage="/brands/"/>
+								<SettingsSubSidebar subpage="/models/"/>
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">
@@ -215,11 +213,11 @@ class Brands extends React.PureComponent {
 									</Row>
 									<Row className="page-header">
 										<Col>
-											<h4>Motorcycle Brands List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+											<h4>Motorcycle Models List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 										</Col>
 									</Row>
 									<Row className="one-input-search">
-											<Col md="6"><Input className="dt-search" placeholder="Search Brands" /></Col>
+											<Col md="6"><Input className="dt-search" placeholder="Search Models" /></Col>
 									</Row>
 									<Row>
 										<br />
@@ -248,4 +246,4 @@ function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Brands);
+export default connect(mapStateToProps, mapDispatchToProps)(Models);

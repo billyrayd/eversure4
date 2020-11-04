@@ -274,6 +274,7 @@ input:active:focus,
       a{
         color: #555;
         font-weight: 600;
+        padding: 3px;
       }
       a:hover{
         text-decoration: none;
@@ -628,6 +629,11 @@ scrollbar appearance
     width: 100%;
     .sub-sidebar{
       display: none;
+    }
+    .container-fluid:not(.with-subsidebar){
+      .page-title{
+        margin-top: 0;
+      }
     }
     .with-subsidebar{
       padding-left: 15px;

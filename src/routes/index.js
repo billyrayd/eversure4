@@ -9,7 +9,13 @@ import BrandNewInStock from "views/Inventory/Inventory/BrandNewInStock";
 import Payments from "views/Inventory/Payments/Payments";
 import BrandNewUnsold from "views/Inventory/Reports/BrandNewUnsold";
 import UsersList from "views/Inventory/Users/UsersList";
+/* settings */
 import Brands from "views/Inventory/Settings/Brands";
+import Models from "views/Inventory/Settings/Models";
+import Branches from "views/Inventory/Settings/Branches";
+import Roles from "views/Inventory/Settings/Roles";
+import Areas from "views/Inventory/Settings/Areas";
+
 import Elements from "views/Inventory/Elements";
 
 /* --- Accounting --- */
@@ -93,9 +99,29 @@ var authenticated = [
     component: UsersList,
   },
   {
+    path: "/branches/",
+    name: "Branches",
+    component: Branches,
+  },
+  {
     path: "/brands/",
     name: "Brands",
     component: Brands,
+  },
+  {
+    path: "/models/",
+    name: "Models",
+    component: Models,
+  },
+  {
+    path: "/user_roles/",
+    name: "Roles",
+    component: Roles,
+  },
+  {
+    path: "/customer_area/",
+    name: "Areas",
+    component: Areas,
   },
   {
     path: "/elements/",

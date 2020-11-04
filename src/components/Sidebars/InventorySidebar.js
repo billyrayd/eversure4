@@ -69,7 +69,7 @@ export default class InventorySidebar extends React.PureComponent {
 			{ name: 'Payments', path: '/payments/', icon: 'money-bill', visible: true },
 			{ name: 'Reports', path: '/brand_new_unsold/', icon: 'file-alt', visible: true },
 			{ name: 'Users', path: '/users/', icon: 'users', visible: true },
-			{ name: 'Settings', path: '/brands/', icon: 'cogs', visible: true },
+			{ name: 'Settings', path: '/branches/', icon: 'cogs', visible: true },
 		]
 		return (
 			<div className="sidebar-wrap">

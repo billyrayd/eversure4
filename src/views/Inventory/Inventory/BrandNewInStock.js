@@ -36,7 +36,8 @@ import NoAccess from 'components/CustomComponents/NoAccess';
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
 
-const mainTableClass = ".bn-in-stock-table"
+const mainTableClass = ".bn-in-stock-table";
+const mainTableClassName = "bn-in-stock-table";
 
 class BrandNewInStock extends React.PureComponent {
 	constructor(props) {
