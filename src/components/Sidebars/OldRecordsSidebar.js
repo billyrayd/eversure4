@@ -5,6 +5,8 @@ import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reac
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { MY_APP } from 'helpers';
+
 import EversureLogo from 'assets/logo/eversure_logo.png';
 
 var $ = require( 'jquery' );
@@ -91,7 +93,7 @@ export default class OldRecordsSidebar extends React.PureComponent {
 							})
 						}
 						<li className="app-version" id="appVersion">
-							<span>Eversure v4.0.0</span>
+							<span>Eversure {MY_APP.version}</span>
 						</li>
 					</ul>
 				</div>

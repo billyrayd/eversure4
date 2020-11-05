@@ -5,7 +5,7 @@ import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reac
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import PerfectScrollbar from 'perfect-scrollbar';
+import { MY_APP } from 'helpers';
 
 import EversureLogo from 'assets/logo/eversure_logo.png';
 
@@ -25,12 +25,6 @@ export default class InventorySidebar extends React.PureComponent {
 	}
 
 	componentDidMount(){
-    // ps = new PerfectScrollbar(this.sideBar.current, {
-    //   suppressScrollX: true,
-    //   suppressScrollY: false,
-    //   minScrollbarLength: 10
-    // });
-
     const that = this;
 
     $("body").on("click", function(e){
@@ -105,7 +99,7 @@ export default class InventorySidebar extends React.PureComponent {
 							})
 						}
 						<li className="app-version" id="appVersion">
-							<span>Eversure v4.0.0</span>
+							<span>Eversure {MY_APP.version}</span>
 						</li>
 					</ul>
 				</div>
