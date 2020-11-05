@@ -7,12 +7,25 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as AuthActions from 'actions/auth';
 
+import toastr from 'toastr';
+
 import FourZeroFour from 'components/CustomComponents/FourZeroFour';
 
+import feathers from 'helpers/feathers';
+
 import Routes from './routes';
+
+
+toastr.options.showMethod = 'slideDown';
+toastr.options.preventDuplicates = true;
+toastr.options.positionClass = 'toast-bottom-right';
+
 let {authenticated, unauthenticated} = Routes()
 
 class App extends React.PureComponent{
+  componentWillMount(){
+
+  }
   render(){
     const AuthenticatedPages = authenticated.map((prop, key) => { return <Route exact path={prop.path} component={prop.component} key={key} /> });
     const UnAuthenticatedPages = unauthenticated.map((prop, key) => { return <Route exact path={prop.path} component={prop.component} key={key} /> });

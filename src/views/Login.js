@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import * as AuthActions from 'actions/auth';
 
 import { Link } from 'react-router-dom';
+import toastr from 'toastr';
 
 //reactstrap
 import {
@@ -25,18 +26,40 @@ class Login extends React.PureComponent {
 		super(props);
 
 		this.state = {
-
+			username: '',
+			password: ''
 		}
 	}
-
 	componentDidMount(){
 	}
-
+	componentWillUnmount(){
+		toastr.remove();
+	}
+	submitInput = (e) => {
+		const that = this;
+    if (e.key === 'Enter') {
+        that.login();
+    }
+	}
 	login = () => {
-		this.props.actions.Authenticate(true)
+		const that = this;
+		let { username,password } = this.state;
+
+		this.props.actions.Authenticate(username,password)
+		.then((res) => {
+			if(res){
+				toastr.success("Access Granted!");
+				setTimeout(() => {
+					that.props.actions.LoginUser(true);
+				}, 1000 * 2)
+			}else{
+				toastr.error("Invalid username or password");
+			}
+		})
 	}
 
 	render() {
+		let { username,password } = this.state;
 		return (
 			<div>
 				<Container>
@@ -52,10 +75,10 @@ class Login extends React.PureComponent {
 								</FormGroup>
 								<div className="space" />
 								<FormGroup>
-									<Input placeholder="Enter Username" />
+									<Input placeholder="Enter Username" onChange={ (e) => this.setState({username: e.target.value}) } value={username} onKeyPress={(e) => this.submitInput(e)} />
 								</FormGroup>
 								<FormGroup>
-									<Input type="password" placeholder="Enter Password" />
+									<Input type="password" placeholder="Enter Password" onChange={ (e) => this.setState({password: e.target.value}) } value={password} onKeyPress={(e) => this.submitInput(e)} />
 								</FormGroup>
 								<FormGroup>
 									<Button color="primary" className="es-main-btn" block onClick={this.login}>

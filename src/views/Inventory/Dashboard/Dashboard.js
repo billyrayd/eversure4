@@ -8,6 +8,7 @@ import * as AuthActions from 'actions/auth';
 import { Link } from "react-router-dom";
 import PerfectScrollbar from "perfect-scrollbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import toastr from 'toastr';
 
 //reactstrap
 import {
@@ -35,10 +36,13 @@ class Dashboard extends React.PureComponent {
   }
 	logOut = () => {
 		const that = this;
-		this.props.actions.Authenticate(false)
+		this.props.actions.Logout(false)
 		.then((res) => {
 			if(res){
-				that.props.history.push("/")
+				that.props.actions.LoginUser(false);
+				that.props.history.push("/");
+			}else{
+				toastr.error("Failed to logout");
 			}
 		})
 	}

@@ -8,6 +8,7 @@ import * as AuthActions from 'actions/auth';
 import { Link } from "react-router-dom";
 import PerfectScrollbar from "perfect-scrollbar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import toastr from 'toastr';
 
 //reactstrap
 import {
@@ -36,7 +37,16 @@ class LandingPage extends React.PureComponent {
     // document.body.classList.toggle("perfect-scrollbar-on");
 	}
 	logOut = () => {
-		this.props.actions.Authenticate(false)
+		const that = this;
+		this.props.actions.Logout(false)
+		.then((res) => {
+			if(res){
+				that.props.actions.LoginUser(false);
+				that.props.history.push("/");
+			}else{
+				toastr.error("Failed to logout");
+			}
+		})
 	}
 	goTo = (path) => {
 		this.props.history.push(path)
