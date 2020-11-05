@@ -38,10 +38,10 @@ import NoAccess from 'components/CustomComponents/NoAccess';
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
 
-const mainTableClass = ".bn-in-stock-table";
-const mainTableClassName = "bn-in-stock-table";
+const mainTableClass = ".bn-transfer-table";
+const mainTableClassName = "bn-transfer-table";
 
-class BrandNewInStock extends React.PureComponent {
+class BrandNewTransfer extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -65,31 +65,13 @@ class BrandNewInStock extends React.PureComponent {
 					"targets": 0,
 					"visible": false,
 				},
-				{
-					"targets": 6,
-					"width": 150
-				}
 			],
       "columns": [
           {title: "DATA OBJECT"},
-          {title: "MODEL"},
-          {title: "CHASSIS NO."},
-          {title: "ENGINE NO."},
-          {title: "BRANCH"},
-          {title: "DATE"},
-          {title: "ACTION", createdCell: (td, cellData, rowData, row, col) => {
-						ReactDOM.render(<div>
-										<Button color="primary" size="sm" className="edit">
-											Edit
-										</Button>
-										<Button color="warning" size="sm" className="view">
-											View
-										</Button>
-										<Button color="danger" size="sm" className="delete">
-											Delete
-										</Button>
-									</div>, td)
-          }},
+          {title: "model name"},
+          {title: "brand name"},
+          {title: "color"},
+          {title: "engine no"},
       ],
 			"sDom": '<"bottom"<t>ip><"clear">',
 			initComplete: () => {
@@ -142,14 +124,8 @@ class BrandNewInStock extends React.PureComponent {
 	advancedFilter = () => {
 		const dt_data = [
 			[
-				[],'fury', '4234234', '567765756', 'silay', '05/23/2020', '',
+				[],'05/05/2020', 'john doe', '567765756', 'raider 115', '5465f8p324d', 'silay', '36', '23, 000', '',
 			],
-			[
-				[],'raider 115', '87987905', '234234231', 'talisay', '09/23/2020', '',
-			],
-			[
-				[],'sniper 150', '34534006', '653234436', 'bacolod', '08/23/2020', '',
-			]
 		]
 
 		const that = this;
@@ -163,7 +139,7 @@ class BrandNewInStock extends React.PureComponent {
 			that.setState({spinnerIsVisible: false, noEvent: false})
 			$(".dataTables_empty").html("<span>No data available in table</span>")
 			that.reDrawDataTable(dt_data)
-		}, 1000 * 2)
+		}, 1000 * 5)
 	}
 	reDrawDataTable = (data) => {
 	  const table = $(mainTableClass).DataTable();
@@ -189,7 +165,7 @@ class BrandNewInStock extends React.PureComponent {
 		let { value, spinnerIsVisible, confirmDeleteShown, noEvent, isOpen } = this.state;
 		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
 
-		const currentPage = ["Brand New - In Stock","/brand_new_in_stock/"];
+		const currentPage = ["Brand New - Transfer","/transfer/"];
 
 		const permission = true;
 		return (
@@ -201,7 +177,7 @@ class BrandNewInStock extends React.PureComponent {
 						{
 							permission ?
 							<div>
-								<InventorySubSidebar subpage="/brand_new_in_stock/"/>
+								<InventorySubSidebar subpage={currentPage[1]} />
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">
@@ -241,7 +217,7 @@ class BrandNewInStock extends React.PureComponent {
 									</Row>
 									<Row className="page-header">
 										<Col>
-											<h4>Units in Stock <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+											<h4>Units to Transfer</h4>
 										</Col>
 									</Row>
 									<Row>
@@ -249,16 +225,12 @@ class BrandNewInStock extends React.PureComponent {
 											<Col className="advanced-filter">
 												<h5>Advanced Filter</h5>
 												<Row>
-													<Col md="4"><Input placeholder="Select Date" onChange={(e) => this.handleChange(e)} value={value} /></Col>
-													<Col md="4"><Input placeholder="Enter Brand" /></Col>
-													<Col md="4"><Input placeholder="Enter Model" /></Col>
+													<Col md="3"><Input placeholder="Enter Brand" onChange={(e) => this.handleChange(e)} value={value} /></Col>
+													<Col md="3"><Input placeholder="Enter Model" /></Col>
+													<Col md="3"><Input placeholder="Enter Engine Number" /></Col>
+													<Col md="3"><Button className="es-main-btn" color="primary" block onClick={this.advancedFilter} disabled={spinnerIsVisible}>Apply Filter</Button> </Col>
 												</Row>
 												<div className="space" />
-												<Row>
-													<Col md="4"><Input placeholder="Enter Engine Number" /></Col>
-													<Col md="4"><Input placeholder="Select Branch" /></Col>
-													<Col md="4"><Button className="es-main-btn" color="primary" block onClick={this.advancedFilter} disabled={spinnerIsVisible}>Apply Filter</Button> </Col>
-												</Row>
 											</Col>
 										</Col>
 									</Row>
@@ -268,8 +240,17 @@ class BrandNewInStock extends React.PureComponent {
 									<Row>
 										<Col className="allowScrollX">
 											<GrowSpinner visible={spinnerIsVisible} />
-											<Table className={table_class_name} />
+											<Table className={mainTableClassName} />
 										</Col>
+									</Row>
+									<Row>
+										<div className="space20" />
+									</Row>
+									<Row>
+										<Col md="3" />
+										<Col md="3"><Input placeholder="Select Branch" /></Col>
+										<Col md="3"><Input placeholder="Select Date" /></Col>
+										<Col md="3"><Button className="es-main-btn" color="primary" block>Transfer</Button> </Col>
 									</Row>
 								</Container>
 							</div> :
@@ -290,4 +271,4 @@ function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrandNewInStock);
+export default connect(mapStateToProps, mapDispatchToProps)(BrandNewTransfer);

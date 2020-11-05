@@ -41,7 +41,7 @@ $.DataTable = require('datatables.net');
 const mainTableClass = ".bn-in-stock-table";
 const mainTableClassName = "bn-in-stock-table";
 
-class BrandNewInStock extends React.PureComponent {
+class BrandNewSold extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -66,17 +66,21 @@ class BrandNewInStock extends React.PureComponent {
 					"visible": false,
 				},
 				{
-					"targets": 6,
-					"width": 150
+					"targets": 9,
+					"width": 100,
+					"orderable": false,
 				}
 			],
       "columns": [
           {title: "DATA OBJECT"},
-          {title: "MODEL"},
-          {title: "CHASSIS NO."},
-          {title: "ENGINE NO."},
-          {title: "BRANCH"},
-          {title: "DATE"},
+          {title: "date sold"},
+          {title: "customer name"},
+          {title: "account no."},
+          {title: "model name"},
+          {title: "engine no"},
+          {title: "branch"},
+          {title: "term"},
+          {title: "payment"},
           {title: "ACTION", createdCell: (td, cellData, rowData, row, col) => {
 						ReactDOM.render(<div>
 										<Button color="primary" size="sm" className="edit">
@@ -84,9 +88,6 @@ class BrandNewInStock extends React.PureComponent {
 										</Button>
 										<Button color="warning" size="sm" className="view">
 											View
-										</Button>
-										<Button color="danger" size="sm" className="delete">
-											Delete
 										</Button>
 									</div>, td)
           }},
@@ -142,14 +143,8 @@ class BrandNewInStock extends React.PureComponent {
 	advancedFilter = () => {
 		const dt_data = [
 			[
-				[],'fury', '4234234', '567765756', 'silay', '05/23/2020', '',
+				[],'05/05/2020', 'john doe', '567765756', 'raider 115', '5465f8p324d', 'silay', '36', '23, 000', '',
 			],
-			[
-				[],'raider 115', '87987905', '234234231', 'talisay', '09/23/2020', '',
-			],
-			[
-				[],'sniper 150', '34534006', '653234436', 'bacolod', '08/23/2020', '',
-			]
 		]
 
 		const that = this;
@@ -163,7 +158,7 @@ class BrandNewInStock extends React.PureComponent {
 			that.setState({spinnerIsVisible: false, noEvent: false})
 			$(".dataTables_empty").html("<span>No data available in table</span>")
 			that.reDrawDataTable(dt_data)
-		}, 1000 * 2)
+		}, 1000 * 5)
 	}
 	reDrawDataTable = (data) => {
 	  const table = $(mainTableClass).DataTable();
@@ -189,7 +184,7 @@ class BrandNewInStock extends React.PureComponent {
 		let { value, spinnerIsVisible, confirmDeleteShown, noEvent, isOpen } = this.state;
 		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
 
-		const currentPage = ["Brand New - In Stock","/brand_new_in_stock/"];
+		const currentPage = ["Brand New - Sold","/brand_new_sold/"];
 
 		const permission = true;
 		return (
@@ -201,7 +196,7 @@ class BrandNewInStock extends React.PureComponent {
 						{
 							permission ?
 							<div>
-								<InventorySubSidebar subpage="/brand_new_in_stock/"/>
+								<InventorySubSidebar subpage={currentPage[1]} />
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">
@@ -241,7 +236,7 @@ class BrandNewInStock extends React.PureComponent {
 									</Row>
 									<Row className="page-header">
 										<Col>
-											<h4>Units in Stock <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+											<h4>Units Sold <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 										</Col>
 									</Row>
 									<Row>
@@ -268,7 +263,7 @@ class BrandNewInStock extends React.PureComponent {
 									<Row>
 										<Col className="allowScrollX">
 											<GrowSpinner visible={spinnerIsVisible} />
-											<Table className={table_class_name} />
+											<Table className={mainTableClassName} />
 										</Col>
 									</Row>
 								</Container>
@@ -290,4 +285,4 @@ function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrandNewInStock);
+export default connect(mapStateToProps, mapDispatchToProps)(BrandNewSold);

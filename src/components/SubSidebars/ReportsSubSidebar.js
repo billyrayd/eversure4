@@ -14,15 +14,15 @@ export default class ReportsSubSidebar extends React.PureComponent {
 
 	render() {
 		let sublinks = [
-			{ name: 'Unsold', path: '/brand_new_unsold/', visible: true },
-			{ name: 'Sold', path: '/brand_new_sold/', visible: true },
-			{ name: 'No Clearance', path: '/transfer/', visible: true },
-			{ name: 'No TBA\'s', path: '/outgoing/', visible: true },
-			{ name: 'Warranty Claims', path: '/incoming/', visible: true },
-			{ name: 'Total (Unsold)', path: '/incoming/', visible: true },
-			{ name: 'Total (Sold)', path: '/incoming/', visible: true },
-			{ name: 'Cash and Installments', path: '/incoming/', visible: true },
-			{ name: 'For BIR', path: '/incoming/', visible: true },
+			{ name: 'Unsold', path: '/unsold_units/', visible: true },
+			{ name: 'Sold', path: '/sold_units/', visible: true },
+			{ name: 'No Clearance', path: '/no_clearance/', visible: true },
+			{ name: 'No TBA\'s', path: '/no_tba/', visible: true },
+			{ name: 'Warranty Claims', path: '/warranty_claims/', visible: true },
+			{ name: 'Total (Unsold)', path: '/total_unsold/', visible: true },
+			{ name: 'Total (Sold)', path: '/total_sold/', visible: true },
+			{ name: 'Cash and Installments', path: '/cash_and_installments/', visible: true },
+			{ name: 'For BIR', path: '/bir/', visible: true },
 		]
 		return (
 			<div className="sub-sidebar">

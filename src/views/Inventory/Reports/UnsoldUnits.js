@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 //redux
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -26,32 +25,31 @@ import {
 	DropdownItem,
 } from 'reactstrap';
 
-import { inventory_sublinks } from 'helpers/sublinks/Inventory/';
+import { reports_sublinks } from 'helpers/sublinks/Inventory/';
 
 import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
-import InventorySubSidebar from 'components/SubSidebars/InventorySubSidebar';
+import ReportsSubSidebar from 'components/SubSidebars/ReportsSubSidebar';
 import GrowSpinner from 'components/Spinners/GrowSpinner';
-import ConfirmDelete from 'components/Modals/ConfirmDelete';
 import NoAccess from 'components/CustomComponents/NoAccess';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
 
-const mainTableClass = ".bn-in-stock-table";
-const mainTableClassName = "bn-in-stock-table";
+const mainTableClass = ".unsold-units-table";
+const mainTableClassName = "unsold-units-table";
 
-class BrandNewInStock extends React.PureComponent {
+class BrandNewUnsold extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
 		this.state = {
+			isOpenEdit: false,
+			isOpenDelete: false,
+			isOpenView: false,
 			value: '',
-			spinnerIsVisible: false,
-			dt_data: [],
-			confirmDeleteShown: false,
-			noEvent: false,
 			isOpen: false,
+			spinnerIsVisible: false,
 		}
 	}
 
@@ -66,27 +64,24 @@ class BrandNewInStock extends React.PureComponent {
 					"visible": false,
 				},
 				{
-					"targets": 6,
-					"width": 150
-				}
+					"targets": 5,
+					"width": 150,
+					"orderable": false,
+				},
 			],
       "columns": [
           {title: "DATA OBJECT"},
-          {title: "MODEL"},
-          {title: "CHASSIS NO."},
-          {title: "ENGINE NO."},
-          {title: "BRANCH"},
-          {title: "DATE"},
+          {title: "title"},
+          {title: "date created"},
+          {title: "created by"},
+          {title: "branch"},
           {title: "ACTION", createdCell: (td, cellData, rowData, row, col) => {
 						ReactDOM.render(<div>
-										<Button color="primary" size="sm" className="edit">
-											Edit
+										<Button color="success" size="sm" className="edit">
+											Accept
 										</Button>
-										<Button color="warning" size="sm" className="view">
-											View
-										</Button>
-										<Button color="danger" size="sm" className="delete">
-											Delete
+										<Button color="danger" size="sm" className="view">
+											Reject
 										</Button>
 									</div>, td)
           }},
@@ -117,6 +112,10 @@ class BrandNewInStock extends React.PureComponent {
 			var data = mainTable.row($(this).parents('tr')).data();
 			console.log("view")
 		})
+
+		$('.dt-search').keyup(function () {
+      mainTable.search($(this).val()).draw();
+    });
 	}
 	logOut = () => {
 		const that = this;
@@ -126,6 +125,18 @@ class BrandNewInStock extends React.PureComponent {
 				that.props.history.push("/")
 			}
 		})
+	}
+	toggleEdit = () => {
+		let { isOpenEdit } = this.state;
+		this.setState({isOpenEdit: !isOpenEdit})
+	}
+	toggleDelete = () => {
+		let { isOpenDelete } = this.state;
+		this.setState({isOpenDelete: !isOpenDelete})
+	}
+	toggleView = () => {
+		let { isOpenView } = this.state;
+		this.setState({isOpenView: !isOpenView})
 	}
 	/* set input characters to uppercase */
 	handleChange = (event) => {
@@ -140,44 +151,8 @@ class BrandNewInStock extends React.PureComponent {
 	  );
 	}
 	advancedFilter = () => {
-		const dt_data = [
-			[
-				[],'fury', '4234234', '567765756', 'silay', '05/23/2020', '',
-			],
-			[
-				[],'raider 115', '87987905', '234234231', 'talisay', '09/23/2020', '',
-			],
-			[
-				[],'sniper 150', '34534006', '653234436', 'bacolod', '08/23/2020', '',
-			]
-		]
-
 		const that = this;
 		let { value } = this.state;
-
-		this.setState({spinnerIsVisible: true,noEvent: true})
-
-		$(".dataTables_empty").html("<br />")
-
-		setTimeout(() => {
-			that.setState({spinnerIsVisible: false, noEvent: false})
-			$(".dataTables_empty").html("<span>No data available in table</span>")
-			that.reDrawDataTable(dt_data)
-		}, 1000 * 2)
-	}
-	reDrawDataTable = (data) => {
-	  const table = $(mainTableClass).DataTable();
-	  table.clear();
-	  table.rows.add(data);
-	  table.draw();
-	}
-	closeModal = () => {
-		const that = this;
-
-		that.setState({confirmDeleteShown: false})
-	}
-	deleteFunction = () => {
-		console.log('delete function here ...')
 	}
 	toggleSubSidebar = () => {
 		let { isOpen } = this.state;
@@ -186,26 +161,23 @@ class BrandNewInStock extends React.PureComponent {
 	}
 
 	render() {
-		let { value, spinnerIsVisible, confirmDeleteShown, noEvent, isOpen } = this.state;
-		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
-
-		const currentPage = ["Brand New - In Stock","/brand_new_in_stock/"];
-
+		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen, spinnerIsVisible } = this.state;
 		const permission = true;
+
+		const currentPage = ["Unsold","/unsold_units/"];
 		return (
 			<div>
-				<InventorySidebar component="Inventory" />
+				<InventorySidebar component="Reports" />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
-						<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
 						{
 							permission ?
 							<div>
-								<InventorySubSidebar subpage="/brand_new_in_stock/"/>
+								<ReportsSubSidebar subpage={currentPage[1]}/>
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">
-											<h1 className="page-title inner">Inventory</h1>
+											<h1 className="page-title inner">Reports</h1>
 										</Col>
 										<Col xs="6" md="3">
 											<Link to="/" className="main-link mobile"><FontAwesomeIcon icon="caret-left"/> main menu</Link>
@@ -224,7 +196,7 @@ class BrandNewInStock extends React.PureComponent {
 									      </DropdownToggle>
 									      <DropdownMenu>
 									      	{
-									      		inventory_sublinks.map((link, key) => {
+									      		reports_sublinks.map((link, key) => {
 															const className = link.nonLink ? link.className : (currentPage[1] == link.path ? "active" : "");
 
 									      			return link.visible ? <DropdownItem className={className} key={key} onClick={() => link.nonLink ? null : this.props.history.push(link.path)}>
@@ -239,39 +211,24 @@ class BrandNewInStock extends React.PureComponent {
 											<div className="space20" />
 										</Col>
 									</Row>
-									<Row className="page-header">
-										<Col>
-											<h4>Units in Stock <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
-										</Col>
-									</Row>
-									<Row>
-										<Col>
-											<Col className="advanced-filter">
-												<h5>Advanced Filter</h5>
-												<Row>
-													<Col md="4"><Input placeholder="Select Date" onChange={(e) => this.handleChange(e)} value={value} /></Col>
-													<Col md="4"><Input placeholder="Enter Brand" /></Col>
-													<Col md="4"><Input placeholder="Enter Model" /></Col>
-												</Row>
-												<div className="space" />
-												<Row>
-													<Col md="4"><Input placeholder="Enter Engine Number" /></Col>
-													<Col md="4"><Input placeholder="Select Branch" /></Col>
-													<Col md="4"><Button className="es-main-btn" color="primary" block onClick={this.advancedFilter} disabled={spinnerIsVisible}>Apply Filter</Button> </Col>
-												</Row>
-											</Col>
-										</Col>
-									</Row>
-									<Row>
-										<br />
-									</Row>
-									<Row>
-										<Col className="allowScrollX">
-											<GrowSpinner visible={spinnerIsVisible} />
-											<Table className={table_class_name} />
-										</Col>
-									</Row>
-								</Container>
+								<Row className="page-header">
+									<Col>
+										<h4>Unsold Units Report List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+									</Col>
+								</Row>
+								<Row className="one-input-search">
+										<Col md="6"><Input className="dt-search" placeholder="Search Reports" /></Col>
+								</Row>
+								<Row>
+									<br />
+								</Row>
+								<Row>
+									<Col className="allowScrollX">
+										<GrowSpinner visible={spinnerIsVisible} />
+										<Table className={mainTableClassName} />
+									</Col>
+								</Row>
+							</Container>
 							</div> :
 							<NoAccess />
 						}
@@ -290,4 +247,4 @@ function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrandNewInStock);
+export default connect(mapStateToProps, mapDispatchToProps)(BrandNewUnsold);

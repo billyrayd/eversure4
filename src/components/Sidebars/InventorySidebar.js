@@ -67,7 +67,7 @@ export default class InventorySidebar extends React.PureComponent {
 			{ name: 'Dashboard', path: '/dashboard/', icon: 'tachometer-alt', visible: true },
 			{ name: 'Inventory', path: '/brand_new_in_stock/', icon: 'list', visible: true },
 			{ name: 'Payments', path: '/payments/', icon: 'money-bill', visible: true },
-			{ name: 'Reports', path: '/brand_new_unsold/', icon: 'file-alt', visible: true },
+			{ name: 'Reports', path: '/unsold_units/', icon: 'file-alt', visible: true },
 			{ name: 'Users', path: '/users/', icon: 'users', visible: true },
 			{ name: 'Settings', path: '/branches/', icon: 'cogs', visible: true },
 		]

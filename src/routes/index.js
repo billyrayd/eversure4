@@ -2,12 +2,32 @@
 import Login from "views/Login";
 import ResetPassword from "views/ResetPassword";
 
-/* --- Inventory --- */
+/* --- Inventory System --- */
 import LandingPage from "views/Inventory/LandingPage";
+/* dashboard */
 import Dashboard from "views/Inventory/Dashboard/Dashboard";
+/* inventory */
 import BrandNewInStock from "views/Inventory/Inventory/BrandNewInStock";
+import BrandNewSold from "views/Inventory/Inventory/BrandNewSold";
+import BrandNewTransfer from "views/Inventory/Inventory/BrandNewTransfer";
+import BrandNewOutgoing from "views/Inventory/Inventory/BrandNewOutgoing";
+import BrandNewIncoming from "views/Inventory/Inventory/BrandNewIncoming";
+import SecondhandInStock from "views/Inventory/Inventory/SecondhandInStock";
+import SecondhandSold from "views/Inventory/Inventory/SecondhandSold";
+import SearchDr from "views/Inventory/Inventory/SearchDr";
+import DuplicateEntries from "views/Inventory/Inventory/DuplicateEntries";
+/* payments */
 import Payments from "views/Inventory/Payments/Payments";
-import BrandNewUnsold from "views/Inventory/Reports/BrandNewUnsold";
+/* reports */
+import UnsoldUnits from "views/Inventory/Reports/UnsoldUnits";
+import SoldUnits from "views/Inventory/Reports/SoldUnits";
+import NoClearance from "views/Inventory/Reports/NoClearance";
+import NoTba from "views/Inventory/Reports/NoTba";
+import WarrantyClaims from "views/Inventory/Reports/WarrantyClaims";
+import TotalUnsold from "views/Inventory/Reports/TotalUnsold";
+import TotalSold from "views/Inventory/Reports/TotalSold";
+import CashAndInstallments from "views/Inventory/Reports/CashAndInstallments";
+/* users */
 import UsersList from "views/Inventory/Users/UsersList";
 /* settings */
 import Brands from "views/Inventory/Settings/Brands";
@@ -18,7 +38,7 @@ import Areas from "views/Inventory/Settings/Areas";
 
 import Elements from "views/Inventory/Elements";
 
-/* --- Accounting --- */
+/* --- Accounting System --- */
 /* landing page */
 import AccountingLandingPage from "views/Accounting/AccountingLandingPage";
 /* customers */
@@ -50,7 +70,7 @@ import Ledgers from 'views/Accounting/Ledgers/Ledgers';
 import AccountsPayable from 'views/Accounting/AccountsPayable/AccountsPayable'
 
 
-/* --- Old Records --- */
+/* --- Old Records System --- */
 import OldRecordsLandingPage from "views/OldRecords/OldRecordsLandingPage";
 
 var unauthenticated = [
@@ -73,31 +93,124 @@ var authenticated = [
     name: "LandingPage",
     component: LandingPage,
   },
+
+  /* === dashboard */
+
   {
     path: "/dashboard/",
     name: "Dashboard",
     component: Dashboard,
   },
+
+  /* == inventory */
+
   {
     path: "/brand_new_in_stock/",
     name: "In Stock",
     component: BrandNewInStock,
   },
   {
+    path: "/brand_new_sold/",
+    name: "BrandNewSold",
+    component: BrandNewSold,
+  },
+  {
+    path: "/transfer/",
+    name: "BrandNewTransfer",
+    component: BrandNewTransfer,
+  },
+  {
+    path: "/outgoing/",
+    name: "BrandNewOutgoing",
+    component: BrandNewOutgoing,
+  },
+  {
+    path: "/incoming/",
+    name: "BrandNewIncoming",
+    component: BrandNewIncoming,
+  },
+  {
+    path: "/secondhand_in_stock/",
+    name: "SecondhandInStock",
+    component: SecondhandInStock,
+  },
+  {
+    path: "/secondhand_sold/",
+    name: "SecondhandSold",
+    component: SecondhandSold,
+  },
+  {
+    path: "/search_dr/",
+    name: "SearchDr",
+    component: SearchDr,
+  },
+  {
+    path: "/duplicate_entries/",
+    name: "DuplicateEntries",
+    component: DuplicateEntries,
+  },
+
+  /* payments */
+
+  {
     path: "/payments/",
     name: "Payments",
     component: Payments,
   },
+
+  /* reports */
+
   {
-    path: "/brand_new_unsold/",
+    path: "/unsold_units/",
     name: "Unsold",
-    component: BrandNewUnsold,
+    component: UnsoldUnits,
   },
+  {
+    path: "/sold_units/",
+    name: "SoldUnits",
+    component: SoldUnits,
+  },
+  {
+    path: "/no_clearance/",
+    name: "NoClearance",
+    component: NoClearance,
+  },
+  {
+    path: "/no_tba/",
+    name: "NoTba",
+    component: NoTba,
+  },
+  {
+    path: "/warranty_claims/",
+    name: "WarrantyClaims",
+    component: WarrantyClaims,
+  },
+  {
+    path: "/total_unsold/",
+    name: "TotalUnsold",
+    component: TotalUnsold,
+  },
+  {
+    path: "/total_sold/",
+    name: "TotalSold",
+    component: TotalSold,
+  },
+  {
+    path: "/cash_and_installments/",
+    name: "CashAndInstallments",
+    component: CashAndInstallments,
+  },
+
+  /* users */
+
   {
     path: "/users/",
     name: "Users",
     component: UsersList,
   },
+
+  /* settings */
+
   {
     path: "/branches/",
     name: "Branches",
