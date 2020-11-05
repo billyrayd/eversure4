@@ -56,6 +56,10 @@ button:active:focus,
 {
   @include noOutline();
 }
+select,
+select:focus,
+select:visited,
+select:active:focus,
 input,
 input:focus,
 input:visited,
@@ -446,13 +450,20 @@ input:active:focus,
 .text-upppercase{
   @include upperCased();
 }
-
 .container-fluid:not(.with-subsidebar){
   .page-title{
     margin-top: 8px;
   }
 }
-
+.list-group{
+  a{
+    @include upperCased();
+  }
+  .list-group-item.active{
+    background-color: $esBlue;
+    border: 1px solid $esBlue;
+  }
+}
 .page-title{
   @include fontSize(30px);
   font-weight: 600;
@@ -466,7 +477,24 @@ input:active:focus,
 .dropdown-item.active{
   background-color: $esBlue;
 }
-
+.background-white{
+  background-color: $white;
+}
+.table.user-permissions{
+  th, td{
+    text-align: center;
+    vertical-align: middle;
+  }
+  th:nth-child(2),
+  th:nth-child(3),
+  th:nth-child(4),
+  td:nth-child(2),
+  td:nth-child(3),
+  td:nth-child(4)
+  {
+    border: 1px solid #ccc;
+  }
+}
 
 
 /*

@@ -39,6 +39,8 @@ import {
   faBars,
   faEllipsisV,
   faTimes,
+  faCheck,
+  faBan,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
@@ -81,6 +83,8 @@ library.add(
   faBars,
   faEllipsisV,
   faTimes,
+  faCheck,
+  faBan,
 )
 
 ReactDOM.render(

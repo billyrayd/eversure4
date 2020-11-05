@@ -27,8 +27,11 @@ import WarrantyClaims from "views/Inventory/Reports/WarrantyClaims";
 import TotalUnsold from "views/Inventory/Reports/TotalUnsold";
 import TotalSold from "views/Inventory/Reports/TotalSold";
 import CashAndInstallments from "views/Inventory/Reports/CashAndInstallments";
+import Bir from "views/Inventory/Reports/Bir";
 /* users */
 import UsersList from "views/Inventory/Users/UsersList";
+import UserRoles from "views/Inventory/Users/UserRoles";
+import UserPermissions from "views/Inventory/Users/UserPermissions";
 /* settings */
 import Brands from "views/Inventory/Settings/Brands";
 import Models from "views/Inventory/Settings/Models";
@@ -200,6 +203,11 @@ var authenticated = [
     name: "CashAndInstallments",
     component: CashAndInstallments,
   },
+  {
+    path: "/bir/",
+    name: "Bir",
+    component: Bir,
+  },
 
   /* users */
 
@@ -207,6 +215,16 @@ var authenticated = [
     path: "/users/",
     name: "Users",
     component: UsersList,
+  },
+  {
+    path: "/user_roles/",
+    name: "UserRoles",
+    component: UserRoles,
+  },
+  {
+    path: "/user_permissions/",
+    name: "UserPermissions",
+    component: UserPermissions,
   },
 
   /* settings */
@@ -225,11 +243,6 @@ var authenticated = [
     path: "/models/",
     name: "Models",
     component: Models,
-  },
-  {
-    path: "/user_roles/",
-    name: "Roles",
-    component: Roles,
   },
   {
     path: "/customer_area/",

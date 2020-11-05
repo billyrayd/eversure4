@@ -251,7 +251,7 @@ class SearchDr extends React.PureComponent {
 									<Row>
 										<Col>
 											<Col className="advanced-filter">
-												<h5>Advanced Filter</h5>
+												<h5>Filter</h5>
 												<Row>
 													<Col md="4"><Input placeholder="Enter D.R. No." onChange={(e) => this.handleChange(e)} value={value} /></Col>
 													<Col md="4"><Button className="es-main-btn" color="primary" block onClick={this.advancedFilter} disabled={spinnerIsVisible}>Search</Button> </Col>

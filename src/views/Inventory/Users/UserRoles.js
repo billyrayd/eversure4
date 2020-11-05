@@ -18,28 +18,26 @@ import {
 	Table,
 	Tooltip,
 	Input,
-	Spinner,
 	ButtonDropdown,
 	DropdownToggle,
 	DropdownMenu,
 	DropdownItem,
 } from 'reactstrap';
 
-import { reports_sublinks } from 'helpers/sublinks/Inventory/';
+import { settings_sub_links } from 'helpers/sublinks/Inventory/';
 
 import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
-import ReportsSubSidebar from 'components/SubSidebars/ReportsSubSidebar';
-import GrowSpinner from 'components/Spinners/GrowSpinner';
+import UsersSubSidebar from 'components/SubSidebars/UsersSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
 
-const mainTableClass = ".unsold-units-table";
-const mainTableClassName = "unsold-units-table";
+const mainTableClass = ".roles-table";
+const mainTableClassName = "roles-table";
 
-class NoClearance extends React.PureComponent {
+class Roles extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -49,73 +47,53 @@ class NoClearance extends React.PureComponent {
 			isOpenView: false,
 			value: '',
 			isOpen: false,
-			spinnerIsVisible: false,
 		}
 	}
 
 	componentDidMount(){
 		const that = this;
-		let { value, spinnerIsVisible, dt_data } = this.state;
 		var mainTable = $(mainTableClass).DataTable({
-			"data": dt_data,
+			data: [],
+			"sDom": '<"bottom"<t>ip><"clear">',
 			"columnDefs": [
 				{
 					"targets": 0,
 					"visible": false,
 				},
 				{
-					"targets": 5,
-					"width": 150,
-					"orderable": false,
+					"targets": 1,
+					"width": 20,
 				},
+				{
+					"orderable": false,
+					"targets": 3,
+					"width": 100
+				}
 			],
       "columns": [
           {title: "DATA OBJECT"},
-          {title: "title"},
-          {title: "date created"},
-          {title: "created by"},
-          {title: "branch"},
-          {title: "ACTION", createdCell: (td, cellData, rowData, row, col) => {
+          {title: "no."},
+          {title: "role name"},
+          {title: "action", createdCell: (td, cellData, rowData, row, col) => {
 						ReactDOM.render(<div>
-										<Button color="success" size="sm" className="edit">
-											Accept
+										<Button color="primary" size="sm" className="edit">
+											Edit
 										</Button>
-										<Button color="danger" size="sm" className="view">
-											Reject
+										<Button color="danger" size="sm" className="delete">
+											Delete
 										</Button>
 									</div>, td)
           }},
       ],
-			"sDom": '<"bottom"<t>ip><"clear">',
 			initComplete: () => {
-
-			},
-			"drawCallBack": (a,b,c) => {
-				console.log(a)
-				console.log(b)
-				console.log(c)
 			}
-		})
-
-		$(`${mainTableClass}`).on("click", ".edit", function(){
-			var data = mainTable.row($(this).parents('tr')).data();
-			console.log("edit")
-		})
-
-		$(`${mainTableClass}`).on("click", ".delete", function(){
-			var data = mainTable.row($(this).parents('tr')).data();
-			console.log("delete")
-			that.setState({confirmDeleteShown: true})
-		})
-
-		$(`${mainTableClass}`).on("click", ".view", function(){
-			var data = mainTable.row($(this).parents('tr')).data();
-			console.log("view")
 		})
 
 		$('.dt-search').keyup(function () {
       mainTable.search($(this).val()).draw();
     });
+
+    that.loadModels();
 	}
 	logOut = () => {
 		const that = this;
@@ -126,17 +104,26 @@ class NoClearance extends React.PureComponent {
 			}
 		})
 	}
-	toggleEdit = () => {
-		let { isOpenEdit } = this.state;
-		this.setState({isOpenEdit: !isOpenEdit})
+	loadModels = () => {
+		const dt_data = [
+			[
+				[], 1, 'administrator', '',
+			],
+			[
+				[], 2, 'branch admin', '',
+			],
+			[
+				[], 3, 'encoder', '',
+			]
+		]
+
+		this.reDrawDataTable(dt_data);
 	}
-	toggleDelete = () => {
-		let { isOpenDelete } = this.state;
-		this.setState({isOpenDelete: !isOpenDelete})
-	}
-	toggleView = () => {
-		let { isOpenView } = this.state;
-		this.setState({isOpenView: !isOpenView})
+	reDrawDataTable = (data) => {
+	  const table = $(mainTableClass).DataTable();
+	  table.clear();
+	  table.rows.add(data);
+	  table.draw();
 	}
 	/* set input characters to uppercase */
 	handleChange = (event) => {
@@ -161,31 +148,26 @@ class NoClearance extends React.PureComponent {
 	}
 
 	render() {
-		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen, spinnerIsVisible } = this.state;
+		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen } = this.state;
 		const permission = true;
 
-		const currentPage = ["No Clearance","/no_clearance/"];
+		const currentPage = ["User Roles","/user_roles/"];
 		return (
 			<div>
-				<InventorySidebar component="Reports" />
+				<InventorySidebar component="Users" />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{
 							permission ?
 							<div>
-								<ReportsSubSidebar subpage={currentPage[1]} />
+								<UsersSubSidebar subpage="/user_roles/"/>
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">
-											<h1 className="page-title inner">Reports</h1>
+											<h1 className="page-title inner">Settings</h1>
 										</Col>
 										<Col xs="6" md="3">
 											<Link to="/" className="main-link mobile"><FontAwesomeIcon icon="caret-left"/> main menu</Link>
-										</Col>
-									</Row>
-									<Row>
-										<Col>
-											<div className="space" />
 										</Col>
 									</Row>
 									<Row className="mobile-subsidebar">
@@ -196,7 +178,7 @@ class NoClearance extends React.PureComponent {
 									      </DropdownToggle>
 									      <DropdownMenu>
 									      	{
-									      		reports_sublinks.map((link, key) => {
+									      		settings_sub_links.map((link, key) => {
 															const className = link.nonLink ? link.className : (currentPage[1] == link.path ? "active" : "");
 
 									      			return link.visible ? <DropdownItem className={className} key={key} onClick={() => link.nonLink ? null : this.props.history.push(link.path)}>
@@ -211,24 +193,23 @@ class NoClearance extends React.PureComponent {
 											<div className="space20" />
 										</Col>
 									</Row>
-								<Row className="page-header">
-									<Col>
-										<h4>Units without Clearance Report List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
-									</Col>
-								</Row>
-								<Row className="one-input-search">
-										<Col md="6"><Input className="dt-search" placeholder="Search Reports" /></Col>
-								</Row>
-								<Row>
-									<br />
-								</Row>
-								<Row>
-									<Col className="allowScrollX">
-										<GrowSpinner visible={spinnerIsVisible} />
-										<Table className={mainTableClassName} />
-									</Col>
-								</Row>
-							</Container>
+									<Row className="page-header">
+										<Col>
+											<h4>User Roles List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+										</Col>
+									</Row>
+									<Row className="one-input-search">
+											<Col md="6"><Input className="dt-search" placeholder="Search User Roles" /></Col>
+									</Row>
+									<Row>
+										<br />
+									</Row>
+									<Row>
+										<Col>
+											<Table className={mainTableClassName} />
+										</Col>
+									</Row>
+								</Container>
 							</div> :
 							<NoAccess />
 						}
@@ -247,4 +228,4 @@ function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NoClearance);
+export default connect(mapStateToProps, mapDispatchToProps)(Roles);

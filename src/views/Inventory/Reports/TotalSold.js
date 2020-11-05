@@ -164,7 +164,7 @@ class TotalSold extends React.PureComponent {
 		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen, spinnerIsVisible } = this.state;
 		const permission = true;
 
-		const currentPage = ["Total Cost - Unsold","/total_sold/"];
+		const currentPage = ["Total Cost - Sold","/total_sold/"];
 		return (
 			<div>
 				<InventorySidebar component="Reports" />

@@ -164,7 +164,7 @@ class WarrantyClaims extends React.PureComponent {
 		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen, spinnerIsVisible } = this.state;
 		const permission = true;
 
-		const currentPage = ["No TBA's","/warranty_claims/"];
+		const currentPage = ["Warranty Claims","/warranty_claims/"];
 		return (
 			<div>
 				<InventorySidebar component="Reports" />

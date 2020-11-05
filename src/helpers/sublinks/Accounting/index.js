@@ -11,3 +11,15 @@ export const customer_sub_links = [
 	{ name: 'Fully Paid', path: '/secondhand_customer_fully_paid/', visible: true },
 	{ name: 'Repossessed', path: '/secondhand_customer_repossessed/', visible: true },
 ]
+
+export const reports_sublinks = [
+	{ name: 'Total Paid', path: '/reports_total_paid/', visible: true },
+	{ name: 'Total Current Monthly Amortization', path: '/reports_total_current_monthly_amortization/', visible: true },
+	{ name: 'Account No Payment (Brand New)', path: '/reports_account_no_payment_brandnew/', visible: true },
+	{ name: 'Account No Payment (Secondhand)', path: '/reports_account_no_payment_secondhand/', visible: true },
+	{ name: 'Customer List Per Area', path: '/reports_customer_list_per_area/', visible: true },
+	{ name: 'Customers Who Paid', path: '/reports_customers_who_paid/', visible: true },
+	{ name: 'New Customers', path: '/reports_new_customers/', visible: true },
+	{ name: 'Fully Paid Customers', path: '/reports_fully_paid_customers/', visible: true },
+	{ name: 'Customers with Repossessed Units', path: '/reports_customers_with_repossessed_units/', visible: true },
+]

@@ -164,7 +164,7 @@ class CashAndInstallments extends React.PureComponent {
 		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen, spinnerIsVisible } = this.state;
 		const permission = true;
 
-		const currentPage = ["Total Cost - Unsold","/total_sold/"];
+		const currentPage = ["Cash & Installments","/cash_and_installments/"];
 		return (
 			<div>
 				<InventorySidebar component="Reports" />
@@ -174,68 +174,68 @@ class CashAndInstallments extends React.PureComponent {
 							permission ?
 							<div>
 								<ReportsSubSidebar subpage={currentPage[1]} />
-								<Container className="with-subsidebar" fluid>
-									<Row>
-										<Col xs="6">
-											<h1 className="page-title inner">Reports</h1>
-										</Col>
-										<Col xs="6" md="3">
-											<Link to="/" className="main-link mobile"><FontAwesomeIcon icon="caret-left"/> main menu</Link>
-										</Col>
-									</Row>
-									<Row>
-										<Col>
-											<div className="space" />
-										</Col>
-									</Row>
-									<Row className="mobile-subsidebar">
-										<Col md="12">
-											<ButtonDropdown isOpen={isOpen} toggle={this.toggleSubSidebar}>
-									      <DropdownToggle caret>
-									        {currentPage[0]}
-									      </DropdownToggle>
-									      <DropdownMenu>
-									      	{
-									      		reports_sublinks.map((link, key) => {
-															const className = link.nonLink ? link.className : (currentPage[1] == link.path ? "active" : "");
+									<Container className="with-subsidebar" fluid>
+										<Row>
+											<Col xs="6">
+												<h1 className="page-title inner">Reports</h1>
+											</Col>
+											<Col xs="6" md="3">
+												<Link to="/" className="main-link mobile"><FontAwesomeIcon icon="caret-left"/> main menu</Link>
+											</Col>
+										</Row>
+										<Row>
+											<Col>
+												<div className="space" />
+											</Col>
+										</Row>
+										<Row className="mobile-subsidebar">
+											<Col md="12">
+												<ButtonDropdown isOpen={isOpen} toggle={this.toggleSubSidebar}>
+										      <DropdownToggle caret>
+										        {currentPage[0]}
+										      </DropdownToggle>
+										      <DropdownMenu>
+										      	{
+										      		reports_sublinks.map((link, key) => {
+																const className = link.nonLink ? link.className : (currentPage[1] == link.path ? "active" : "");
 
-									      			return link.visible ? <DropdownItem className={className} key={key} onClick={() => link.nonLink ? null : this.props.history.push(link.path)}>
-									      				{link.divider ? <hr /> : link.name}
-									      			</DropdownItem> : null
-									      		})
-									      	}
-									      </DropdownMenu>
-									    </ButtonDropdown>
-										</Col>
-										<Col md="12">
-											<div className="space20" />
+										      			return link.visible ? <DropdownItem className={className} key={key} onClick={() => link.nonLink ? null : this.props.history.push(link.path)}>
+										      				{link.divider ? <hr /> : link.name}
+										      			</DropdownItem> : null
+										      		})
+										      	}
+										      </DropdownMenu>
+										    </ButtonDropdown>
+											</Col>
+											<Col md="12">
+												<div className="space20" />
+											</Col>
+										</Row>
+									<Row className="page-header">
+										<Col>
+											<h4>Installment and Cash Payments<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 										</Col>
 									</Row>
-								<Row className="page-header">
-									<Col>
-										<h4>Installment and Cash Payments<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
-									</Col>
-								</Row>
-								<Row className="one-input-search">
-										<Col md="6"><Input className="dt-search" placeholder="Search Reports" /></Col>
-										<Col md="3" />
-										<Col md="3">
-											<Input type="select" name="select" id="exampleSelect">
-							          <option>Cash</option>
-							          <option>Installments</option>
-							        </Input>
-						        </Col>
-								</Row>
-								<Row>
-									<br />
-								</Row>
-								<Row>
-									<Col className="allowScrollX">
-										<GrowSpinner visible={spinnerIsVisible} />
-										<Table className={mainTableClassName} />
-									</Col>
-								</Row>
-							</Container>
+									<Row className="one-input-search">
+											<Col md="6"><Input className="dt-search" placeholder="Search Reports" /></Col>
+											<Col md="3" />
+											<Col md="3">
+												<Input type="select" name="select" id="exampleSelect">
+								          <option>Cash</option>
+								          <option>Installments</option>
+								        </Input>
+							        </Col>
+									</Row>
+									<Row>
+										<br />
+									</Row>
+									<Row>
+										<Col className="allowScrollX">
+											<GrowSpinner visible={spinnerIsVisible} />
+											<Table className={mainTableClassName} />
+										</Col>
+									</Row>
+								</Container>
 							</div> :
 							<NoAccess />
 						}
