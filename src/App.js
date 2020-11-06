@@ -12,19 +12,37 @@ import toastr from 'toastr';
 import FourZeroFour from 'components/CustomComponents/FourZeroFour';
 
 import feathers from 'helpers/feathers';
+import { detectMob } from 'helpers/';
 
 import Routes from './routes';
 
+let {authenticated, unauthenticated} = Routes();
+
+var $ = require( 'jquery' );
 
 toastr.options.showMethod = 'slideDown';
-toastr.options.preventDuplicates = true;
+// toastr.options.preventDuplicates = true;
 toastr.options.positionClass = 'toast-bottom-right';
-
-let {authenticated, unauthenticated} = Routes()
+if(detectMob){
+// toastr.options.positionClass = 'toast-top-right';
+}
 
 class App extends React.PureComponent{
   componentWillMount(){
+    const that = this;
 
+    feathers.reAuthenticate()
+    .then((a) => {
+    })
+    .catch((e) => {
+      that.props.actions.Logout();
+      that.props.actions.LoginUser(false);
+    })
+
+    $("body").removeClass("disable-scroll");
+
+    that.props.actions.LoggingIn(false);
+    that.props.actions.LoggingOut(false);
   }
   render(){
     const AuthenticatedPages = authenticated.map((prop, key) => { return <Route exact path={prop.path} component={prop.component} key={key} /> });

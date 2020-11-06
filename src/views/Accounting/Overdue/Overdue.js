@@ -49,7 +49,7 @@ class Overdue extends React.PureComponent {
 										<h1 className="page-title">Overdue</h1>
 									</Col>
 									<Col xs="6" md="3">
-										<Link to="/" className="main-link mobile"><FontAwesomeIcon icon="caret-left"/> main menu</Link>
+										<Link to="/accounting/" className="main-link mobile"><FontAwesomeIcon icon="caret-left"/> main menu</Link>
 									</Col>
 								</Row>
 							</Container>

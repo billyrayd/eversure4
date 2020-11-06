@@ -15,6 +15,7 @@ import {
 	FormGroup,
 	Input,
 	Button,
+	Spinner,
 } from 'reactstrap';
 
 import PageFooter from 'components/CustomComponents/PageFooter';
@@ -31,6 +32,8 @@ class Login extends React.PureComponent {
 		}
 	}
 	componentDidMount(){
+		const that = this;
+		that.props.actions.LoggingIn(false);
 	}
 	componentWillUnmount(){
 		toastr.remove();
@@ -44,22 +47,33 @@ class Login extends React.PureComponent {
 	login = () => {
 		const that = this;
 		let { username,password } = this.state;
+		
+		toastr.remove();
 
-		this.props.actions.Authenticate(username,password)
-		.then((res) => {
-			if(res){
-				toastr.success("Access Granted!");
-				setTimeout(() => {
-					that.props.actions.LoginUser(true);
-				}, 1000 * 2)
-			}else{
-				toastr.error("Invalid username or password");
-			}
-		})
+		if(username == ""){
+			toastr.info("Please enter username");
+		}
+		else if(password == ""){
+			toastr.info("Please enter password");
+		}else{
+			that.props.actions.Authenticate(username,password)
+			.then((res) => {
+				if(res.status){
+					toastr.success(res.message);
+					setTimeout(() => {
+						that.props.actions.LoginUser(true);
+					}, 1000 * 1.5)
+				}else{
+					toastr.error(res.message);
+					that.setState({password: ''});
+				}
+			})
+		}
 	}
 
 	render() {
 		let { username,password } = this.state;
+		let { loggingIn } = this.props;
 		return (
 			<div>
 				<Container>
@@ -75,18 +89,20 @@ class Login extends React.PureComponent {
 								</FormGroup>
 								<div className="space" />
 								<FormGroup>
-									<Input placeholder="Enter Username" onChange={ (e) => this.setState({username: e.target.value}) } value={username} onKeyPress={(e) => this.submitInput(e)} />
+									<Input placeholder="Enter Username" onChange={ (e) => this.setState({username: e.target.value}) } value={username} onKeyPress={(e) => this.submitInput(e)} autoFocus />
 								</FormGroup>
 								<FormGroup>
 									<Input type="password" placeholder="Enter Password" onChange={ (e) => this.setState({password: e.target.value}) } value={password} onKeyPress={(e) => this.submitInput(e)} />
 								</FormGroup>
 								<FormGroup>
-									<Button color="primary" className="es-main-btn" block onClick={this.login}>
-										Login
+									<Button color="primary" className="es-main-btn" block onClick={this.login} disabled={loggingIn}>
+										{
+											loggingIn ? <Spinner color="light" size="sm" /> : "Login"
+										}
 									</Button>
 								</FormGroup>
 								<FormGroup>
-									<Link to="/reset_password/">Forgot Password?</Link>
+									<Link className="esBlue" to="/reset_password/">Forgot Password?</Link>
 								</FormGroup>
 							</div>
 						</div>

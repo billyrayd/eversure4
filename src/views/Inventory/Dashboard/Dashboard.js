@@ -20,6 +20,9 @@ import {
 import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
+import LoggingOut from 'components/CustomComponents/LoggingOut';
+
+var $ = require( 'jquery' );
 
 var ps;
 
@@ -30,14 +33,17 @@ class Dashboard extends React.PureComponent {
 		this.mainContent = React.createRef();
 	}
 	componentDidMount(){
-    document.body.classList.remove("disable-scroll");
 	}
   componentWillUnmount() {
   }
 	logOut = () => {
 		const that = this;
-		this.props.actions.Logout(false)
+		$("body").addClass("disable-scroll");
+		that.props.actions.LoggingOut(true);
+		that.props.actions.Logout()
 		.then((res) => {
+			$("body").removeClass("disable-scroll");
+			that.props.actions.LoggingOut(false);
 			if(res){
 				that.props.actions.LoginUser(false);
 				that.props.history.push("/");
@@ -48,6 +54,7 @@ class Dashboard extends React.PureComponent {
 	}
 
 	render() {
+		let { loggingOut } = this.props;
 		var data = [
 			{ letter: 'A' },
 			{ letter: 'B' },
@@ -59,6 +66,7 @@ class Dashboard extends React.PureComponent {
 		const permission = true;
 		return (
 			<div>
+				<LoggingOut loggingOut={loggingOut} />
 				<InventorySidebar component="Dashboard" />
 				<div className="content" ref={this.mainContent}>
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
@@ -95,6 +103,7 @@ class Dashboard extends React.PureComponent {
 const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
+  loggingOut: state.user_auth.loggingOut,
 });
 
 function mapDispatchToProps(dispatch) {

@@ -115,8 +115,8 @@ export default class NavBar extends React.PureComponent {
           <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar>
             </Nav>
-            <NavbarText id="notif" className="notification-icon" onClick={() => this.goTo("/reset_password_notifications/")} style={{cursor: 'pointer'}}>
-              <FontAwesomeIcon className="esBlue" icon="bell" /><Badge color="danger">{notifCount}</Badge>
+            <NavbarText className="notification-icon" onClick={() => this.goTo("/reset_password_notifications/")} style={{cursor: 'pointer'}}>
+              <FontAwesomeIcon id="notif" className="esBlue" icon="bell" /><Badge color="danger">{notifCount}</Badge>
               <Tooltip
                 placement="left"
                 isOpen={notifTooltipOpen}

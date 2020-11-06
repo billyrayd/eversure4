@@ -11,6 +11,9 @@
   	.title-wrap{
   		@include marginB(50px);
   	}
+    .spinner-border{
+      vertical-align: middle;
+    }
   }
 }
 .page-footer{

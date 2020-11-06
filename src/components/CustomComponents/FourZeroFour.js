@@ -1,5 +1,10 @@
 import React from 'react';
 
+//redux
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as AuthActions from 'actions/auth';
+
 //reactstrap
 import {
 	Container,
@@ -14,9 +19,19 @@ import PageFooter from 'components/CustomComponents/PageFooter';
 
 import EversureLogo from 'assets/logo/eversure_logo.png';
 
-export default class FourZeroFour extends React.PureComponent {
+class FourZeroFour extends React.PureComponent {
 	constructor(props) {
 		super(props);
+	}
+
+	goBack = () => {
+		let { authenticated } = this.props;
+
+		if(authenticated){
+			this.props.history.goBack();
+		}else{
+			this.props.history.push("/");
+		}
 	}
 
 	render() {
@@ -31,7 +46,7 @@ export default class FourZeroFour extends React.PureComponent {
 						<h1 className="text-danger">404</h1>
 						<h2 className="text-danger">Page Not Found</h2>
 						<br />
-						<h6 style={{cursor: 'pointer'}} onClick={() => this.props.history.goBack()}><FontAwesomeIcon icon="caret-left" /> GO BACK</h6>
+						<h6 style={{cursor: 'pointer'}} onClick={this.goBack}><FontAwesomeIcon icon="caret-left" /> GO BACK</h6>
 					</div>
 				</Container>
 				<PageFooter />
@@ -39,3 +54,13 @@ export default class FourZeroFour extends React.PureComponent {
 		);
 	}
 }
+
+const mapStateToProps = state => ({
+  authenticated: state.user_auth.authenticated,
+});
+
+function mapDispatchToProps(dispatch) {
+   return { actions: bindActionCreators(Object.assign({}, AuthActions), dispatch) }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FourZeroFour);

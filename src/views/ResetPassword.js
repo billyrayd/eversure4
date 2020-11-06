@@ -53,7 +53,7 @@ class ResetPassword extends React.PureComponent {
 								</FormGroup>
 								<div className="space" />
 								<FormGroup>
-									<Input placeholder="Enter Email" />
+									<Input placeholder="Enter Email" autoFocus />
 								</FormGroup>
 								<FormGroup>
 									<Button color="primary" className="es-main-btn" block onClick={this.resetPassword}>
