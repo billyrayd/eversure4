@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as AuthActions from 'actions/auth';
+import * as LoginActions from 'actions/prev/login';
 
 import { Link } from 'react-router-dom';
 import toastr from 'toastr';
@@ -41,6 +42,7 @@ class Login extends React.PureComponent {
 	submitInput = (e) => {
 		const that = this;
     if (e.key === 'Enter') {
+    		e.target.blur(); // hide virtual keyboard on mobile devices
         that.login();
     }
 	}
@@ -120,7 +122,7 @@ const mapStateToProps = state => ({
 });
 
 function mapDispatchToProps(dispatch) {
-   return { actions: bindActionCreators(Object.assign({}, AuthActions), dispatch) }
+   return { actions: bindActionCreators(Object.assign({}, AuthActions, LoginActions), dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

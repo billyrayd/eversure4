@@ -31,10 +31,13 @@ class App extends React.PureComponent{
   componentWillMount(){
     const that = this;
 
-    feathers.reAuthenticate()
+    // feathers.reAuthenticate()
+    feathers.authenticate()
     .then((a) => {
+      console.log('authenticated');
     })
     .catch((e) => {
+      console.log('not authenticated');
       that.props.actions.Logout();
       that.props.actions.LoginUser(false);
     })

@@ -19,7 +19,7 @@ export const Authenticate = (username, password) => {
 			username: username,
 			password: password,
 		})
-		.then(() => {
+		.then((data) => {
 			output.status = true;
 			output.message = "Access Granted!";
 			return Promise.resolve(output);
@@ -81,5 +81,11 @@ export const Logout = () => {
 		.catch(() => {
 			return Promise.resolve(false);
 		})
+	}
+}
+
+export const GetUserData = (id) => {
+	return (dispatch, getState) => {
+		
 	}
 }

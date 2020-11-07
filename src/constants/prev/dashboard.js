@@ -1,0 +1,5 @@
+export const SAMPLE_SALES = "SAMPLE_SALES";
+export const GRAPH_TYPE = "GRAPH_TYPE";
+export const GRAPH_PARAM = "GRAPH_PARAM";
+export const SET_NOTIFICATIONS = "SET_NOTIFICATIONS";
+export const SET_UNREAD_NOTIFS = "SET_UNREAD_NOTIFS";

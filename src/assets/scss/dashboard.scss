@@ -516,6 +516,25 @@ input:active:focus,
 .disable-scroll{
   overflow: hidden;
 }
+td.txt-transform-i{
+  text-transform: inherit !important; 
+}
+.es-modal{
+  .modal-header{
+    background-color: $esBlue;
+    .modal-title{
+      color: $white;
+    }
+  }
+  input.form-control{
+    border: 1px solid #ccc !important;
+    &:active,
+    &:focus,
+    &:active:focus{
+      border: 1px solid #111 !important;
+    }
+  }
+}
 
 /*
 *
