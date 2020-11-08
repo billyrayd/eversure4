@@ -12,6 +12,11 @@ import users from 'reducers/prev/users';
 const rootReducer = combineReducers({
 	user_auth,
 	dashboard,
+	login,
+	customers,
+	products,
+	category,
+	users,
 })
 
 export default rootReducer;

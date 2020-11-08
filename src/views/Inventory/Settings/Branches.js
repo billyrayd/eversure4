@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 //redux
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as DashboardActions from 'actions/dashboard';
 import * as AuthActions from 'actions/auth';
+import * as CategoryActions from 'actions/prev/category';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
@@ -30,6 +30,7 @@ import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import SettingsSubSidebar from 'components/SubSidebars/SettingsSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
+import AddBranch from './Modals/AddBranch';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -47,13 +48,15 @@ class Branches extends React.PureComponent {
 			isOpenView: false,
 			value: '',
 			isOpen: false,
+			branchAddMdlIsOpen: false,
 		}
 	}
 
 	componentDidMount(){
 		const that = this;
+		let { branchList } = this.props;
 		var mainTable = $(mainTableClass).DataTable({
-			data: [],
+			data: branchList,
 			"sDom": '<"bottom"<t>ip><"clear">',
 			"columnDefs": [
 				{
@@ -75,7 +78,7 @@ class Branches extends React.PureComponent {
           {title: "no."},
           {title: "branch name"},
           {title: "action", createdCell: (td, cellData, rowData, row, col) => {
-						ReactDOM.render(<div>
+						ReactDOM.render(rowData[2] == "MAIN" ? null : <div>
 										<Button color="primary" size="sm" className="edit">
 											Edit
 										</Button>
@@ -93,7 +96,7 @@ class Branches extends React.PureComponent {
       mainTable.search($(this).val()).draw();
     });
 
-    that.loadModels();
+    that.loadBranches();
 	}
 	logOut = () => {
 		const that = this;
@@ -104,20 +107,10 @@ class Branches extends React.PureComponent {
 			}
 		})
 	}
-	loadModels = () => {
-		const dt_data = [
-			[
-				[], 1, 'silay', '',
-			],
-			[
-				[], 2, 'talisay', '',
-			],
-			[
-				[], 3, 'bacolod', '',
-			]
-		]
+	loadBranches = () => {
+		let { branchList } = this.props;
 
-		this.reDrawDataTable(dt_data);
+		this.reDrawDataTable(branchList);
 	}
 	reDrawDataTable = (data) => {
 	  const table = $(mainTableClass).DataTable();
@@ -158,15 +151,29 @@ class Branches extends React.PureComponent {
 
 		this.setState({isOpen: !isOpen})
 	}
+	showModal = (type, status) => {
+		const that = this;
+		switch(type){
+			case 'add':
+			that.setState({branchAddMdlIsOpen: status}); break;
+			default:
+			that.setState({branchAddMdlIsOpen: status}); break;
+		}
+	}
+	addBranchCb = () => {
+		this.loadBranches();
+	}
 
 	render() {
-		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen } = this.state;
+		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen, branchAddMdlIsOpen } = this.state;
+		let { actions } = this.props;
 		const permission = true;
 
 		const currentPage = ["Branches","/branches/"];
 		return (
 			<div>
 				<InventorySidebar component="Settings" />
+				<AddBranch modal={branchAddMdlIsOpen} className="es-modal" callBack={this.addBranchCb} closeModal={() => this.showModal('add', false)} actions={actions} />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{
@@ -212,7 +219,7 @@ class Branches extends React.PureComponent {
 									</Row>
 									<Row className="page-header">
 										<Col>
-											<h4>Branch List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+											<h4>Branch List<Button className="es-main-btn" color="primary" size="sm" onClick={() => this.showModal("add", true)}><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 										</Col>
 									</Row>
 									<Row className="one-input-search">
@@ -239,10 +246,11 @@ class Branches extends React.PureComponent {
 const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
+  branchList: state.category.branchesList,
 });
 
 function mapDispatchToProps(dispatch) {
-   return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
+   return { actions: bindActionCreators(Object.assign({}, AuthActions, CategoryActions), dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Branches);

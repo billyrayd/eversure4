@@ -93,7 +93,7 @@ class Brands extends React.PureComponent {
       mainTable.search($(this).val()).draw();
     });
 
-    that.loadModels();
+    that.loadBrands();
 	}
 	logOut = () => {
 		const that = this;
@@ -104,23 +104,10 @@ class Brands extends React.PureComponent {
 			}
 		})
 	}
-	loadModels = () => {
-		const dt_data = [
-			[
-				[], 1, 'kawasaki', '',
-			],
-			[
-				[], 2, 'suzuki', '',
-			],
-			[
-				[], 3, 'yamaha', '',
-			],
-			[
-				[], 3, 'kymco', '',
-			],
-		]
+	loadBrands = () => {
+		let { brandList } = this.props;
 
-		this.reDrawDataTable(dt_data);
+		this.reDrawDataTable(brandList);
 	}
 	reDrawDataTable = (data) => {
 	  const table = $(mainTableClass).DataTable();
@@ -242,6 +229,7 @@ class Brands extends React.PureComponent {
 const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
+  brandList: state.category.brandsList,
 });
 
 function mapDispatchToProps(dispatch) {

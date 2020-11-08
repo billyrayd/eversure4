@@ -157,8 +157,6 @@ class UsersList extends React.PureComponent {
 		const that = this;
 		that.props.actions.GetAllUsers()
 		.then((res) => {
-			console.log("res")
-			console.log(res)
 			if(res){
 				that.reDrawDataTable(res);
 			}

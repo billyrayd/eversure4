@@ -52,8 +52,9 @@ class Models extends React.PureComponent {
 
 	componentDidMount(){
 		const that = this;
+		let { modelList } = this.props;
 		var mainTable = $(mainTableClass).DataTable({
-			data: [],
+			data: modelList,
 			"sDom": '<"bottom"<t>ip><"clear">',
 			"columnDefs": [
 				{
@@ -106,19 +107,9 @@ class Models extends React.PureComponent {
 		})
 	}
 	loadModels = () => {
-		const dt_data = [
-			[
-				[], 1, 'fury', 'kawasaki', '',
-			],
-			[
-				[], 2, 'raider 115', 'suzuki', '',
-			],
-			[
-				[], 3, 'sniper 150', 'yamaha', '',
-			]
-		]
+		let { modelList } = this.props;
 
-		this.reDrawDataTable(dt_data);
+		this.reDrawDataTable(modelList);
 	}
 	reDrawDataTable = (data) => {
 	  const table = $(mainTableClass).DataTable();
@@ -240,6 +231,7 @@ class Models extends React.PureComponent {
 const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
+  modelList: state.category.modelsList,
 });
 
 function mapDispatchToProps(dispatch) {

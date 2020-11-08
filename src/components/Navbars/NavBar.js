@@ -1,4 +1,13 @@
 import React, { useState } from 'react';
+
+import feathers from 'helpers/feathers';
+
+//redux
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as AuthActions from 'actions/auth';
+import * as CategoryActions from 'actions/prev/category';
+
 import {
   Button,
   Collapse,
@@ -25,7 +34,7 @@ import EversureLogo from 'assets/logo/eversure_logo.png';
 
 var $ = require( 'jquery' );
 
-export default class NavBar extends React.PureComponent {
+class NavBar extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -48,13 +57,33 @@ export default class NavBar extends React.PureComponent {
       }
     })
 
-    // console.log(!this.props.data.authenticated)
+    this.loadListeners();
+    this.loadSettings();
   }
 
   componentDidUpdate(){
     if(!this.props.data.authenticated){
       this.props.history.push("/")
     }
+  }
+
+  loadListeners = () => {
+    const that = this;
+    feathers.service("branches").on("created", function(s){
+      console.log("haha")
+      console.log(s)
+      that.loadSettings();
+    })
+  }
+
+  loadSettings = () => {
+    /* set brands for datatables and select options */
+    this.props.actions.GetAllBrands();
+    /* set branches for datatables and select options */
+    this.props.actions.GetAllBranches();
+    /* set models for datatables and select options */
+    this.props.actions.GetCategoryModels();
+
   }
 
   openSidebar = () => {
@@ -146,3 +175,14 @@ export default class NavBar extends React.PureComponent {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  authenticated: state.user_auth.authenticated,
+  loggingIn: state.user_auth.loggingIn,
+});
+
+function mapDispatchToProps(dispatch) {
+   return { actions: bindActionCreators(Object.assign({}, AuthActions, CategoryActions, ), dispatch) }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBar);

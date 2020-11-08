@@ -16,7 +16,7 @@ export default class AddUser extends React.PureComponent {
         	<Row>
           	<Col md="6">
           		<label>Name</label> <br />
-          		<Input placeholder="Enter full name" />
+          		<Input placeholder="Enter full name" autoComplete="off" />
           	</Col>
           	<Col md="6">
           		<label>Username</label> <br />
@@ -46,11 +46,11 @@ export default class AddUser extends React.PureComponent {
         	<Row>
           	<Col md="6">
           		<label>Password</label> <br />
-          		<Input placeholder="Enter password" />
+          		<Input type="password" placeholder="Enter password" />
           	</Col>
           	<Col md="6">
           		<label>Confirm Password</label> <br />
-          		<Input placeholder="Confirm password" />
+          		<Input type="password" placeholder="Confirm password" />
           	</Col>
         	</Row>
         </ModalBody>

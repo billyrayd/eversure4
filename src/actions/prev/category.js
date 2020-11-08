@@ -9,9 +9,9 @@ import {
     UPDATE_BRANCH_INFO,
     UPDATE_BRAND_INFO,
     UPDATE_DESIGNATION_INFO,
-} from '../constants/category';
+} from 'constants/prev/category';
 
-import feathers from '../helpers/feathers'
+import feathers from 'helpers/feathers'
 
 const _user = 'stratium', _pass = 'unitb1ts'
 
@@ -55,20 +55,26 @@ export function addModel(modelName, branch, brand) {
 
 
 //category management models
-export function getCategoryModels() {
+export function GetCategoryModels() {
     return (dispatch, getState) => {
         const modelService = feathers.service('motorcycle-models');
         return modelService.find().then((models) => {
-            const results = models.data,
-                data = [];
-            results.forEach((value, index) => {
-                const branch = value.branch ? value.branch.branch_name : 'no branch';
-                const actionBtn = '<button class="btn btn-sm btn-primary edit"><span class="fa fa-edit" /></button> <button class="btn btn-sm btn-danger delete" data-toggle="modal" data-target="#confirm_model_delete1"><span class="fa fa-trash" /> </button>';
-                data.push([value._id, index + 1, value.model_name, value.brand_details.brand_name, actionBtn, value]);
-            });
-            return Promise.resolve(data);
-        }).catch((err) => {
+            if(models.data.length > 0){
+                const results = models.data,
+                    data = [];
+                results.forEach((value, index) => {
+                    const branch = value.branch ? value.branch.branch_name : 'no branch';
+                    const actionBtn = '<button class="btn btn-sm btn-primary edit"><span class="fa fa-edit" /></button> <button class="btn btn-sm btn-danger delete" data-toggle="modal" data-target="#confirm_model_delete1"><span class="fa fa-trash" /> </button>';
+                    data.push([value._id, index + 1, value.model_name, value.brand_details.brand_name, actionBtn, value]);
+                });
 
+                dispatch(SetModels(data))
+                return Promise.resolve(data);
+            }else{
+                return Promise.resolve(false);
+            }
+        }).catch((err) => {
+            return Promise.resolve(false);
         })
     }
 }
@@ -83,7 +89,7 @@ export function deleteModel(id) {
     }
 }
 
-export function setModels(data) {
+export function SetModels(data) {
     return {
         type: MODEL_DATATABLES,
         data: data
@@ -140,47 +146,68 @@ export function modelInUse(data) {
 
 /* ================  branch actions ================ */
 
-export function getAllBranches() {
+export function GetAllBranches() {
     return (dispatch, getState) => {
         var branchService = feathers.service('branches');
 
         return branchService.find().then((branches) => {
-            var results = branches.data,
-                data = [];
+            if(branches.data.length > 0){
+                var results = branches.data,
+                    data = [];
 
-            results.forEach((value, index) => {
-                var actionBtn = '<button class="btn btn-sm btn-primary edit"><span class="fa fa-edit" /></button> <button class="btn btn-sm btn-danger delete" data-toggle="modal" data-target="#confirm_branch_delete1"><span class="fa fa-trash" /> </button>';
-                data.push([value._id, index + 1, value.branch_name, actionBtn]);
-            });
+                results.forEach((value, index) => {
+                    var actionBtn = '<button class="btn btn-sm btn-primary edit"><span class="fa fa-edit" /></button> <button class="btn btn-sm btn-danger delete" data-toggle="modal" data-target="#confirm_branch_delete1"><span class="fa fa-trash" /> </button>';
+                    data.push([value._id, index + 1, value.branch_name, actionBtn]);
+                });
 
-            return Promise.resolve(data);
+                dispatch(SetBranches(data));
 
+                return Promise.resolve(data);
+            }else{
+                return Promise.resolve(false);
+            }
         }).catch((err) => {
-
+            return Promise.resolve(false);
         })
     }
 }
 
-export function addBranch(branchName) {
+export function AddBranch(branchName) {
     return (dispatch, getState) => {
         var branchService = feathers.service('branches');
 
-        return branchService.create({
-            branch_name: branchName
-        }).then((result) => {
-            return Promise.resolve('success');
-        }).catch((err) => {
-            if ((err.message).includes('already exists')) {
-                return Promise.resolve('exist');
-            } else {
-                return Promise.resolve('failed');
-            }
 
-        });
+        return branchService.find({
+            query: {
+                branch_name: branchName
+            }
+        })
+        .then((result) => {
+            if(result.data.length > 0){
+                return Promise.resolve('exist');
+            }else{
+                return branchService.create({
+                    branch_name: branchName
+                }).then((result) => {
+                    return Promise.resolve('success');
+                }).catch((err) => {
+                    if ((err.message).includes('already exists')) {
+                        return Promise.resolve('exist');
+                    } else {
+                        return Promise.resolve(false);
+                    }
+                });
+            }
+        })
+        .catch(() => {
+            return Promise.resolve(false);
+        })
+
+        
     }
 }
 
-export function setBranches(data) {
+export function SetBranches(data) {
     return {
         type: BRANCH_DATATABLES,
         data: data
@@ -221,20 +248,27 @@ export function updateBranch(id, name) {
 /* ================  closing branch actions ================ */
 
 /* ================  brand actions ================ */
-export function getAllBrands() {
+export function GetAllBrands() {
     return (dispatch, getState) => {
         const brandsService = feathers.service('brands');
         return brandsService.find().then((brands) => {
-            const results = brands.data,
-                data = [];
-            results.forEach((value, index) => {
-                const branch = value.branch ? value.branch.branch_name : 'No branch';
-                const actionBtn = '<button class="btn btn-sm btn-primary edit"><span class="fa fa-edit" /></button> <button class="btn btn-sm btn-danger delete" data-toggle="modal" data-target="#confirm_brand_delete1"><span class="fa fa-trash" /> </button>';
-                data.push([value._id, index + 1, value.brand_name, actionBtn]);
-            });
-            return Promise.resolve(data);
-        }).catch((err) => {
+            if(brands.data.length > 0){
+                const results = brands.data,
+                    data = [];
+                results.forEach((value, index) => {
+                    const branch = value.branch ? value.branch.branch_name : 'No branch';
+                    const actionBtn = '<button class="btn btn-sm btn-primary edit"><span class="fa fa-edit" /></button> <button class="btn btn-sm btn-danger delete" data-toggle="modal" data-target="#confirm_brand_delete1"><span class="fa fa-trash" /> </button>';
+                    data.push([value._id, index + 1, value.brand_name, actionBtn]);
+                });
 
+                dispatch(SetBrands(data))
+
+                return Promise.resolve(data);
+            }else{
+                return Promise.resolve(false);
+            }
+        }).catch((err) => {
+            return Promise.resolve(false);
         })
     }
 }
@@ -299,7 +333,7 @@ export function addBrands(brandName, branch) {
     }
 }
 
-export function setBrands(data) {
+export function SetBrands(data) {
     return {
         type: BRAND_DATATABLES,
         data: data

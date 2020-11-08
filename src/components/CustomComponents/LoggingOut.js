@@ -23,7 +23,7 @@ export default class LoggingOut extends React.PureComponent {
 							<Spinner style={{width: '4rem', height: '4rem'}} className="esBlue" />
 							<br />
 							<br />
-							<b className="esBlue">Logging Out</b>
+							<b className="esBlue">Logging out</b>
 						</div>
 					</div> : null
 				}
