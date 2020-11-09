@@ -37,13 +37,13 @@ class AccountingLandingPage extends React.PureComponent {
 	render() {
 		return (
 			<div>
-				<AccountingSidebar component="Landing" />
+				<AccountingSidebar history={this.props.history} component="Landing" />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						<Container fluid>
 							<Row>
 								<Col xs="12" md="10">
-									<h1 className="page-title landing-page">Accounting System</h1>
+									<h1 className="page-title landing-page">Sales</h1>
 								</Col>
 							</Row>
 							<Row className="landing-page">

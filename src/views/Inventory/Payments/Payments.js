@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 //redux
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -23,9 +24,70 @@ import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
 
+var $ = require( 'jquery' );
+
+const mainTableClass = ".payments-table";
+const mainTableClassName = "payments-table";
+
 class Payments extends React.PureComponent {
 	constructor(props) {
 		super(props);
+	}
+	componentDidMount(){
+		var mainTable = $(mainTableClass).DataTable({
+			data: [],
+			"sDom": '<"bottom"<t>ip><"clear">',
+			"columnDefs": [
+				{
+					"targets": 0,
+					"visible": false,
+				},
+			],
+      "columns": [
+          {title: "DATA OBJECT"},
+          {title: "supplier name"},
+          {title: "receipt no."},
+          {title: "amount paid"},
+          {title: "date paid"},
+          {title: "remarks"},
+      //     {title: "action", createdCell: (td, cellData, rowData, row, col) => {
+						// ReactDOM.render(<div>
+						// 				<Button color="primary" size="sm" className="check">
+						// 					Verify Email
+						// 				</Button>
+						// 			</div>, td)
+      //     }},
+      ],
+			initComplete: () => {
+			}
+		})
+
+		$('.dt-search').keyup(function () {
+      mainTable.search($(this).val()).draw();
+    });
+
+    this.getPayments();
+	}
+	getPayments = () => {
+		const dt_data = [
+			[
+				[], "suzuki motors", "121001287", "1,000,000", "12/22/2019", 'okay',
+			],
+			[
+				[], "suzuki motors", "154621001", "1,000,000", "03/09/2020", 'lorem ipsum',
+			],
+			[
+				[], "suzuki motors", "436450023", "1,000,000","01/12/2020", 'okay',
+			]
+		]
+
+		this.reDrawDataTable(dt_data);
+	}
+	reDrawDataTable = (data) => {
+	  const table = $(mainTableClass).DataTable();
+	  table.clear();
+	  table.rows.add(data);
+	  table.draw();
 	}
 	logOut = () => {
 		const that = this;
@@ -42,7 +104,7 @@ class Payments extends React.PureComponent {
 
 		return (
 			<div>
-				<InventorySidebar component="Payments" />
+				<InventorySidebar history={this.props.history} component="Payments" />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{
@@ -51,10 +113,22 @@ class Payments extends React.PureComponent {
 								<Container fluid>
 									<Row>
 										<Col xs="6" md="9">
-											<h1 className="page-title">Payments</h1>
+											<h1 className="page-title">Payments <Button color="primary" className="es-main-btn add-payments"><FontAwesomeIcon icon="plus" /> Add Payments</Button></h1>
 										</Col>
 										<Col xs="6" md="3">
 											<Link to="/" className="main-link mobile"><FontAwesomeIcon icon="caret-left"/> main menu</Link>
+										</Col>
+										<Col md="12"><Button color="primary" className="es-main-btn add-payments mobile" block><FontAwesomeIcon icon="plus" /> Add Payments</Button></Col>
+									</Row>
+									<Row className="one-input-search">
+										<Col md="3"><Input placeholder="Enter Date" /></Col>
+									</Row>
+									<Row>
+										<div className="space" />
+									</Row>
+									<Row>
+										<Col>
+											<Table className={mainTableClassName} />
 										</Col>
 									</Row>
 								</Container>

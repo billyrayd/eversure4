@@ -195,7 +195,7 @@ class SecondhandSold extends React.PureComponent {
 		const permission = true;
 		return (
 			<div>
-				<InventorySidebar component="Inventory" />
+				<InventorySidebar history={this.props.history} component="Inventory" />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
@@ -242,7 +242,7 @@ class SecondhandSold extends React.PureComponent {
 									</Row>
 									<Row className="page-header">
 										<Col>
-											<h4>Units Sold <small>(Secondhand)</small> <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+											<h4>Units Sold <small>(Secondhand)</small></h4>
 										</Col>
 									</Row>
 									<Row>

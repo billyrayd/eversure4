@@ -96,7 +96,7 @@ class UsersPermissions extends React.PureComponent {
 		const permission = true;
 		return (
 			<div>
-				<InventorySidebar component="Users" />
+				<InventorySidebar history={this.props.history} component="Users" />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{

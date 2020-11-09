@@ -22,9 +22,9 @@ class OldRecordsLandingPage extends React.PureComponent {
 	render() {
 		return (
 			<div>
-				<OldRecordsSidebar component="Landing" />
+				<OldRecordsSidebar history={this.props.history} component="Landing" />
 				<div className="content">
-						<NavBar data={this.props} system="Accounting" />
+						<NavBar data={this.props} history={this.props.history} system="Accounting" />
 						<Container fluid>
 							<Row>
 								<Col>

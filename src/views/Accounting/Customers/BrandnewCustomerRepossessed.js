@@ -188,7 +188,7 @@ class BrandnewCustomerRepossessed extends React.PureComponent {
 		const currentPage = ["Brand New (Repossessed)","/brandnew_customer_repossessed/"];
 		return (
 			<div>
-				<AccountingSidebar component="Customers" />
+				<AccountingSidebar history={this.props.history} component="Customers" />
 				<div className="content">
 					<NavBar data={this.props} system="Accounting" history={this.props.history} logout={this.logOut}/>
 					<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />

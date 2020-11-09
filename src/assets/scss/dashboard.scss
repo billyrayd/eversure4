@@ -155,22 +155,26 @@ input:active:focus,
   	}
   	.dropdown-menu{
   		// left: 4px !important;
+      width: 180px;
   		.dropdown-item{
   			@include fontSize(14px);
-        a{
+        text-align: center;
+        a,span{
           color: #333333;
           font-weight: 600;
         }
         a:hover{
           text-decoration: none;
         }
-        a:active{
+        a:active,
+        span:active
+        {
           color: $white;
         }
   		}
   		.dropdown-item:active{
   			background-color: $esBlue;
-        a{
+        a,span{
           color: $white;
         }
   		}
@@ -309,12 +313,14 @@ input:active:focus,
     thead{
       th{
         @include upperCased();
+        vertical-align: middle;
       }
     }
     tbody{
       background-color: $white;
       td{
         @include upperCased();
+        vertical-align: middle;
         button.btn{
           margin-right: 5px;
           .text-white{
@@ -533,6 +539,17 @@ td.txt-transform-i{
     &:active:focus{
       border: 1px solid #111 !important;
     }
+  }
+}
+.table{
+  thead{
+    @include upperCased();
+    background-color: #02061d;
+    color: $white;
+    vertical-align: middle;
+  }
+  td{
+    @include upperCased();
   }
 }
 

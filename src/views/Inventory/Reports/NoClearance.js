@@ -167,7 +167,7 @@ class NoClearance extends React.PureComponent {
 		const currentPage = ["No Clearance","/no_clearance/"];
 		return (
 			<div>
-				<InventorySidebar component="Reports" />
+				<InventorySidebar history={this.props.history} component="Reports" />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{

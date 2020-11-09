@@ -34,13 +34,11 @@ export default class InventorySidebar extends React.PureComponent {
 
     $("body").removeClass("disable-scroll");
 	}
-
 	toggle = () => {
 		let { isOpen } = this.state;
 
 		this.setState({isOpen: !isOpen})
 	}
-
 	closeSidebar = () => {
 		// $(".sidebar").toggle();
 
@@ -48,6 +46,9 @@ export default class InventorySidebar extends React.PureComponent {
     document.getElementById("appVersion").style.bottom = "-55px";
 		$(".sidebar-wrap").removeClass("es-overlay");
     document.body.classList.toggle("disable-scroll");
+	}
+	goTo = (path) =>{
+		this.props.history.push(path);
 	}
 
 	render() {
@@ -73,15 +74,15 @@ export default class InventorySidebar extends React.PureComponent {
 						<li className="system-type">
 							<ButtonDropdown isOpen={isOpen} toggle={this.toggle}>
 					      <DropdownToggle caret>
-					        Accounting System
+					        Sales
 					      </DropdownToggle>
 					      <DropdownMenu>
-					        <DropdownItem>
-					        	<Link to="/">Inventory System</Link>
+					        <DropdownItem onClick={() => this.goTo("/")}>
+					        	<span>Inventory</span>
 					        </DropdownItem>
 					        <DropdownItem divider />
-					        <DropdownItem>
-					        	<Link to="/old_records/">Old Records System</Link>
+					        <DropdownItem onClick={() => this.goTo("/old_records/")}>
+					        	<span>Old Records</span>
 					        </DropdownItem>
 					      </DropdownMenu>
 					    </ButtonDropdown>

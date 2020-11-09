@@ -154,7 +154,7 @@ class Areas extends React.PureComponent {
 		const currentPage = ["Customer Area","/customer_area/"];
 		return (
 			<div>
-				<InventorySidebar component="Settings" />
+				<InventorySidebar history={this.props.history} component="Settings" />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{

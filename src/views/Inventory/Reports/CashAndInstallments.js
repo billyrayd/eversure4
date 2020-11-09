@@ -167,7 +167,7 @@ class CashAndInstallments extends React.PureComponent {
 		const currentPage = ["Cash & Installments","/cash_and_installments/"];
 		return (
 			<div>
-				<InventorySidebar component="Reports" />
+				<InventorySidebar history={this.props.history} component="Reports" />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{

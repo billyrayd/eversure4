@@ -172,7 +172,7 @@ class Branches extends React.PureComponent {
 		const currentPage = ["Branches","/branches/"];
 		return (
 			<div>
-				<InventorySidebar component="Settings" />
+				<InventorySidebar history={this.props.history} component="Settings" />
 				<AddBranch modal={branchAddMdlIsOpen} className="es-modal" callBack={this.addBranchCb} closeModal={() => this.showModal('add', false)} actions={actions} />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>

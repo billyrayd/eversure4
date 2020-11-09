@@ -186,7 +186,7 @@ class SecondhandCustomerFullyPaid extends React.PureComponent {
 		const currentPage = ["Secondhand (Fully Paid)","/secondhand_customer_fully_paid/"];
 		return (
 			<div>
-				<AccountingSidebar component="Customers" />
+				<AccountingSidebar history={this.props.history} component="Customers" />
 				<div className="content">
 					<NavBar data={this.props} system="Accounting" history={this.props.history} logout={this.logOut}/>
 					<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />

@@ -6,6 +6,7 @@ import ResetPassword from "views/ResetPassword";
 import LandingPage from "views/Inventory/LandingPage";
 /* dashboard */
 import Dashboard from "views/Inventory/Dashboard/Dashboard";
+import Notifications from "views/Inventory/Dashboard/Notifications";
 /* inventory */
 import BrandNewInStock from "views/Inventory/Inventory/BrandNewInStock";
 import BrandNewSold from "views/Inventory/Inventory/BrandNewSold";
@@ -103,6 +104,11 @@ var authenticated = [
     path: "/dashboard/",
     name: "Dashboard",
     component: Dashboard,
+  },
+  {
+    path: "/reset_password_notifications/",
+    name: "Notifications",
+    component: Notifications,
   },
 
   /* == inventory */

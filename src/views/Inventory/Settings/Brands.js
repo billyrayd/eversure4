@@ -156,7 +156,7 @@ class Brands extends React.PureComponent {
 		const currentPage = ["Brands","/brands/"];
 		return (
 			<div>
-				<InventorySidebar component="Settings" />
+				<InventorySidebar history={this.props.history} component="Settings" />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{

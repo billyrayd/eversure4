@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 //redux
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -14,7 +15,10 @@ import toastr from 'toastr';
 import {
 	Container,
 	Row,
-	Col
+	Col,
+	Table,
+	Button,
+	Input,
 } from 'reactstrap';
 
 import NavBar from 'components/Navbars/NavBar';
@@ -26,13 +30,51 @@ var $ = require( 'jquery' );
 
 var ps;
 
-class Dashboard extends React.PureComponent {
+const mainTableClass = ".notifications-table";
+const mainTableClassName = "notifications-table";
+
+class Notifications extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
 		this.mainContent = React.createRef();
 	}
 	componentDidMount(){
+		var mainTable = $(mainTableClass).DataTable({
+			data: [],
+			"sDom": '<"bottom"<t>ip><"clear">',
+			"columnDefs": [
+				{
+					"targets": 0,
+					"visible": false,
+				},
+				{
+					"orderable": false,
+					"targets": 3,
+					"width": 150
+				}
+			],
+      "columns": [
+          {title: "DATA OBJECT"},
+          {title: "email"},
+          {title: "date"},
+          {title: "action", createdCell: (td, cellData, rowData, row, col) => {
+						ReactDOM.render(<div>
+										<Button color="primary" size="sm" className="check">
+											Verify Email
+										</Button>
+									</div>, td)
+          }},
+      ],
+			initComplete: () => {
+			}
+		})
+
+		$('.dt-search').keyup(function () {
+      mainTable.search($(this).val()).draw();
+    });
+
+    this.getNotifications();
 	}
   componentWillUnmount() {
   }
@@ -52,6 +94,27 @@ class Dashboard extends React.PureComponent {
 			}
 		})
 	}
+	getNotifications = () => {
+		const dt_data = [
+			[
+				[], "email1@email.com", "10/22/2020 - 9:21:56 AM", '',
+			],
+			[
+				[], "email2@email.com", "10/22/2020 - 9:21:56 AM", '',
+			],
+			[
+				[], "email3@email.com", "10/22/2020 - 9:21:56 AM", '',
+			]
+		]
+
+		this.reDrawDataTable(dt_data);
+	}
+	reDrawDataTable = (data) => {
+	  const table = $(mainTableClass).DataTable();
+	  table.clear();
+	  table.rows.add(data);
+	  table.draw();
+	}
 
 	render() {
 		let { loggingOut } = this.props;
@@ -67,7 +130,7 @@ class Dashboard extends React.PureComponent {
 		return (
 			<div>
 				<LoggingOut loggingOut={loggingOut} />
-				<InventorySidebar history={this.props.history} component="Dashboard" />
+				<InventorySidebar history={this.props.history} component="Notifications" />
 				<div className="content" ref={this.mainContent}>
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 					{
@@ -76,17 +139,21 @@ class Dashboard extends React.PureComponent {
 							<Container fluid>
 								<Row>
 									<Col xs="6" md="9">
-										<h1 className="page-title">Dashboard</h1>
+										<h1 className="page-title">Notifications</h1>
 									</Col>
 									<Col xs="6" md="3">
 										<Link to="/" className="main-link mobile"><FontAwesomeIcon icon="caret-left"/> main menu</Link>
 									</Col>
+								</Row>
+								<Row className="one-input-search">
+									<Col md="6"><Input className="dt-search" placeholder="Search Notifications" /></Col>
+								</Row>
+								<Row>
+									<div className="space" />
+								</Row>
+								<Row>
 									<Col>
-										{
-											data.map((v, i) => {
-												return <div key={i} className="test">{v.letter}</div>
-											})
-										}
+										<Table className={mainTableClassName} />
 									</Col>
 								</Row>
 							</Container>
@@ -110,4 +177,4 @@ function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(Notifications);

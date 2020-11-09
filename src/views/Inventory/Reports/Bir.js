@@ -71,7 +71,7 @@ class Bir extends React.PureComponent {
 		const currentPage = ["BIR","/bir/"];
 		return (
 			<div>
-				<InventorySidebar component="Reports" />
+				<InventorySidebar history={this.props.history} component="Reports" />
 				<div className="content" ref={this.mainContent}>
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 					{
