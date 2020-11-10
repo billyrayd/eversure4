@@ -22,6 +22,7 @@ var $ = require( 'jquery' );
 
 toastr.options.showMethod = 'slideDown';
 // toastr.options.preventDuplicates = true;
+// toastr.options.timeOut = 0;
 toastr.options.positionClass = 'toast-bottom-right';
 if(detectMob){
 // toastr.options.positionClass = 'toast-top-right';

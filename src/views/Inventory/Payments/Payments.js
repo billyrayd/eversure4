@@ -23,6 +23,7 @@ import {
 import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
+import AddPayment from './Modals/AddPayment';
 
 var $ = require( 'jquery' );
 
@@ -32,6 +33,10 @@ const mainTableClassName = "payments-table";
 class Payments extends React.PureComponent {
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			paymentAddMdlIsOpen: false
+		}
 	}
 	componentDidMount(){
 		var mainTable = $(mainTableClass).DataTable({
@@ -98,13 +103,28 @@ class Payments extends React.PureComponent {
 			}
 		})
 	}
+	addPaymentCb = () => {
+
+	}
+	showModal = (type, status) => {
+		const that = this;
+		switch(type){
+			case 'add':
+			that.setState({paymentAddMdlIsOpen: status}); break;
+			default:
+			that.setState({paymentAddMdlIsOpen: status}); break;
+		}
+	}
 
 	render() {
+		let { paymentAddMdlIsOpen } = this.state;
+		let { actions } = this.props;
 		const permission = true;
 
 		return (
 			<div>
 				<InventorySidebar history={this.props.history} component="Payments" />
+				<AddPayment modal={paymentAddMdlIsOpen} className="es-modal payment" callBack={this.addPaymentCb} closeModal={() => this.showModal('delete', false)} actions={actions} />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{
@@ -113,12 +133,12 @@ class Payments extends React.PureComponent {
 								<Container fluid>
 									<Row>
 										<Col xs="6" md="9">
-											<h1 className="page-title">Payments <Button color="primary" className="es-main-btn add-payments"><FontAwesomeIcon icon="plus" /> Add Payments</Button></h1>
+											<h1 className="page-title">Payments <Button color="primary" className="es-main-btn add-payments" onClick={() => this.showModal("add", true)}><FontAwesomeIcon icon="plus" /> Add Payment</Button></h1>
 										</Col>
 										<Col xs="6" md="3">
 											<Link to="/" className="main-link mobile"><FontAwesomeIcon icon="caret-left"/> main menu</Link>
 										</Col>
-										<Col md="12"><Button color="primary" className="es-main-btn add-payments mobile" block><FontAwesomeIcon icon="plus" /> Add Payments</Button></Col>
+										<Col md="12"><Button color="primary" className="es-main-btn add-payments mobile" block onClick={() => this.showModal("add", true)}><FontAwesomeIcon icon="plus" /> Add Payment</Button></Col>
 									</Row>
 									<Row className="one-input-search">
 										<Col md="3"><Input placeholder="Enter Date" /></Col>

@@ -2,28 +2,28 @@ import React from 'react';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input } from 'reactstrap';
 import toastr from 'toastr';
 
-export default class DeleteBrand extends React.PureComponent {
+export default class DeleteBranch extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
 
     this.state = {
-      brand: ''
+      branch: ''
     }
 	}
 
   delete = () => {
     const that = this;
-    let { brand } = this.state;
+    let { branch } = this.state;
     let { callBack,closeModal,data } = this.props;
 
-    that.props.actions.DeleteBrand(data[0])
+    that.props.actions.DeleteBranch(data[0])
     .then((res) => {
       toastr.remove();
       if(res){
-        toastr.success("Brand successfully deleted");
+        toastr.success("Branch successfully deleted");
       }else{
-        toastr.error("Failed to delete brand");
+        toastr.error("Failed to delete branch");
       }
       callBack();
       closeModal();
@@ -38,26 +38,26 @@ export default class DeleteBrand extends React.PureComponent {
     let uppercasedValue = input.value.toUpperCase()
 
     this.setState(
-      {brand: uppercasedValue},
+      {branch: uppercasedValue},
       () => input.setSelectionRange(start, end)
     );
   }
   modalClosed = () => {
     let { closeModal } = this.props;
-    this.setState({brand: ''});
+    this.setState({branch: ''});
     closeModal();
   }
 
 	render() {
 		let { modal,className,callBack,closeModal } = this.props;
-    let { brand } = this.state;
+    let { branch } = this.state;
 		return (
 			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false}>
-        <ModalHeader>Delete Brand</ModalHeader>
+        <ModalHeader>Delete Branch</ModalHeader>
         <ModalBody>
         	<Row>
           	<Col md="12">
-          		<label>Are you sure you want to delete this brand?</label> <br />
+          		<label>Are you sure you want to delete this branch?</label> <br />
               <b>{this.props.data[1] || ''}</b>
           	</Col>
         	</Row>

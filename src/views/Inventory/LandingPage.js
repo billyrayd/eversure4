@@ -72,20 +72,20 @@ class LandingPage extends React.PureComponent {
 								<Col md="12">
 									<div className="space1"></div>
 								</Col>
-								<Col xs="12" md="4" className="landing-link" onClick={() => this.goTo("/dashboard/")}>
-									<div className="link-wrap">
+								<Col xs="12" md="4" className="landing-link">
+									<div className="link-wrap" onClick={() => this.goTo("/dashboard/")}>
 										<Col xs="6" md="12"><FontAwesomeIcon icon="tachometer-alt" className="landing-icon" /></Col>
 										<Col xs="6" md="12"><span>Dashboard</span></Col>
 									</div>
 								</Col>
-								<Col xs="12" md="4" className="landing-link" onClick={() => this.goTo("/brand_new_in_stock/")}>
-									<div className="link-wrap">
+								<Col xs="12" md="4" className="landing-link">
+									<div className="link-wrap" onClick={() => this.goTo("/brand_new_in_stock/")}>
 										<Col xs="6" md="12"><FontAwesomeIcon icon="list" className="landing-icon" /></Col>
 										<Col xs="6" md="12"><span>Inventory</span></Col>
 									</div>
 								</Col>
-								<Col xs="12" md="4" className="landing-link" onClick={() => this.goTo("/payments/")}>
-									<div className="link-wrap">
+								<Col xs="12" md="4" className="landing-link">
+									<div className="link-wrap" onClick={() => this.goTo("/payments/")}>
 										<Col xs="6" md="12"><FontAwesomeIcon icon="money-bill" className="landing-icon" /></Col>
 										<Col xs="6" md="12"><span>Payments</span></Col>
 									</div>
@@ -93,20 +93,20 @@ class LandingPage extends React.PureComponent {
 								<Col md="12">
 									<div className="space2"></div>
 								</Col>
-								<Col xs="12" md="4" className="landing-link" onClick={() => this.goTo("/unsold_units/")}>
-									<div className="link-wrap">
+								<Col xs="12" md="4" className="landing-link">
+									<div className="link-wrap" onClick={() => this.goTo("/unsold_units/")}>
 										<Col xs="6" md="12"><FontAwesomeIcon icon="file-alt" className="landing-icon" /></Col>
 										<Col xs="6" md="12"><span>Reports</span></Col>
 									</div>
 								</Col>
-								<Col xs="12" md="4" className="landing-link" onClick={() => this.goTo("/users/")}>
-									<div className="link-wrap">
+								<Col xs="12" md="4" className="landing-link">
+									<div className="link-wrap" onClick={() => this.goTo("/users/")}>
 										<Col xs="6" md="12"><FontAwesomeIcon icon="users" className="landing-icon" /></Col>
 										<Col xs="6" md="12"><span>Users</span></Col>
 									</div>
 								</Col>
-								<Col xs="12" md="4" className="landing-link" onClick={() => this.goTo("/branches/")}>
-									<div className="link-wrap">
+								<Col xs="12" md="4" className="landing-link">
+									<div className="link-wrap" onClick={() => this.goTo("/branches/")}>
 										<Col xs="6" md="12"><FontAwesomeIcon icon="cogs" className="landing-icon" /></Col>
 										<Col xs="6" md="12"><span>Settings</span></Col>
 									</div>

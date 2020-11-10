@@ -70,9 +70,7 @@ class NavBar extends React.PureComponent {
   loadListeners = () => {
     const that = this;
     feathers.service("branches").on("created", function(s){
-      console.log("haha")
-      console.log(s)
-      that.loadSettings();
+      // that.loadSettings();
     })
   }
 

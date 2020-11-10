@@ -214,12 +214,15 @@ export function SetBranches(data) {
     }
 }
 
-export function deleteBranch(id) {
+export function DeleteBranch(id) {
     return (dispatch, getState) => {
         var branchService = feathers.service('branches');
 
-        branchService.remove(id).then((data) => {
-            console.log('data', data)
+        return branchService.remove(id).then((data) => {
+            return Promise.resolve(true);
+        })
+        .catch(() => {
+            return Promise.resolve(false);
         });
     }
 }
@@ -254,14 +257,16 @@ export function GetAllBrands() {
         return brandsService.find().then((brands) => {
             if(brands.data.length > 0){
                 const results = brands.data,
+                    dataSelection = [],
                     data = [];
                 results.forEach((value, index) => {
                     const branch = value.branch ? value.branch.branch_name : 'No branch';
                     const actionBtn = '<button class="btn btn-sm btn-primary edit"><span class="fa fa-edit" /></button> <button class="btn btn-sm btn-danger delete" data-toggle="modal" data-target="#confirm_brand_delete1"><span class="fa fa-trash" /> </button>';
                     data.push([value._id, index + 1, value.brand_name, actionBtn]);
+                    dataSelection.push([value._id, index + 1, value.brand_name, branch]);
                 });
 
-                dispatch(SetBrands(data))
+                dispatch(SetBrands(dataSelection))
 
                 return Promise.resolve(data);
             }else{
@@ -378,8 +383,11 @@ export function DeleteBrand(id) {
     return (dispatch, getState) => {
         var brandService = feathers.service('brands');
 
-        brandService.remove(id).then((data) => {
-            console.log('data', data)
+        return brandService.remove(id).then((data) => {
+            return Promise.resolve(true);
+        })
+        .catch(() => {
+            return Promise.resolve(false);
         });
     }
 }

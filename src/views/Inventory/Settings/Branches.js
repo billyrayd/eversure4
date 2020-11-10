@@ -31,6 +31,7 @@ import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import SettingsSubSidebar from 'components/SubSidebars/SettingsSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
 import AddBranch from './Modals/AddBranch';
+import DeleteBranch from './Modals/DeleteBranch';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -49,6 +50,7 @@ class Branches extends React.PureComponent {
 			value: '',
 			isOpen: false,
 			branchAddMdlIsOpen: false,
+			branch: '',
 		}
 	}
 
@@ -96,6 +98,24 @@ class Branches extends React.PureComponent {
       mainTable.search($(this).val()).draw();
     });
 
+    $(mainTableClass).on("click",".delete", function(){
+    	const data = mainTable.row($(this).parents('tr')).data();
+    	const branchId = data[0];
+    	const branchName = data[2];
+
+    	that.setState({branch: [branchId,branchName]});
+    	that.showModal("delete", true);
+    });
+
+    $(mainTableClass).on("click",".edit", function(){
+    	const data = mainTable.row($(this).parents('tr')).data();
+    	const branchId = data[0];
+    	const branchName = data[2];
+
+    	that.setState({branch: [branchId,branchName]});
+    	that.showModal("edit", true);
+    });
+
     that.loadBranches();
 	}
 	logOut = () => {
@@ -108,27 +128,21 @@ class Branches extends React.PureComponent {
 		})
 	}
 	loadBranches = () => {
+		const that = this;
 		let { branchList } = this.props;
 
-		this.reDrawDataTable(branchList);
+		that.props.actions.GetAllBranches()
+		.then((res) => {
+			if(res){
+				that.reDrawDataTable(res);
+			}
+		})
 	}
 	reDrawDataTable = (data) => {
 	  const table = $(mainTableClass).DataTable();
 	  table.clear();
 	  table.rows.add(data);
 	  table.draw();
-	}
-	toggleEdit = () => {
-		let { isOpenEdit } = this.state;
-		this.setState({isOpenEdit: !isOpenEdit})
-	}
-	toggleDelete = () => {
-		let { isOpenDelete } = this.state;
-		this.setState({isOpenDelete: !isOpenDelete})
-	}
-	toggleView = () => {
-		let { isOpenView } = this.state;
-		this.setState({isOpenView: !isOpenView})
 	}
 	/* set input characters to uppercase */
 	handleChange = (event) => {
@@ -156,16 +170,17 @@ class Branches extends React.PureComponent {
 		switch(type){
 			case 'add':
 			that.setState({branchAddMdlIsOpen: status}); break;
-			default:
-			that.setState({branchAddMdlIsOpen: status}); break;
+			case 'delete':
+			that.setState({branchDeleteMdlIsOpen: status}); break;
+			default: return false;
 		}
 	}
-	addBranchCb = () => {
+	modalCallback = () => {
 		this.loadBranches();
 	}
 
 	render() {
-		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen, branchAddMdlIsOpen } = this.state;
+		let { value, isOpen, branchAddMdlIsOpen,branchDeleteMdlIsOpen,branch } = this.state;
 		let { actions } = this.props;
 		const permission = true;
 
@@ -173,7 +188,8 @@ class Branches extends React.PureComponent {
 		return (
 			<div>
 				<InventorySidebar history={this.props.history} component="Settings" />
-				<AddBranch modal={branchAddMdlIsOpen} className="es-modal" callBack={this.addBranchCb} closeModal={() => this.showModal('add', false)} actions={actions} />
+				<AddBranch modal={branchAddMdlIsOpen} className="es-modal" callBack={this.modalCallback} closeModal={() => this.showModal('add', false)} actions={actions} />
+				<DeleteBranch modal={branchDeleteMdlIsOpen} className="es-modal" callBack={this.modalCallback} closeModal={() => this.showModal('delete', false)} actions={actions} data={branch} />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{

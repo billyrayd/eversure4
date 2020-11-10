@@ -8,28 +8,28 @@ export default class AddBrand extends React.PureComponent {
 		super(props);
 
     this.state = {
-      brand: ''
+      brandValue: ''
     }
 	}
 
   save = () => {
     const that = this;
-    let { brand } = this.state;
+    let { brandValue } = this.state;
     let { callBack } = this.props;
-    if(brand.trim() === ""){
-      that.setState({brand: ''});
+
+    if(brandValue.trim() === ""){
+      that.setState({brandValue: ''});
       toastr.remove();
       toastr.info("Please enter brand name");
     }else{
-      this.props.actions.AddBrand(brand)
+      this.props.actions.UpdateBrand(brandValue)
       .then((res) => {
-        toastr.remove();
         if(res.status){
             toastr.success(res.message);
             that.modalClosed();
             callBack();
         }else{
-          that.setState({brand: ''});
+          that.setState({brandValue: ''});
           toastr.error(res.message);
         }
       })
@@ -43,27 +43,27 @@ export default class AddBrand extends React.PureComponent {
     let uppercasedValue = input.value.toUpperCase()
 
     this.setState(
-      {brand: uppercasedValue},
+      {brandValue: uppercasedValue},
       () => input.setSelectionRange(start, end)
     );
   }
   modalClosed = () => {
     let { closeModal } = this.props;
-    this.setState({brand: ''});
+    this.setState({brandValue: ''});
     closeModal();
   }
 
 	render() {
-		let { modal,className,callBack,closeModal } = this.props;
-    let { brand } = this.state;
+		let { modal,className,callBack,closeModal, data } = this.props;
+    let { brandValue } = this.state;
 		return (
 			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false}>
-        <ModalHeader>Add Brand</ModalHeader>
+        <ModalHeader>Edit Brand</ModalHeader>
         <ModalBody>
         	<Row>
           	<Col md="12">
           		<label>Brand Name</label> <br />
-          		<Input placeholder="Enter Brand Name" autoComplete="off" onChange={(e) => this.handleChange(e)} value={brand} />
+          		<Input placeholder="Enter Brand Name" autoComplete="off" placeholder={data[1]} onChange={(e) => this.handleChange(e)} value={brandValue} />
           	</Col>
         	</Row>
         </ModalBody>

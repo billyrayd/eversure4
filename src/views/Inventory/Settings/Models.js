@@ -30,6 +30,7 @@ import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import SettingsSubSidebar from 'components/SubSidebars/SettingsSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
+import AddModel from './Modals/AddModel';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -117,18 +118,6 @@ class Models extends React.PureComponent {
 	  table.rows.add(data);
 	  table.draw();
 	}
-	toggleEdit = () => {
-		let { isOpenEdit } = this.state;
-		this.setState({isOpenEdit: !isOpenEdit})
-	}
-	toggleDelete = () => {
-		let { isOpenDelete } = this.state;
-		this.setState({isOpenDelete: !isOpenDelete})
-	}
-	toggleView = () => {
-		let { isOpenView } = this.state;
-		this.setState({isOpenView: !isOpenView})
-	}
 	/* set input characters to uppercase */
 	handleChange = (event) => {
 	  const input = event.target;
@@ -150,15 +139,32 @@ class Models extends React.PureComponent {
 
 		this.setState({isOpen: !isOpen})
 	}
+	modalCallback = () => {
+
+	}
+	showModal = (type, status) => {
+		const that = this;
+		switch(type){
+			case 'add':
+			that.setState({modelAddMdlIsOpen: status}); break;
+			case 'edit':
+			that.setState({brandEditMdlIsOpen: status}); break;
+			case 'delete':
+			that.setState({brandDeleteMdlIsOpen: status}); break;
+			default: return false;
+		}
+	}
 
 	render() {
-		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen } = this.state;
+		let { value,isOpen,modelAddMdlIsOpen } = this.state;
+		let { actions } = this.props;
 		const permission = true;
 
 		const currentPage = ["Models","/models/"];
 		return (
 			<div>
 				<InventorySidebar history={this.props.history} component="Settings" />
+				<AddModel modal={modelAddMdlIsOpen} className="es-modal add-model" callBack={this.modalCallback} closeModal={() => this.showModal('add', false)} actions={actions} />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{
@@ -204,7 +210,7 @@ class Models extends React.PureComponent {
 									</Row>
 									<Row className="page-header">
 										<Col>
-											<h4>Motorcycle Models List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+											<h4>Motorcycle Models List<Button className="es-main-btn" color="primary" size="sm" onClick={() => this.showModal("add",true)}><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 										</Col>
 									</Row>
 									<Row className="one-input-search">

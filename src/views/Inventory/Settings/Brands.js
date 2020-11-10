@@ -32,6 +32,7 @@ import SettingsSubSidebar from 'components/SubSidebars/SettingsSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
 import AddBrand from './Modals/AddBrand';
 import DeleteBrand from './Modals/DeleteBrand';
+import EditBrand from './Modals/EditBrand';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -51,6 +52,7 @@ class Brands extends React.PureComponent {
 			isOpen: false,
 			brandAddMdlIsOpen: false,
 			brandDeleteMdlIsOpen: false,
+			brand: '',
 		}
 	}
 
@@ -97,6 +99,24 @@ class Brands extends React.PureComponent {
       mainTable.search($(this).val()).draw();
     });
 
+    $(mainTableClass).on("click",".delete", function(){
+    	const data = mainTable.row($(this).parents('tr')).data();
+    	const brandId = data[0];
+    	const brandName = data[2];
+
+    	that.setState({brand: [brandId,brandName]});
+    	that.showModal("delete", true);
+    });
+
+    $(mainTableClass).on("click",".edit", function(){
+    	const data = mainTable.row($(this).parents('tr')).data();
+    	const brandId = data[0];
+    	const brandName = data[2];
+
+    	that.setState({brand: [brandId,brandName]});
+    	that.showModal("edit", true);
+    });
+
     that.loadBrands();
 	}
 	logOut = () => {
@@ -109,9 +129,15 @@ class Brands extends React.PureComponent {
 		})
 	}
 	loadBrands = () => {
+		const that = this;
 		let { brandList } = this.props;
 
-		this.reDrawDataTable(brandList);
+		that.props.actions.GetAllBrands()
+		.then((res) => {
+			if(res){
+				that.reDrawDataTable(res);
+			}
+		})
 	}
 	reDrawDataTable = (data) => {
 	  const table = $(mainTableClass).DataTable();
@@ -140,23 +166,24 @@ class Brands extends React.PureComponent {
 
 		this.setState({isOpen: !isOpen})
 	}
-	addBrandCb = () => {
-
+	modalCallback = () => {
+		this.loadBrands();
 	}
 	showModal = (type, status) => {
 		const that = this;
 		switch(type){
 			case 'add':
 			that.setState({brandAddMdlIsOpen: status}); break;
+			case 'edit':
+			that.setState({brandEditMdlIsOpen: status}); break;
 			case 'delete':
 			that.setState({brandDeleteMdlIsOpen: status}); break;
-			default:
-			that.setState({brandAddMdlIsOpen: status}); break;
+			default: return false;
 		}
 	}
 
 	render() {
-		let { value, isOpen, brandAddMdlIsOpen,brandDeleteMdlIsOpen, } = this.state;
+		let { value, isOpen, brandAddMdlIsOpen,brandDeleteMdlIsOpen,brand,brandEditMdlIsOpen } = this.state;
 		let { actions } = this.props;
 		const permission = true;
 
@@ -164,8 +191,9 @@ class Brands extends React.PureComponent {
 		return (
 			<div>
 				<InventorySidebar history={this.props.history} component="Settings" />
-				<AddBrand modal={brandAddMdlIsOpen} className="es-modal" callBack={this.addBrandCb} closeModal={() => this.showModal('add', false)} actions={actions} />
-				<AddBrand modal={brandDeleteMdlIsOpen} className="es-modal" callBack={this.deleteBrandCb} closeModal={() => this.showModal('delete', false)} actions={actions} />
+				<AddBrand modal={brandAddMdlIsOpen} className="es-modal" callBack={this.modalCallback} closeModal={() => this.showModal('add', false)} actions={actions} />
+				<DeleteBrand modal={brandDeleteMdlIsOpen} className="es-modal" callBack={this.modalCallback} closeModal={() => this.showModal('delete', false)} actions={actions} data={brand} />
+				<EditBrand modal={brandEditMdlIsOpen} className="es-modal" callBack={this.modalCallback} closeModal={() => this.showModal('edit', false)} actions={actions} data={brand} />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{
