@@ -1,9 +1,14 @@
 import React from 'react';
+//redux
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as AuthActions from 'actions/auth';
+
 import { Link } from 'react-router-dom';
 
 import { Button } from 'reactstrap';
 
-export default class InventorySubSidebar extends React.PureComponent {
+class InventorySubSidebar extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -12,7 +17,12 @@ export default class InventorySubSidebar extends React.PureComponent {
 		}
 	}
 
+	goTo = (path) => {
+		this.props.history.push(path);
+	}
+
 	render() {
+		let { userData } = this.props;
 		let sublinks = [
 			{ name: 'Brand New', path: '/', visible: true, className: "nav-link-header", nonLink: true },
 			{ name: 'In Stock', path: '/brand_new_in_stock/', visible: true },
@@ -45,7 +55,7 @@ export default class InventorySubSidebar extends React.PureComponent {
 						sublinks.map((link, key) => {
 							const className = link.nonLink ? link.className : (this.props.subpage == link.path ? "nav-link active" : "nav-link");
 
-							return link.visible ? <li key={key} className={className}><Link to={link.path}>{link.className == "divider" ? '' : link.name}</Link></li> : null
+							return link.visible ? <li key={key} className={className} onClick={() => this.goTo(link.path)}><a>{link.className == "divider" ? '' : link.name}</a></li> : null
 						})
 					}
 				</ul>
@@ -53,3 +63,14 @@ export default class InventorySubSidebar extends React.PureComponent {
 		);
 	}
 }
+
+const mapStateToProps = state => ({
+  authenticated: state.user_auth.authenticated,
+  userData: state.login.userData
+});
+
+function mapDispatchToProps(dispatch) {
+   return { actions: bindActionCreators(Object.assign({}, AuthActions), dispatch) }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(InventorySubSidebar);

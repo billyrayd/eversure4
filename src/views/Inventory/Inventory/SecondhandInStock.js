@@ -202,7 +202,7 @@ class SecondhandInStock extends React.PureComponent {
 						{
 							permission ?
 							<div>
-								<InventorySubSidebar subpage={currentPage[1]}/>
+								<InventorySubSidebar subpage={currentPage[1]} history={this.props.history} />
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">

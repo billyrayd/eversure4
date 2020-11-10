@@ -2,38 +2,34 @@ import React from 'react';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input } from 'reactstrap';
 import toastr from 'toastr';
 
-export default class AddBranch extends React.PureComponent {
+export default class AddBrand extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
 
     this.state = {
-      branch: ''
+      brand: ''
     }
 	}
 
   save = () => {
     const that = this;
-    let { branch } = this.state;
+    let { brand } = this.state;
     let { callBack } = this.props;
-    if(branch.trim() === ""){
-      that.setState({branch: ''});
+    if(brand.trim() === ""){
+      that.setState({brand: ''});
       toastr.remove();
-      toastr.info("Please enter branch name");
+      toastr.info("Please enter brand name");
     }else{
-      this.props.actions.AddBranch(branch)
+      this.props.actions.AddBrand(brand)
       .then((res) => {
-        if(res){
-          if(res == "exist"){
-            toastr.error(`The branch ${branch} already exists.`);
-            that.setState({branch: ''});
-          }else{
-            toastr.success("Branch successfully added!");
+        if(res.status){
+            toastr.success(res.message);
             that.modalClosed();
             callBack();
-          }
         }else{
-          toastr.error("Failed to add branch. Please try again");
+          that.setState({brand: ''});
+          toastr.error(res.message);
         }
       })
     }
@@ -46,27 +42,27 @@ export default class AddBranch extends React.PureComponent {
     let uppercasedValue = input.value.toUpperCase()
 
     this.setState(
-      {branch: uppercasedValue},
+      {brand: uppercasedValue},
       () => input.setSelectionRange(start, end)
     );
   }
   modalClosed = () => {
     let { closeModal } = this.props;
-    this.setState({branch: ''});
+    this.setState({brand: ''});
     closeModal();
   }
 
 	render() {
 		let { modal,className,callBack,closeModal } = this.props;
-    let { branch } = this.state;
+    let { brand } = this.state;
 		return (
 			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false}>
-        <ModalHeader>Add Branch</ModalHeader>
+        <ModalHeader>Add Brand</ModalHeader>
         <ModalBody>
         	<Row>
           	<Col md="12">
-          		<label>Branch Name</label> <br />
-          		<Input placeholder="Enter Branch Name" autoComplete="off" onChange={(e) => this.handleChange(e)} value={branch} />
+          		<label>Brand Name</label> <br />
+          		<Input placeholder="Enter Brand Name" autoComplete="off" onChange={(e) => this.handleChange(e)} value={brand} />
           	</Col>
         	</Row>
         </ModalBody>

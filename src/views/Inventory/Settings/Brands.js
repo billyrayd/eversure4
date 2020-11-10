@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 //redux
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as DashboardActions from 'actions/dashboard';
 import * as AuthActions from 'actions/auth';
+import * as CategoryActions from 'actions/prev/category';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
@@ -30,6 +30,8 @@ import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import SettingsSubSidebar from 'components/SubSidebars/SettingsSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
+import AddBrand from './Modals/AddBrand';
+import DeleteBrand from './Modals/DeleteBrand';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -47,6 +49,8 @@ class Brands extends React.PureComponent {
 			isOpenView: false,
 			value: '',
 			isOpen: false,
+			brandAddMdlIsOpen: false,
+			brandDeleteMdlIsOpen: false,
 		}
 	}
 
@@ -115,18 +119,6 @@ class Brands extends React.PureComponent {
 	  table.rows.add(data);
 	  table.draw();
 	}
-	toggleEdit = () => {
-		let { isOpenEdit } = this.state;
-		this.setState({isOpenEdit: !isOpenEdit})
-	}
-	toggleDelete = () => {
-		let { isOpenDelete } = this.state;
-		this.setState({isOpenDelete: !isOpenDelete})
-	}
-	toggleView = () => {
-		let { isOpenView } = this.state;
-		this.setState({isOpenView: !isOpenView})
-	}
 	/* set input characters to uppercase */
 	handleChange = (event) => {
 	  const input = event.target;
@@ -148,15 +140,32 @@ class Brands extends React.PureComponent {
 
 		this.setState({isOpen: !isOpen})
 	}
+	addBrandCb = () => {
+
+	}
+	showModal = (type, status) => {
+		const that = this;
+		switch(type){
+			case 'add':
+			that.setState({brandAddMdlIsOpen: status}); break;
+			case 'delete':
+			that.setState({brandDeleteMdlIsOpen: status}); break;
+			default:
+			that.setState({brandAddMdlIsOpen: status}); break;
+		}
+	}
 
 	render() {
-		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen } = this.state;
+		let { value, isOpen, brandAddMdlIsOpen,brandDeleteMdlIsOpen, } = this.state;
+		let { actions } = this.props;
 		const permission = true;
 
 		const currentPage = ["Brands","/brands/"];
 		return (
 			<div>
 				<InventorySidebar history={this.props.history} component="Settings" />
+				<AddBrand modal={brandAddMdlIsOpen} className="es-modal" callBack={this.addBrandCb} closeModal={() => this.showModal('add', false)} actions={actions} />
+				<AddBrand modal={brandDeleteMdlIsOpen} className="es-modal" callBack={this.deleteBrandCb} closeModal={() => this.showModal('delete', false)} actions={actions} />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{
@@ -202,7 +211,7 @@ class Brands extends React.PureComponent {
 									</Row>
 									<Row className="page-header">
 										<Col>
-											<h4>Motorcycle Brands List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+											<h4>Motorcycle Brands List<Button className="es-main-btn" color="primary" size="sm" onClick={() => this.showModal("add", true)}><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 										</Col>
 									</Row>
 									<Row className="one-input-search">
@@ -233,7 +242,7 @@ const mapStateToProps = state => ({
 });
 
 function mapDispatchToProps(dispatch) {
-   return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
+   return { actions: bindActionCreators(Object.assign({}, AuthActions, CategoryActions), dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Brands);

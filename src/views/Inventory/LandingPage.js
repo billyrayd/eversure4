@@ -93,7 +93,7 @@ class LandingPage extends React.PureComponent {
 								<Col md="12">
 									<div className="space2"></div>
 								</Col>
-								<Col xs="12" md="4" className="landing-link" onClick={() => this.goTo("/brand_new_unsold/")}>
+								<Col xs="12" md="4" className="landing-link" onClick={() => this.goTo("/unsold_units/")}>
 									<div className="link-wrap">
 										<Col xs="6" md="12"><FontAwesomeIcon icon="file-alt" className="landing-icon" /></Col>
 										<Col xs="6" md="12"><span>Reports</span></Col>

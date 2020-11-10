@@ -119,7 +119,7 @@ class NavBar extends React.PureComponent {
 
   render() {
     let { isOpen,tooltipOpen,notifTooltipOpen } = this.state;
-    let { system } = this.props;
+    let { system,userData } = this.props;
     const mainLink = system == "Inventory" ? "/" : "/accounting/";
     const notifCount = "99+"
     return (
@@ -128,7 +128,7 @@ class NavBar extends React.PureComponent {
           <FontAwesomeIcon className="toggle-sidebar" icon="bars" onClick={this.openSidebar} />
           <img src={EversureLogo} alt="logo" className="logo" />
           <Link to={mainLink} className="main-link"><FontAwesomeIcon icon="caret-left"/> BACK TO MAIN MENU</Link>
-          <div className="current-user"><b>Super Admin</b></div>
+          <div className="current-user"><b>{userData.fullname}</b></div>
           <span onClick={this.toggleMenu} >
             <FontAwesomeIcon className="toggle-menu" icon="ellipsis-v"/>
             <div className="notification-count">
@@ -156,7 +156,7 @@ class NavBar extends React.PureComponent {
               </Tooltip>
             </NavbarText>
             <NavbarText className="user-text esBlue">
-              Welcome, <b>Admin User Full Name</b>
+              Welcome, <b>{userData.fullname}</b>
             </NavbarText>
             <NavbarText id="logout" className="logout" onClick={this.logOut}>
               <FontAwesomeIcon icon="sign-out-alt" className="esBlue" />
@@ -179,6 +179,7 @@ class NavBar extends React.PureComponent {
 const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
+  userData: state.login.userData,
 });
 
 function mapDispatchToProps(dispatch) {

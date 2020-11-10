@@ -201,7 +201,7 @@ class BrandNewInStock extends React.PureComponent {
 						{
 							permission ?
 							<div>
-								<InventorySubSidebar subpage="/brand_new_in_stock/"/>
+								<InventorySubSidebar subpage={currentPage[1]} history={this.props.history} />
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">
@@ -284,6 +284,7 @@ class BrandNewInStock extends React.PureComponent {
 const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
+  userData: state.login.userData,
 });
 
 function mapDispatchToProps(dispatch) {

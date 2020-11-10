@@ -195,7 +195,7 @@ class UsersList extends React.PureComponent {
 		return (
 			<div>
 				<InventorySidebar history={this.props.history} component="Users" />
-				<AddUser modal={userAddMdlIsOpen} className="es-modal" callBack={this.addUserCb} closeModal={() => this.closeModal('add')} />
+				<AddUser modal={userAddMdlIsOpen} className="es-modal add-user" callBack={this.addUserCb} closeModal={() => this.closeModal('add')} />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{

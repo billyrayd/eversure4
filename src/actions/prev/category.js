@@ -291,10 +291,43 @@ export function getAllBrandsWithoutBranchName() {
     }
 }
 
-export function addBrands(brandName, branch) {
+export function AddBrand(brandName, branch) {
     return (dispatch, getState) => {
         var brandsService = feathers.service('brands');
+        let output = {};
 
+        return brandsService.find({
+            query: {
+                brand_name: brandName
+            }
+        })
+        .then((res) => {
+            if(res.data.length > 0){
+                output.status = false;
+                output.message = `The brand ${brandName} already exists`;
+
+                return Promise.resolve(output);
+            }else{
+                return brandsService.create({
+                    brand_name: brandName
+                })
+                .then(() => {
+                    output.status = true;
+                    output.message = `Brand successfully added`;
+                    return Promise.resolve(output);
+                })
+                .catch(() => {
+                    output.status = false;
+                    output.message = `Error adding brand. Please try again`;
+                    return Promise.resolve(output);
+                })
+            }
+        })
+        .catch((err) => {
+
+        })
+
+        /*
         return feathers.authenticate({
             strategy: 'local',
             username: _user,
@@ -330,6 +363,7 @@ export function addBrands(brandName, branch) {
                         return Promise.resolve('failed')
                     })
             })
+            */
     }
 }
 
@@ -340,7 +374,7 @@ export function SetBrands(data) {
     }
 }
 
-export function deleteBrand(id) {
+export function DeleteBrand(id) {
     return (dispatch, getState) => {
         var brandService = feathers.service('brands');
 

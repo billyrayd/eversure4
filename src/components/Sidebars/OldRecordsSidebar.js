@@ -33,11 +33,22 @@ export default class OldRecordsSidebar extends React.PureComponent {
     	}
     	
     })
+
+    $("body").removeClass("disable-scroll");
+    window.addEventListener("resize", this.showSidebar.bind(this));
 	}
 	toggle = () => {
 		let { isOpen } = this.state;
 
 		this.setState({isOpen: !isOpen})
+	}
+	showSidebar = () => {
+		if(window.innerWidth > 415){
+			document.getElementById("sideBar").style.width = "200px";
+			$(".table").css({width: '100%'});
+		}else{
+			document.getElementById("sideBar").style.width = "0px";
+		}
 	}
 	closeSidebar = () => {
 		// $(".sidebar").toggle();

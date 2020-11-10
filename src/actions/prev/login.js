@@ -40,7 +40,7 @@ export function getUserId(username){
 	}
 }
 
-export function getUserData(id){
+export function GetUserData(id){
 	return (dispatch, getState) => {
 		var usersService = feathers.service('users');
 
@@ -71,6 +71,8 @@ export function getUserData(id){
 					username,
   			}
 
+  			dispatch(SetUserData(data.data[0]))
+
 			return Promise.resolve(data.data)
 			// return Promise.resolve(fetchedUserData)
 		})
@@ -80,14 +82,14 @@ export function getUserData(id){
 	}
 }
 
-export function setUserData(data){
+export function SetUserData(data){
 	return {
 		type: USER_DATA,
 		data: data
 	}
 }
 
-export function getUserPermissions(id){
+export function GetUserPermissions(id){
 	return (dispatch, getState) => {
 		var permissionService = feathers.service('permission');
 		var defaultPermissions = {
@@ -110,20 +112,26 @@ export function getUserPermissions(id){
 		.then((data) => {
 			if(data.total){
 				var permissions = data.data[0].permissions
-				dispatch(setUserPermissions(permissions))
+				dispatch(SetUserPermissions(permissions))
+
+				return Promise.resolve(true);
 			}else{
-				dispatch(setUserPermissions(defaultPermissions))
+				dispatch(SetUserPermissions(defaultPermissions))
+
+				return Promise.resolve(true);
 			}
 		})
 		.catch((error) => {
 			console.log('error')
 			console.log(error)
+
+			return Promise.resolve(false);
 		})
 
 	}
 }
 
-export function setUserPermissions(data){
+export function SetUserPermissions(data){
 	return {
 		type: USER_PERMISSION,
 		data: data

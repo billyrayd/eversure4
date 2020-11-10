@@ -55,8 +55,8 @@ export default class AddUser extends React.PureComponent {
         	</Row>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" className="es-main-btn" onClick={callBack}>Save</Button>{' '}
-          <Button color="secondary" onClick={closeModal}>Cancel</Button>
+          <Button color="secondary" onClick={closeModal}>Cancel</Button>{' '}
+          <Button color="primary" className="es-main-btn" onClick={callBack}>Save</Button>
         </ModalFooter>
       </Modal>
 		);

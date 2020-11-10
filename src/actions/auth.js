@@ -8,6 +8,8 @@ import {
 
 import feathers from 'helpers/feathers';
 
+import { GetUserData, GetUserPermissions } from 'actions/prev/login';
+
 export const Authenticate = (username, password) => {
 	return (dispatch, getState) => {
 		let output = {};
@@ -20,11 +22,33 @@ export const Authenticate = (username, password) => {
 			password: password,
 		})
 		.then((data) => {
+			let { user } = data;
+
 			output.status = true;
 			output.message = "Access Granted!";
+
+			dispatch(GetUserData(user._id));
+			dispatch(GetUserPermissions(user.type));
+
 			return Promise.resolve(output);
+
+			// return GetUserData(data.user._id)
+			// .then((res) => {
+			// 	console.log('res')
+			// 	console.log(res)
+			// 	console.log(res)
+			// 	if(res){
+			// 		return Promise.resolve(output);
+			// 	}else{
+			// 		output.status = false;
+			// 		output.message = "An error occured. Please try again.";
+
+			// 		return Promise.resolve(output);
+			// 	}
+			// })
 		})
 		.catch((e) => {
+			console.log(e)
 			output.status = false;
 			output.message = "Invalid username or password";
 			if(e.code == 408){
@@ -81,11 +105,5 @@ export const Logout = () => {
 		.catch(() => {
 			return Promise.resolve(false);
 		})
-	}
-}
-
-export const GetUserData = (id) => {
-	return (dispatch, getState) => {
-		
 	}
 }
