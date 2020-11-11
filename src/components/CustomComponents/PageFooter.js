@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { MY_APP } from 'helpers';
+
 //reactstrap
 import {
 	Container,
@@ -16,7 +18,7 @@ export default class PageFooter extends React.PureComponent {
 		return (
 			<div>
 				<div className="page-footer">
-					<small>Eversure v4.0.0</small>
+					<small>Eversure v{MY_APP.version}</small>
 				</div>
 			</div>
 		);

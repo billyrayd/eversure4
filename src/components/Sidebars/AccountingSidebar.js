@@ -54,7 +54,8 @@ export default class InventorySidebar extends React.PureComponent {
     document.getElementById("sideBar").style.width = "0px";
     document.getElementById("appVersion").style.bottom = "-55px";
 		$(".sidebar-wrap").removeClass("es-overlay");
-    document.body.classList.toggle("disable-scroll");
+    // document.body.classList.toggle("disable-scroll");
+    $("body").removeClass("disable-scroll");
 	}
 	goTo = (path) =>{
 		this.props.history.push(path);
@@ -99,11 +100,11 @@ export default class InventorySidebar extends React.PureComponent {
 						{
 							links.map((link, key) => {
 								return link.visible ? link.longText ? 
-											<li key={key} className={this.props.component == link.name ? "nav-link active" : "nav-link"}>
-												<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} /><span>{link.name}</span> <span className="secondText">{link.secondText}</span></Link>
+											<li key={key} className={this.props.component == link.name ? "nav-link active" : "nav-link"} onClick={() => this.goTo(link.path)}>
+												<span className="link-name"><FontAwesomeIcon className="link-icon" icon={link.icon} /><span>{link.name}</span> <span className="secondText">{link.secondText}</span></span>
 											</li> : 
-											<li key={key} className={this.props.component == link.name ? "nav-link active" : "nav-link"}>
-												<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} />{link.name}</Link>
+											<li key={key} className={this.props.component == link.name ? "nav-link active" : "nav-link"} onClick={() => this.goTo(link.path)}>
+												<span className="link-name"><FontAwesomeIcon className="link-icon" icon={link.icon} />{link.name}</span>
 											</li> : null
 							})
 						}

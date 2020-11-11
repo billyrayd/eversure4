@@ -58,8 +58,9 @@ class Brands extends React.PureComponent {
 
 	componentDidMount(){
 		const that = this;
+		let { brandList } = this.props;
 		var mainTable = $(mainTableClass).DataTable({
-			data: [],
+			data: brandList,
 			"sDom": '<"bottom"<t>ip><"clear">',
 			"columnDefs": [
 				{
@@ -199,7 +200,7 @@ class Brands extends React.PureComponent {
 						{
 							permission ?
 							<div>
-								<SettingsSubSidebar subpage="/brands/"/>
+								<SettingsSubSidebar subpage="/brands/" history={this.props.history} />
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">

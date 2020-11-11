@@ -12,6 +12,10 @@ export default class SettingsSubSidebar extends React.PureComponent {
 		}
 	}
 
+	goTo = (path) => {
+		this.props.history.push(path);
+	}
+
 	render() {
 		let sublinks = [
 			{ name: 'Branches', path: '/branches/', visible: true },
@@ -37,7 +41,7 @@ export default class SettingsSubSidebar extends React.PureComponent {
 						sublinks.map((link, key) => {
 							const className = link.nonLink ? link.className : (this.props.subpage == link.path ? "nav-link active" : "nav-link");
 
-							return link.visible ? <li key={key} className={className}><Link to={link.path}>{link.className == "divider" ? '' : link.name}</Link></li> : null
+							return link.visible ? <li key={key} className={className} onClick={() => this.goTo(link.path)}><span className="link-name">{link.className == "divider" ? '' : link.name}</span></li> : null
 						})
 					}
 				</ul>

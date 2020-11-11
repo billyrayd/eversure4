@@ -97,10 +97,10 @@ export default class OldRecordsSidebar extends React.PureComponent {
 							links.map((link, key) => {
 								return link.visible ? link.longText ? 
 											<li key={key} className={this.props.component == link.title ? "nav-link active" : "nav-link"}>
-												<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} /><span>{link.name}</span> <span className="secondText">{link.secondText}</span></Link>
+												<span className="link-name"><FontAwesomeIcon className="link-icon" icon={link.icon} /><span>{link.name}</span> <span className="secondText">{link.secondText}</span></span>
 											</li> : 
 											<li key={key} className={this.props.component == link.title ? "nav-link active" : "nav-link"}>
-												<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} />{link.name}</Link>
+												<span className="link-name"><FontAwesomeIcon className="link-icon" icon={link.icon} />{link.name}</span>
 											</li> : null
 							})
 						}

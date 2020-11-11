@@ -63,7 +63,7 @@ class NavBar extends React.PureComponent {
 
   componentDidUpdate(){
     if(!this.props.data.authenticated){
-      this.props.history.push("/")
+      // this.props.history.push("/")
     }
   }
 
@@ -118,7 +118,17 @@ class NavBar extends React.PureComponent {
   render() {
     let { isOpen,tooltipOpen,notifTooltipOpen } = this.state;
     let { system,userData } = this.props;
-    const mainLink = system == "Inventory" ? "/" : "/accounting/";
+    let mainLink = "/";
+
+    switch(system){
+      case 'Inventory':
+        mainLink = "/"; break;
+      case 'Accounting':
+        mainLink = "/accounting/"; break;
+      case 'OldRecords':
+        mainLink = "/old_records/"; break;
+      default: mainLink = "/";
+    }
     const notifCount = "99+"
     return (
       <div className="main-nav">

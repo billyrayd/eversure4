@@ -37,7 +37,7 @@ class FinancialStatement extends React.PureComponent {
 		const permission = true;
 		return (
 			<div>
-				<AccountingSidebar component="Financial" />
+				<AccountingSidebar history={this.props.history} component="Financial" />
 				<div className="content">
 					<NavBar data={this.props} system="Accounting" history={this.props.history} logout={this.logOut}/>
 						{

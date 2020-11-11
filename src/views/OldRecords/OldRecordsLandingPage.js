@@ -24,7 +24,7 @@ class OldRecordsLandingPage extends React.PureComponent {
 			<div>
 				<OldRecordsSidebar history={this.props.history} component="Landing" />
 				<div className="content">
-						<NavBar data={this.props} history={this.props.history} system="Accounting" />
+						<NavBar data={this.props} history={this.props.history} system="OldRecords" />
 						<Container fluid>
 							<Row>
 								<Col>

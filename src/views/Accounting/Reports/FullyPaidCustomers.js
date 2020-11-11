@@ -175,14 +175,14 @@ class ReportsFullyPaidCustomers extends React.PureComponent {
 		const permission = true;
 		return (
 			<div>
-				<AccountingSidebar component="Reports" />
+				<AccountingSidebar history={this.props.history} component="Reports" />
 				<div className="content">
 					<NavBar data={this.props} system="Accounting" history={this.props.history} logout={this.logOut}/>
 					<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
 					{
 						permission ?
 						<div>
-							<AccReportsSubSidebar subpage="/reports_fully_paid_customers/"/>
+							<AccReportsSubSidebar subpage="/reports_fully_paid_customers/" history={this.props.history} />
 							<Container className="with-subsidebar" fluid>
 								<Row className="page-header">
 									<Col>

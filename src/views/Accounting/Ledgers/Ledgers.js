@@ -37,7 +37,7 @@ class Ledgers extends React.PureComponent {
 		const permission = true;
 		return (
 			<div>
-				<AccountingSidebar component="Ledgers" />
+				<AccountingSidebar history={this.props.history} component="Ledgers" />
 				<div className="content">
 					<NavBar data={this.props} system="Accounting" history={this.props.history} logout={this.logOut}/>
 						{

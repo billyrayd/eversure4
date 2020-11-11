@@ -55,7 +55,7 @@ class InventorySubSidebar extends React.PureComponent {
 						sublinks.map((link, key) => {
 							const className = link.nonLink ? link.className : (this.props.subpage == link.path ? "nav-link active" : "nav-link");
 
-							return link.visible ? <li key={key} className={className} onClick={() => this.goTo(link.path)}><a>{link.className == "divider" ? '' : link.name}</a></li> : null
+							return link.visible ? <li key={key} className={className} onClick={() => this.goTo(link.path)}><span className="link-name">{link.className == "divider" ? '' : link.name}</span></li> : null
 						})
 					}
 				</ul>

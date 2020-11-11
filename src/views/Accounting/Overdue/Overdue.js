@@ -37,7 +37,7 @@ class Overdue extends React.PureComponent {
 		const permission = true;
 		return (
 			<div>
-				<AccountingSidebar component="Overdue" />
+				<AccountingSidebar history={this.props.history} component="Overdue" />
 				<div className="content">
 					<NavBar data={this.props} system="Accounting" history={this.props.history} logout={this.logOut}/>
 					{

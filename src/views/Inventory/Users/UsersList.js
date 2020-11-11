@@ -201,7 +201,7 @@ class UsersList extends React.PureComponent {
 						{
 							permission ?
 							<div>
-								<UsersSubSidebar subpage="/users/"/>
+								<UsersSubSidebar subpage="/users/" history={this.props.history} />
 								<Container className="with-subsidebar" fluid>
 									<Row className="page-header">
 										<Col>

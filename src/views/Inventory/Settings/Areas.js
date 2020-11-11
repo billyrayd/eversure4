@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 //redux
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as DashboardActions from 'actions/dashboard';
 import * as AuthActions from 'actions/auth';
+import * as CategoryActions from 'actions/prev/category';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
@@ -30,6 +30,7 @@ import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import SettingsSubSidebar from 'components/SubSidebars/SettingsSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
+import AddArea from './Modals/AddArea';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -47,6 +48,7 @@ class Areas extends React.PureComponent {
 			isOpenView: false,
 			value: '',
 			isOpen: false,
+			areaAddMdlIsOpen: false,
 		}
 	}
 
@@ -65,8 +67,8 @@ class Areas extends React.PureComponent {
 					"width": 20,
 				},
 				{
-					"orderable": false,
 					"targets": 3,
+					"orderable": false,
 					"width": 100
 				}
 			],
@@ -93,7 +95,7 @@ class Areas extends React.PureComponent {
       mainTable.search($(this).val()).draw();
     });
 
-    that.loadModels();
+    that.loadAreas();
 	}
 	logOut = () => {
 		const that = this;
@@ -104,20 +106,18 @@ class Areas extends React.PureComponent {
 			}
 		})
 	}
-	loadModels = () => {
-		const dt_data = [
-			[
-				[], 1, 'talisay', '',
-			],
-			[
-				[], 2, 'silay', '',
-			],
-			[
-				[], 3, 'saravia', '',
-			]
-		]
+	loadAreas = () => {
+		const that = this;
 
-		this.reDrawDataTable(dt_data);
+		that.props.actions.GetArea()
+		.then((res) => {
+			console.log(res)
+			if(res){
+				that.reDrawDataTable(res);
+			}
+		})
+
+		
 	}
 	reDrawDataTable = (data) => {
 	  const table = $(mainTableClass).DataTable();
@@ -146,21 +146,38 @@ class Areas extends React.PureComponent {
 
 		this.setState({isOpen: !isOpen})
 	}
+	showModal = (type, status) => {
+		const that = this;
+		switch(type){
+			case 'add':
+			that.setState({areaAddMdlIsOpen: status}); break;
+			case 'edit':
+			that.setState({areaEditMdlIsOpen: status}); break;
+			case 'delete':
+			that.setState({areaDeleteMdlIsOpen: status}); break;
+			default: return false;
+		}
+	}
+	modalCallback = () => {
+		this.loadAreas();
+	}
 
 	render() {
-		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen } = this.state;
+		let { value, isOpen,areaAddMdlIsOpen } = this.state;
+		let { actions } = this.props;
 		const permission = true;
 
 		const currentPage = ["Customer Area","/customer_area/"];
 		return (
 			<div>
 				<InventorySidebar history={this.props.history} component="Settings" />
+				<AddArea modal={areaAddMdlIsOpen} className="es-modal add-area" callBack={this.modalCallback} closeModal={() => this.showModal('add', false)} actions={actions} />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{
 							permission ?
 							<div>
-								<SettingsSubSidebar subpage="/customer_area/"/>
+								<SettingsSubSidebar subpage="/customer_area/" history={this.props.history} />
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">
@@ -200,7 +217,7 @@ class Areas extends React.PureComponent {
 									</Row>
 									<Row className="page-header">
 										<Col>
-											<h4>Customer Area List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+											<h4>Customer Area List<Button className="es-main-btn" color="primary" size="sm" onClick={() => this.showModal("add",true)}><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 										</Col>
 									</Row>
 									<Row className="one-input-search">
@@ -230,7 +247,7 @@ const mapStateToProps = state => ({
 });
 
 function mapDispatchToProps(dispatch) {
-   return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
+   return { actions: bindActionCreators(Object.assign({}, AuthActions, CategoryActions), dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Areas);

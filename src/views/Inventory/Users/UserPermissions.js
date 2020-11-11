@@ -102,7 +102,7 @@ class UsersPermissions extends React.PureComponent {
 						{
 							permission ?
 							<div>
-								<UsersSubSidebar subpage="/user_permissions/"/>
+								<UsersSubSidebar subpage="/user_permissions/" history={this.props.history} />
 								<Container className="with-subsidebar" fluid>
 									<Row className="page-header">
 										<Col>

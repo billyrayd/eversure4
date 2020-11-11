@@ -104,8 +104,8 @@ export default class InventorySidebar extends React.PureComponent {
 						</li>
 						{
 							links.map((link, key) => {
-								return link.visible ? <li key={key} className={this.props.component == link.name ? "nav-link active" : "nav-link"}>
-												<Link to={link.path}><FontAwesomeIcon className="link-icon" icon={link.icon} />{link.name}</Link>
+								return link.visible ? <li key={key} className={this.props.component == link.name ? "nav-link active" : "nav-link"} onClick={() => this.goTo(link.path)}>
+												<span className="link-name"><FontAwesomeIcon className="link-icon" icon={link.icon} />{link.name}</span>
 											</li> : null
 							})
 						}

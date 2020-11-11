@@ -17,37 +17,48 @@ const _user = 'stratium', _pass = 'unitb1ts'
 
 /* ================ models actions ================ */
 
-export function addModel(modelName, branch, brand) {
+export function AddModel(modelName, brand) {
     return (dispatch, getState) => {
         var modelService = feathers.service('motorcycle-models');
+        let output = {};
 
         return modelService.find({
             query: {
                 model_name: modelName,
-                localbranch_id: branch,
+                // localbranch_id: branch,
                 brand: brand
             }
         }).then((model) => {
             if (model.total) {
-                return Promise.resolve('exist');
+                output.status = false;
+                output.message = `The model ${modelName} already exists`;
+                return Promise.resolve(output);
             } else {
                 return modelService.create({
                     model_name: modelName,
-                    localbranch_id: branch,
+                    // localbranch_id: branch,
                     brand: brand
                 }).then((res) => {
-                    return Promise.resolve('success');
+                    output.status = true;
+                    output.message = "Model successfully addded";
+                    return Promise.resolve(output);
                 }).catch((err) => {
                     console.log('err', err);
                     if ((err.message).includes('already exists')) {
-                        return Promise.resolve('exist');
+                        output.status = false;
+                        output.message = `The model ${modelName} already exists`;
                     } else {
-                        return Promise.resolve('failed');
+                        output.status = false;
+                        output.message = `Failed to add model`;
                     }
+                    return Promise.resolve(output);
                 });
             }
         }).catch((err) => {
             console.log('err', err);
+            output.status = false;
+            output.message = `Failed to add model`;
+            return Promise.resolve(output);
         });
 
     }
@@ -542,7 +553,92 @@ export function positionInUse(data) {
     }
 }
 
+export const GetArea = () => {
+    return (dispatch, getState) => {
+        let Service = feathers.service("customer-area");
+        let data = [];
 
-/* ================  user's branches actions ================ */
+        return Service.find()
+        .then((result) => {
+            if(result.data.length > 0){
+                let col = result.data;
+                col.map((v,i) => {
+                    console.log(v)
+                    data.push([
+                        v,
+                        i + 1,
+                        v.area_name.name,
+                        // '',
+                        '',
+                    ])
+                })
+
+                return Promise.resolve(data);
+            }else{
+                return Promise.resolve(false);
+            }
+        })
+        .catch((e) => {
+            console.log(e)
+            return Promise.resolve(false);
+        })
+    }
+}
+
+export const AddArea = (area) => {
+    return (dispatch, getState) => {
+        let Service = feathers.service("customer-area");
+        let output = {};
+
+        return Service.find({
+            query: {
+                area_name: {
+                    name: area
+                }
+            }
+        })
+        .then((result) => {
+            if(result.data.length > 0){
+                output.status = false;
+                output.message = `The area ${area} already exists`;
+                return Promise.resolve(output);
+            }else{
+                return Service.create({
+                    area_name: {
+                        name: area
+                    }
+                })
+                .then(() => {
+                    output.status = true;
+                    output.message = "Area successfully added";
+                    return Promise.resolve(output);
+                })
+                .catch(() => {
+                    output.status = false;
+                    output.message = "Failed to add area";
+                    return Promise.resolve(output);
+                })
+            }
+        })
+        .catch(() => {
+            output.status = false;
+            output.message = "Failed to add area";
+            return Promise.resolve(output);
+        })
+    }
+}
+
+export const DeleteArea = (id) => {
+    return (dispatch,getState) => {
+        let Service = feathers.service("customer-area");
+        return Service.remove(id)
+        .then(() => {
+            return Promise.resolve(true);
+        })
+        .catch(() => {
+            return Promise.resolve(false);
+        })
+    }
+}
 
 

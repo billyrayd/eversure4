@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as AuthActions from 'actions/auth';
+import * as CategoryActions from 'actions/prev/category';
 
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input } from 'reactstrap';
 import Select from 'react-select'
@@ -15,7 +16,7 @@ class AddModel extends React.PureComponent {
 
     this.state = {
       model: '',
-      selectedBrand: ''
+      selectedBrand: '',
     }
 	}
 
@@ -34,18 +35,18 @@ class AddModel extends React.PureComponent {
       toastr.info("Please enter model name");
     }
     else{
-      // this.props.actions.AddBrand(brand)
-      // .then((res) => {
-      //   toastr.remove();
-      //   if(res.status){
-      //       toastr.success(res.message);
-      //       that.modalClosed();
-      //       callBack();
-      //   }else{
-      //     that.setState({brand: ''});
-      //     toastr.error(res.message);
-      //   }
-      // })
+      this.props.actions.AddModel(model, selectedBrand.value)
+      .then((res) => {
+        toastr.remove();
+        if(res.status){
+            toastr.success(res.message);
+            that.modalClosed();
+            callBack();
+        }else{
+          that.setState({model: ''});
+          toastr.error(res.message);
+        }
+      })
     }
   }
   /* set input characters to uppercase */
@@ -68,9 +69,16 @@ class AddModel extends React.PureComponent {
   handleChangeBrand = (option) => {
     this.setState({selectedBrand: option})
   }
+  submitForm = (e) => {
+    const that = this;
+    if (e.key === 'Enter') {
+        e.target.blur(); // hide virtual keyboard on mobile devices
+        that.save();
+    }
+  }
 
 	render() {
-		let { modal,className,callBack,closeModal,brandsSelect } = this.props;
+		let { modal,className,callBack,closeModal,brandsSelect,selectedBrand } = this.props;
     let { model } = this.state;
 
     let brandOptions = brandsSelect.filter((v) => v.value != "all");
@@ -85,12 +93,13 @@ class AddModel extends React.PureComponent {
           		<Select
                 options={brandOptions}
                 placeholder="Select Brand"
+                value={selectedBrand}
                 onChange={this.handleChangeBrand}
               />
           	</Col>
             <Col md="12">
               <label>Model Name</label> <br />
-              <Input placeholder="Enter Model Name" autoComplete="off" onChange={(e) => this.handleChange(e)} value={model} />
+              <Input placeholder="Enter Model Name" autoComplete="off" onChange={(e) => this.handleChange(e)} value={model} onKeyPress={(e) => this.submitForm(e)} />
             </Col>
         	</Row>
         </ModalBody>
@@ -110,7 +119,7 @@ const mapStateToProps = state => ({
 });
 
 function mapDispatchToProps(dispatch) {
-   return { actions: bindActionCreators(Object.assign({}, AuthActions, ), dispatch) }
+   return { actions: bindActionCreators(Object.assign({}, AuthActions,CategoryActions, ), dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddModel);

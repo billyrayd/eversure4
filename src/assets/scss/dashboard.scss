@@ -84,6 +84,7 @@ input:active:focus,
     padding-bottom: 70px;
   	li{
   		list-style-type: none;
+      cursor: pointer;
   	}
   	li.logo-li{
   		img.logo{
@@ -97,7 +98,7 @@ input:active:focus,
   	}
   	li.nav-link{
   		padding: 1rem 1rem !important;
-  		a{
+  		span.link-name{
   			color: #222222;
   			font-size: 15px;
   			font-weight: bold;
@@ -114,7 +115,7 @@ input:active:focus,
           margin-left: 20px !important;
         }
   		}
-  		a:hover{
+  		span.link-name:hover{
   			text-decoration: none;
   		}
   	}
@@ -122,7 +123,7 @@ input:active:focus,
   	li.nav-link:hover,
   	{
   		background-color: $esLightBlue;
-  		a{
+  		span.link-name{
   			@include esThemeBlue();
   		}
   	}
@@ -266,7 +267,7 @@ input:active:focus,
       padding: 10px 1px;
       pointer-events: none;
       text-transform: uppercase;
-      a{
+      span.link-name{
         color: $black;
       }
     }
@@ -280,12 +281,12 @@ input:active:focus,
       border-radius: 3px;
       padding: 1px 15px;
       margin-bottom: 13px;
-      a{
+      span.link-name{
         color: #555;
         font-weight: 600;
         padding: 3px;
       }
-      a:hover{
+      span.link-name:hover{
         text-decoration: none;
       }
     }
@@ -558,6 +559,11 @@ td.txt-transform-i{
   &.add-model{
     .modal-content{
       top: calc((100vh / 2) - 200px);
+    }
+  }
+  .modal-footer{
+    button.btn{
+      width: 130px;
     }
   }
 }

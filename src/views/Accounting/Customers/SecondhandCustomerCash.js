@@ -200,7 +200,7 @@ class SecondhandCustomerCash extends React.PureComponent {
 					{
 						permission ?
 						<div>
-							<CustomersSubSidebar subpage="/secondhand_customer_cash/"/>
+							<CustomersSubSidebar subpage="/secondhand_customer_cash/" history={this.props.history} />
 							<Container className="with-subsidebar" fluid>
 								<Row>
 									<Col xs="6">

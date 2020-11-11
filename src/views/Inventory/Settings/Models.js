@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 //redux
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as DashboardActions from 'actions/dashboard';
 import * as AuthActions from 'actions/auth';
+import * as CategoryActions from 'actions/prev/category';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
@@ -108,9 +108,15 @@ class Models extends React.PureComponent {
 		})
 	}
 	loadModels = () => {
+		const that = this;
 		let { modelList } = this.props;
 
-		this.reDrawDataTable(modelList);
+		that.props.actions.GetCategoryModels()
+		.then((res) => {
+			if(res){
+				that.reDrawDataTable(res);
+			}
+		})
 	}
 	reDrawDataTable = (data) => {
 	  const table = $(mainTableClass).DataTable();
@@ -140,7 +146,7 @@ class Models extends React.PureComponent {
 		this.setState({isOpen: !isOpen})
 	}
 	modalCallback = () => {
-
+		this.loadModels();
 	}
 	showModal = (type, status) => {
 		const that = this;
@@ -170,7 +176,7 @@ class Models extends React.PureComponent {
 						{
 							permission ?
 							<div>
-								<SettingsSubSidebar subpage="/models/"/>
+								<SettingsSubSidebar subpage="/models/" history={this.props.history} />
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">
@@ -241,7 +247,7 @@ const mapStateToProps = state => ({
 });
 
 function mapDispatchToProps(dispatch) {
-   return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
+   return { actions: bindActionCreators(Object.assign({}, AuthActions, CategoryActions), dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Models);

@@ -160,7 +160,7 @@ class Roles extends React.PureComponent {
 						{
 							permission ?
 							<div>
-								<UsersSubSidebar subpage="/user_roles/"/>
+								<UsersSubSidebar subpage="/user_roles/" history={this.props.history} />
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">

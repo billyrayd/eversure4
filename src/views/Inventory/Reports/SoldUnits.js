@@ -173,7 +173,7 @@ class SoldUnits extends React.PureComponent {
 						{
 							permission ?
 							<div>
-								<ReportsSubSidebar subpage={currentPage[1]}/>
+								<ReportsSubSidebar subpage={currentPage[1]} history={this.props.history} />
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">

@@ -194,7 +194,7 @@ class SecondhandCustomerInstallment extends React.PureComponent {
 					{
 						permission ?
 						<div>
-							<CustomersSubSidebar subpage="/secondhand_customer_installment/"/>
+							<CustomersSubSidebar subpage="/secondhand_customer_installment/" history={this.props.history} />
 							<Container className="with-subsidebar" fluid>
 								<Row>
 									<Col xs="6">

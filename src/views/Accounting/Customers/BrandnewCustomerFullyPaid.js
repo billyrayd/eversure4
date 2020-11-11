@@ -195,7 +195,7 @@ class BrandnewCustomerFullyPaid extends React.PureComponent {
 					{
 						permission ?
 						<div>
-							<CustomersSubSidebar subpage="/brandnew_customer_fully_paid/"/>
+							<CustomersSubSidebar subpage="/brandnew_customer_fully_paid/" history={this.props.history} />
 							<Container className="with-subsidebar" fluid>
 								<Row>
 									<Col xs="6">

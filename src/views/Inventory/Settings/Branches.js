@@ -195,7 +195,7 @@ class Branches extends React.PureComponent {
 						{
 							permission ?
 							<div>
-								<SettingsSubSidebar subpage="/branches/"/>
+								<SettingsSubSidebar subpage="/branches/" history={this.props.history} />
 								<Container className="with-subsidebar" fluid>
 									<Row>
 										<Col xs="6">
