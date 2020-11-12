@@ -52,6 +52,13 @@ export default class AddArea extends React.PureComponent {
     this.setState({area: ''});
     closeModal();
   }
+  submitForm = (e) => {
+    const that = this;
+    if (e.key === 'Enter') {
+        e.target.blur(); // hide virtual keyboard on mobile devices
+        that.save();
+    }
+  }
 
 	render() {
 		let { modal,className,callBack,closeModal } = this.props;
@@ -63,7 +70,7 @@ export default class AddArea extends React.PureComponent {
         	<Row>
           	<Col md="12">
           		<label>Area Name</label> <br />
-          		<Input placeholder="Enter Area Name" autoComplete="off" onChange={(e) => this.handleChange(e)} value={area} />
+          		<Input placeholder="Enter Area Name" autoComplete="off" onChange={(e) => this.handleChange(e)} value={area} onKeyPress={(e) => this.submitForm(e)}  />
           	</Col>
         	</Row>
         </ModalBody>

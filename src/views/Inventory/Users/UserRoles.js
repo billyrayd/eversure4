@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 //redux
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as DashboardActions from 'actions/dashboard';
 import * as AuthActions from 'actions/auth';
+import * as UserActions from 'actions/prev/users';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
@@ -30,6 +30,7 @@ import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import UsersSubSidebar from 'components/SubSidebars/UsersSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
+import AddUserRole from './Modals/AddUserRole';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -93,7 +94,7 @@ class Roles extends React.PureComponent {
       mainTable.search($(this).val()).draw();
     });
 
-    that.loadModels();
+    that.loadUserRoles();
 	}
 	logOut = () => {
 		const that = this;
@@ -104,20 +105,17 @@ class Roles extends React.PureComponent {
 			}
 		})
 	}
-	loadModels = () => {
-		const dt_data = [
-			[
-				[], 1, 'administrator', '',
-			],
-			[
-				[], 2, 'branch admin', '',
-			],
-			[
-				[], 3, 'encoder', '',
-			]
-		]
+	loadUserRoles = () => {
+		const that = this;
 
-		this.reDrawDataTable(dt_data);
+		that.props.actions.GetUserDesignation()
+		.then((res) => {
+			if(res){
+				that.reDrawDataTable(res);
+			}
+		})
+
+		
 	}
 	reDrawDataTable = (data) => {
 	  const table = $(mainTableClass).DataTable();
@@ -146,15 +144,32 @@ class Roles extends React.PureComponent {
 
 		this.setState({isOpen: !isOpen})
 	}
+	modalCallback = () => {
+		this.loadUserRoles();
+	}
+	showModal = (type, status) => {
+		const that = this;
+		switch(type){
+			case 'add':
+			that.setState({roleAddMdlIsOpen: status}); break;
+			case 'edit':
+			that.setState({roleEditMdlIsOpen: status}); break;
+			case 'delete':
+			that.setState({roleDeleteMdlIsOpen: status}); break;
+			default: return false;
+		}
+	}
 
 	render() {
-		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen } = this.state;
+		let { value,isOpen,roleAddMdlIsOpen, } = this.state;
+		let { actions } = this.props;
 		const permission = true;
 
 		const currentPage = ["User Roles","/user_roles/"];
 		return (
 			<div>
 				<InventorySidebar history={this.props.history} component="Users" />
+				<AddUserRole modal={roleAddMdlIsOpen} className="es-modal" callBack={this.modalCallback} closeModal={() => this.showModal('add', false)} actions={actions} />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{
@@ -195,7 +210,7 @@ class Roles extends React.PureComponent {
 									</Row>
 									<Row className="page-header">
 										<Col>
-											<h4>User Roles List<Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+											<h4>User Roles List<Button className="es-main-btn" color="primary" size="sm" onClick={() => this.showModal("add",true)}><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
 										</Col>
 									</Row>
 									<Row className="one-input-search">
@@ -225,7 +240,7 @@ const mapStateToProps = state => ({
 });
 
 function mapDispatchToProps(dispatch) {
-   return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
+   return { actions: bindActionCreators(Object.assign({}, AuthActions,UserActions,), dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Roles);

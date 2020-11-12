@@ -200,7 +200,7 @@ export function setUserInfo(userInfo) {
     }
 }
 
-export function getUserDesignation() {
+export function GetUserDesignation() {
     return (dispatch, getState) => {
         const positionsService = feathers.service('user-position');
 
@@ -210,13 +210,58 @@ export function getUserDesignation() {
 
             results.forEach((value, index) => {
                 const actionBtn = '<tr><td><button id="' + value._id + '" class="btn btn-sm btn-block btn-primary ct-userPermission"><span class="fa fa-user" />' + value.position_type + '</button></td></tr>';
-                data.push([value._id, value.position_type]);
+                data.push([value._id, index + 1, value.position_type, actionBtn]);
             });
 
             return Promise.resolve(data);
 
         }).catch((err) => {
+            return Promise.resolve(false)
+        })
+    }
+}
 
+
+
+export const AddUserRole = (role) => {
+    return (dispatch, getState) => {
+        let Service = feathers.service("user-position");
+        let output = {};
+
+        return Service.find({
+            query: {
+                position_type: role
+            }
+        })
+        .then((result) => {
+            if(result.data.length > 0){
+                output.status = false;
+                output.message = `The role ${role} already exists`;
+
+                return Promise.resolve(output);
+            }else{
+                return Service.create({
+                    position_type: role
+                })
+                .then(() => {
+                    output.status = true;
+                    output.message = `The role successfully added`;
+
+                    return Promise.resolve(output);
+                })
+                .catch(() => {
+                    output.status = false;
+                    output.message = `Failed to add role`;
+
+                    return Promise.resolve(output);
+                })
+            }
+        })
+        .catch(() => {
+            output.status = false;
+            output.message = `Failed to add role`;
+
+            return Promise.resolve(output);
         })
     }
 }

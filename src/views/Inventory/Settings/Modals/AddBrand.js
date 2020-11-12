@@ -52,6 +52,13 @@ export default class AddBrand extends React.PureComponent {
     this.setState({brand: ''});
     closeModal();
   }
+  submitForm = (e) => {
+    const that = this;
+    if (e.key === 'Enter') {
+        e.target.blur(); // hide virtual keyboard on mobile devices
+        that.save();
+    }
+  }
 
 	render() {
 		let { modal,className,callBack,closeModal } = this.props;
@@ -63,7 +70,7 @@ export default class AddBrand extends React.PureComponent {
         	<Row>
           	<Col md="12">
           		<label>Brand Name</label> <br />
-          		<Input placeholder="Enter Brand Name" autoComplete="off" onChange={(e) => this.handleChange(e)} value={brand} />
+          		<Input placeholder="Enter Brand Name" autoComplete="off" onChange={(e) => this.handleChange(e)} value={brand} onKeyPress={(e) => this.submitForm(e)}  />
           	</Col>
         	</Row>
         </ModalBody>

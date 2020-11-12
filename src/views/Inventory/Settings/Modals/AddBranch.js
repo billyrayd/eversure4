@@ -55,6 +55,13 @@ export default class AddBranch extends React.PureComponent {
     this.setState({branch: ''});
     closeModal();
   }
+  submitForm = (e) => {
+    const that = this;
+    if (e.key === 'Enter') {
+        e.target.blur(); // hide virtual keyboard on mobile devices
+        that.save();
+    }
+  }
 
 	render() {
 		let { modal,className,callBack,closeModal } = this.props;
@@ -66,7 +73,7 @@ export default class AddBranch extends React.PureComponent {
         	<Row>
           	<Col md="12">
           		<label>Branch Name</label> <br />
-          		<Input placeholder="Enter Branch Name" autoComplete="off" onChange={(e) => this.handleChange(e)} value={branch} />
+          		<Input placeholder="Enter Branch Name" autoComplete="off" onChange={(e) => this.handleChange(e)} value={branch} onKeyPress={(e) => this.submitForm(e)}  />
           	</Col>
         	</Row>
         </ModalBody>

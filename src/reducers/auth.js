@@ -4,6 +4,7 @@ import
 	AUTHENTICATED,
 	SET_USER_INFO,
 	LOGGING_OUT,
+	ACTIVE_TIME,
 } from '../constants/';
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
 	loggingIn: false,
 	loggingOut: false,
 	userInfo: [],
+	activeTime: false,
 }
 
 export default function user_auth(state = initialState, action){
@@ -23,6 +25,8 @@ export default function user_auth(state = initialState, action){
 			return {...state, authenticated: action.status}; break;
 		case SET_USER_INFO:
 			return {...state, userInfo: action.data}; break;
+		case ACTIVE_TIME:
+			return {...state, activeTime: action.data}; break;
 		default:
 			return state;
 	}

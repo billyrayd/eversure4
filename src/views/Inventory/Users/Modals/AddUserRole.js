@@ -2,34 +2,34 @@ import React from 'react';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input } from 'reactstrap';
 import toastr from 'toastr';
 
-export default class AddBrand extends React.PureComponent {
+export default class AddArea extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
 
     this.state = {
-      brandValue: ''
+      role: ''
     }
 	}
 
   save = () => {
     const that = this;
-    let { brandValue } = this.state;
+    let { role } = this.state;
     let { callBack } = this.props;
-
-    if(brandValue.trim() === ""){
-      that.setState({brandValue: ''});
+    if(role.trim() === ""){
+      that.setState({role: ''});
       toastr.remove();
-      toastr.info("Please enter brand name");
+      toastr.info("Please enter role name");
     }else{
-      this.props.actions.UpdateBrand(brandValue)
+      this.props.actions.AddUserRole(role)
       .then((res) => {
+        toastr.remove();
         if(res.status){
             toastr.success(res.message);
             that.modalClosed();
             callBack();
         }else{
-          that.setState({brandValue: ''});
+          that.setState({role: ''});
           toastr.error(res.message);
         }
       })
@@ -43,13 +43,13 @@ export default class AddBrand extends React.PureComponent {
     let uppercasedValue = input.value.toUpperCase()
 
     this.setState(
-      {brandValue: uppercasedValue},
+      {role: uppercasedValue},
       () => input.setSelectionRange(start, end)
     );
   }
   modalClosed = () => {
     let { closeModal } = this.props;
-    this.setState({brandValue: ''});
+    this.setState({role: ''});
     closeModal();
   }
   submitForm = (e) => {
@@ -61,16 +61,16 @@ export default class AddBrand extends React.PureComponent {
   }
 
 	render() {
-		let { modal,className,callBack,closeModal, data } = this.props;
-    let { brandValue } = this.state;
+		let { modal,className,callBack,closeModal } = this.props;
+    let { role } = this.state;
 		return (
 			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false}>
-        <ModalHeader>Edit Brand</ModalHeader>
+        <ModalHeader>Add User Role</ModalHeader>
         <ModalBody>
         	<Row>
           	<Col md="12">
-          		<label>Brand Name</label> <br />
-          		<Input placeholder="Enter Brand Name" autoComplete="off" placeholder={data[1]} onChange={(e) => this.handleChange(e)} value={brandValue} onKeyPress={(e) => this.submitForm(e)} />
+          		<label>Role Name</label> <br />
+          		<Input placeholder="Enter Role Name" autoComplete="off" onChange={(e) => this.handleChange(e)} value={role} onKeyPress={(e) => this.submitForm(e)} />
           	</Col>
         	</Row>
         </ModalBody>

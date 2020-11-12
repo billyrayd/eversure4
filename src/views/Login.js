@@ -63,6 +63,8 @@ class Login extends React.PureComponent {
 				if(res.status){
 					toastr.success(res.message);
 					setTimeout(() => {
+						let now = new Date();
+    				that.props.actions.SetActiveTime(now);
 						that.props.actions.LoginUser(true);
 					}, 1000 * 1.5)
 				}else{

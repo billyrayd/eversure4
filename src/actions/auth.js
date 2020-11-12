@@ -4,6 +4,7 @@ import {
 	SET_USER_INFO,
 	LOGGING_IN,
 	LOGGING_OUT,
+	ACTIVE_TIME,
 } from '../constants';
 
 import feathers from 'helpers/feathers';
@@ -105,5 +106,12 @@ export const Logout = () => {
 		.catch(() => {
 			return Promise.resolve(false);
 		})
+	}
+}
+
+export const SetActiveTime = (datetime) => {
+	return {
+		type: ACTIVE_TIME,
+		data: datetime
 	}
 }

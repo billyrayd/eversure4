@@ -27,7 +27,7 @@ import {
 } from 'reactstrap';
 
 import { Link } from "react-router-dom";
-
+import toastr from 'toastr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import EversureLogo from 'assets/logo/eversure_logo.png';
@@ -47,6 +47,8 @@ class NavBar extends React.PureComponent {
   }
 
   componentDidMount(){
+    const that = this;
+    let { activeTime } = this.props;
     $(document).on("click", function(e){
       var target = e.target;
 
@@ -59,6 +61,32 @@ class NavBar extends React.PureComponent {
 
     this.loadListeners();
     this.loadSettings();
+
+    if(activeTime){
+      let timeNow = new Date();
+      let lastActiveTime = activeTime;
+
+      let diff = ((timeNow - new Date(lastActiveTime) ) / 1000);
+
+      if(diff > 7200){ // logout if inactivity lasts more than 7200 seconds or 2 hours
+        $("body").addClass("disable-scroll");
+        // that.props.actions.LoggingOut(true);
+        that.props.actions.Logout()
+        .then((res) => {
+          $("body").removeClass("disable-scroll");
+          that.props.actions.LoggingOut(false);
+          if(res){
+            that.props.actions.LoginUser(false);
+            that.props.history.push("/");
+          }else{
+            toastr.error("Failed to logout");
+          }
+        })
+      }
+    }
+
+    let now = new Date();
+    that.props.actions.SetActiveTime(now);
   }
 
   componentDidUpdate(){
@@ -187,6 +215,7 @@ class NavBar extends React.PureComponent {
 const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
+  activeTime: state.user_auth.activeTime,
   userData: state.login.userData,
 });
 
