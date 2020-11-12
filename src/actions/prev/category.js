@@ -187,7 +187,6 @@ export function AddBranch(branchName) {
     return (dispatch, getState) => {
         var branchService = feathers.service('branches');
 
-
         return branchService.find({
             query: {
                 branch_name: branchName
@@ -213,8 +212,6 @@ export function AddBranch(branchName) {
         .catch(() => {
             return Promise.resolve(false);
         })
-
-        
     }
 }
 
@@ -222,6 +219,46 @@ export function SetBranches(data) {
     return {
         type: BRANCH_DATATABLES,
         data: data
+    }
+}
+
+export const UpdateBranch = (id,branchName) => {
+    return (dispatch, getState) => {
+        var branchService = feathers.service('branches');
+        let output = {};
+
+        return branchService.find({
+            query: {
+                branch_name: branchName
+            }
+        })
+        .then((result) => {
+            if(result.data.length > 0){
+                output.status = false;
+                output.message = `The branch ${branchName} already exists`;
+                return Promise.resolve(output);
+            }else{
+                return branchService.patch(id, {branch_name: branchName}).then((result) => {
+                    output.status = true;
+                    output.message = `Branch name successfully updated`;
+                    return Promise.resolve(output);
+                }).catch((err) => {
+                    if ((err.message).includes('already exists')) {
+                        output.status = false;
+                        output.message = `The branch ${branchName} already exists`;
+                    } else {
+                        output.status = false;
+                        output.message = `Failed to update branch`;
+                    }
+                    return Promise.resolve(output);
+                });
+            }
+        })
+        .catch(() => {
+            output.status = false;
+            output.message = `Failed to update branch`;
+            return Promise.resolve(output);
+        })
     }
 }
 
@@ -340,7 +377,9 @@ export function AddBrand(brandName, branch) {
             }
         })
         .catch((err) => {
-
+            output.status = false;
+            output.message = `Error adding brand. Please try again`;
+            return Promise.resolve(output);
         })
 
         /*
@@ -387,6 +426,44 @@ export function SetBrands(data) {
     return {
         type: BRAND_DATATABLES,
         data: data
+    }
+}
+
+export const UpdateBrand = (id,brandName) => {
+    return (dispatch, getState) => {
+        var brandsService = feathers.service('brands');
+        let output = {};
+
+        return brandsService.find({
+            query: {
+                brand_name: brandName
+            }
+        })
+        .then((res) => {
+            if(res.data.length > 0){
+                output.status = false;
+                output.message = `The brand ${brandName} already exists`;
+
+                return Promise.resolve(output);
+            }else{
+                return brandsService.patch(id,{brand_name: brandName})
+                .then(() => {
+                    output.status = true;
+                    output.message = `Brand successfully updated`;
+                    return Promise.resolve(output);
+                })
+                .catch(() => {
+                    output.status = false;
+                    output.message = `Error adding brand. Please try again`;
+                    return Promise.resolve(output);
+                })
+            }
+        })
+        .catch((err) => {
+            output.status = false;
+            output.message = `Error adding brand. Please try again`;
+            return Promise.resolve(output);
+        })
     }
 }
 

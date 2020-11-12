@@ -32,19 +32,15 @@ class App extends React.PureComponent{
   componentWillMount(){
     const that = this;
 
-    // feathers.reAuthenticate()
-    feathers.authenticate()
-    .then((a) => {
-      console.log('authenticated');
+    feathers.reAuthenticate()
+    .then(() => {
+
     })
-    .catch((e) => {
-      console.log('not authenticated');
-      that.props.actions.Logout();
-      that.props.actions.LoginUser(false);
+    .catch(() => {
+
     })
 
     $("body").removeClass("disable-scroll");
-
     that.props.actions.LoggingIn(false);
     that.props.actions.LoggingOut(false);
   }

@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input } from 'reactstrap';
 import toastr from 'toastr';
 
-export default class AddBrand extends React.PureComponent {
+export default class EditBrand extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -15,14 +15,14 @@ export default class AddBrand extends React.PureComponent {
   save = () => {
     const that = this;
     let { brandValue } = this.state;
-    let { callBack } = this.props;
+    let { callBack,data } = this.props;
 
     if(brandValue.trim() === ""){
       that.setState({brandValue: ''});
       toastr.remove();
       toastr.info("Please enter brand name");
     }else{
-      this.props.actions.UpdateBrand(brandValue)
+      this.props.actions.UpdateBrand(data[0],brandValue)
       .then((res) => {
         if(res.status){
             toastr.success(res.message);

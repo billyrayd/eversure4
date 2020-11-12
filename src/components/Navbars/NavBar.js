@@ -68,25 +68,21 @@ class NavBar extends React.PureComponent {
 
       let diff = ((timeNow - new Date(lastActiveTime) ) / 1000);
 
-      if(diff > 7200){ // logout if inactivity lasts more than 7200 seconds or 2 hours
-        $("body").addClass("disable-scroll");
-        // that.props.actions.LoggingOut(true);
-        that.props.actions.Logout()
-        .then((res) => {
-          $("body").removeClass("disable-scroll");
-          that.props.actions.LoggingOut(false);
-          if(res){
-            that.props.actions.LoginUser(false);
-            that.props.history.push("/");
-          }else{
-            toastr.error("Failed to logout");
-          }
-        })
+      if(diff > 3600){ // logout if inactivity lasts more than 3600 seconds or 1 hour
+        that.props.actions.LoginUser(false);
+        that.props.history.push("/");
       }
     }
 
     let now = new Date();
     that.props.actions.SetActiveTime(now);
+
+    feathers.reAuthenticate()
+    .then(() => {
+    })
+    .catch(() => {
+      toastr.error("Lost connection to the server");
+    })
   }
 
   componentDidUpdate(){

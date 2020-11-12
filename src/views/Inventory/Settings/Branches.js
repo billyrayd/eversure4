@@ -31,6 +31,7 @@ import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import SettingsSubSidebar from 'components/SubSidebars/SettingsSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
 import AddBranch from './Modals/AddBranch';
+import EditBranch from './Modals/EditBranch';
 import DeleteBranch from './Modals/DeleteBranch';
 
 var $ = require( 'jquery' );
@@ -170,6 +171,8 @@ class Branches extends React.PureComponent {
 		switch(type){
 			case 'add':
 			that.setState({branchAddMdlIsOpen: status}); break;
+			case 'edit':
+			that.setState({branchEditMdlIsOpen: status}); break;
 			case 'delete':
 			that.setState({branchDeleteMdlIsOpen: status}); break;
 			default: return false;
@@ -178,9 +181,13 @@ class Branches extends React.PureComponent {
 	modalCallback = () => {
 		this.loadBranches();
 	}
+	toggle = () => {
+		let { branchEditMdlIsOpen } = this.state;
+		this.setState({branchEditMdlIsOpen: !branchEditMdlIsOpen})
+	}
 
 	render() {
-		let { value, isOpen, branchAddMdlIsOpen,branchDeleteMdlIsOpen,branch } = this.state;
+		let { value, isOpen, branchAddMdlIsOpen,branchDeleteMdlIsOpen,branchEditMdlIsOpen,branch } = this.state;
 		let { actions } = this.props;
 		const permission = true;
 
@@ -189,6 +196,15 @@ class Branches extends React.PureComponent {
 			<div>
 				<InventorySidebar history={this.props.history} component="Settings" />
 				<AddBranch modal={branchAddMdlIsOpen} className="es-modal" callBack={this.modalCallback} closeModal={() => this.showModal('add', false)} actions={actions} />
+				<EditBranch
+					modal={branchEditMdlIsOpen}
+					className="es-modal"
+					callBack={this.modalCallback}
+					closeModal={() => this.showModal('edit', false)}
+					actions={actions}
+					data={branch}
+					toggle={this.toggle}
+				/>
 				<DeleteBranch modal={branchDeleteMdlIsOpen} className="es-modal" callBack={this.modalCallback} closeModal={() => this.showModal('delete', false)} actions={actions} data={branch} />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
