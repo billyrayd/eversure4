@@ -64,7 +64,7 @@ export default class AddBrand extends React.PureComponent {
 		let { modal,className,callBack,closeModal } = this.props;
     let { brand } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false}>
+			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} centered={true}>
         <ModalHeader>Add Brand</ModalHeader>
         <ModalBody>
         	<Row>

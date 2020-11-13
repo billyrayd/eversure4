@@ -62,12 +62,18 @@ export default class AddBranch extends React.PureComponent {
         that.save();
     }
   }
+  toggleCallback = () => {
+    let { toggle } = this.props;
+    this.setState({branch: ''});
+
+    toggle();
+  }
 
 	render() {
 		let { modal,className,callBack,closeModal } = this.props;
     let { branch } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false}>
+			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} centered={true}>
         <ModalHeader>Add Branch</ModalHeader>
         <ModalBody>
         	<Row>

@@ -181,9 +181,22 @@ class Branches extends React.PureComponent {
 	modalCallback = () => {
 		this.loadBranches();
 	}
-	toggle = () => {
-		let { branchEditMdlIsOpen } = this.state;
-		this.setState({branchEditMdlIsOpen: !branchEditMdlIsOpen})
+	toggle = (type) => {
+		const that = this;
+		let { branchAddMdlIsOpen,branchEditMdlIsOpen,branchDeleteMdlIsOpen } = this.state;
+
+		switch(type){
+			case 'add':
+				that.setState({branchAddMdlIsOpen: !branchAddMdlIsOpen}); break;
+			case 'edit':
+				that.setState({branchEditMdlIsOpen: !branchEditMdlIsOpen}); break;
+			case 'delete':
+				that.setState({branchDeleteMdlIsOpen: !branchDeleteMdlIsOpen}); break;
+			default: return false;
+		}
+	}
+	opened = () => {
+		$(".modal #delete").focus();
 	}
 
 	render() {
@@ -195,7 +208,14 @@ class Branches extends React.PureComponent {
 		return (
 			<div>
 				<InventorySidebar history={this.props.history} component="Settings" />
-				<AddBranch modal={branchAddMdlIsOpen} className="es-modal" callBack={this.modalCallback} closeModal={() => this.showModal('add', false)} actions={actions} />
+				<AddBranch
+					modal={branchAddMdlIsOpen}
+					className="es-modal"
+					callBack={this.modalCallback}
+					closeModal={() => this.showModal('add', false)}
+					actions={actions}
+					toggle={() => this.toggle("add")}
+					/>
 				<EditBranch
 					modal={branchEditMdlIsOpen}
 					className="es-modal"
@@ -203,9 +223,18 @@ class Branches extends React.PureComponent {
 					closeModal={() => this.showModal('edit', false)}
 					actions={actions}
 					data={branch}
-					toggle={this.toggle}
+					toggle={() => this.toggle("edit")}
 				/>
-				<DeleteBranch modal={branchDeleteMdlIsOpen} className="es-modal" callBack={this.modalCallback} closeModal={() => this.showModal('delete', false)} actions={actions} data={branch} />
+				<DeleteBranch
+					modal={branchDeleteMdlIsOpen}
+					className="es-modal"
+					callBack={this.modalCallback}
+					closeModal={() => this.showModal('delete', false)}
+					actions={actions}
+					data={branch}
+					toggle={() => this.toggle("delete")}
+					onOpened={() => this.opened()}
+				/>
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{

@@ -48,7 +48,7 @@ class NavBar extends React.PureComponent {
 
   componentDidMount(){
     const that = this;
-    let { activeTime } = this.props;
+    let { activeTime,authenticated, } = this.props;
     $(document).on("click", function(e){
       var target = e.target;
 
@@ -81,7 +81,9 @@ class NavBar extends React.PureComponent {
     .then(() => {
     })
     .catch(() => {
-      toastr.error("Lost connection to the server");
+      if(authenticated){
+        toastr.error("Lost connection to the server");
+      }
     })
   }
 

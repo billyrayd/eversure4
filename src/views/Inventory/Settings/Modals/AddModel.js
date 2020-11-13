@@ -84,7 +84,7 @@ class AddModel extends React.PureComponent {
     let brandOptions = brandsSelect.filter((v) => v.value != "all");
 
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false}>
+			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} centered={true}>
         <ModalHeader>Add Model</ModalHeader>
         <ModalBody>
         	<Row>

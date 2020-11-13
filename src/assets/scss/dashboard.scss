@@ -543,22 +543,31 @@ td.txt-transform-i{
       border: 1px solid #111 !important;
     }
   }
+  .modal-footer{
+    #delete{
+      &:focus{
+        // background-color: red !important;
+        // background-image: linear-gradient(to right, red , orange) !important;
+        // transition: 1.5s;
+      }
+    }
+  }
   .modal-content{
-    top: calc((100vh / 2) - 150px);
+    // top: calc((100vh / 2) - 150px);
   }
   &.add-user{
     .modal-content{
-      top: calc((100vh / 2) - 250px);
+      // top: calc((100vh / 2) - 250px);
     }
   }
   &.payment{
     .modal-content{
-      top: calc((100vh / 2) - 280px);
+      // top: calc((100vh / 2) - 280px);
     }
   }
   &.add-model{
     .modal-content{
-      top: calc((100vh / 2) - 200px);
+      // top: calc((100vh / 2) - 200px);
     }
   }
   .modal-footer{
@@ -594,6 +603,36 @@ td.txt-transform-i{
   display: none;
 }
 
+.dataTables_wrapper{
+  .dataTables_paginate{
+    .paginate_button{
+      &:active{
+        background-color: $esBlue !important;
+        color: $white;
+      }
+      &:hover{
+        background: none !important;
+        background-color: $esBlue !important;
+        border: 1px solid $esBlue !important;
+        color: $white;
+      }
+      &.disabled{
+        &:hover{
+          background: none !important;
+          background-color: transparent !important;
+          border: 1px solid transparent !important;
+        }
+      }
+      &.current{
+        border: 1px solid $esBlue !important;;
+        &:hover{
+          background-color: transparent !important;
+          color: $white;
+        }
+      }
+    }
+  }
+}
 
 /*
 *

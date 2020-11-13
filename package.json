@@ -2,6 +2,10 @@
   "name": "Eversure",
   "version": "4.1.0",
   "private": true,
+  "author": {
+    "name": "Billy Ray D. Bebit",
+    "email": "raybilly00@gmail.com"
+  },
   "dependencies": {
     "@feathersjs/authentication-client": "^4.5.9",
     "@feathersjs/socketio-client": "^4.5.9",

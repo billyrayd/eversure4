@@ -75,10 +75,10 @@ export default class EditBranch extends React.PureComponent {
   }
 
 	render() {
-		let { modal,className,callBack,closeModal,toggle,data } = this.props;
+		let { modal,className,callBack,closeModal,data } = this.props;
     let { branch } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} keyboard={true}>
+			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} keyboard={true} centered={true}>
         <ModalHeader>Edit Branch</ModalHeader>
         <ModalBody>
         	<Row>

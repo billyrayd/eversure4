@@ -64,7 +64,7 @@ export default class EditBrand extends React.PureComponent {
 		let { modal,className,callBack,closeModal, data } = this.props;
     let { brandValue } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false}>
+			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} centered={true}>
         <ModalHeader>Edit Brand</ModalHeader>
         <ModalBody>
         	<Row>

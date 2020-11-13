@@ -6,15 +6,10 @@ export default class DeleteBranch extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
-
-    this.state = {
-      branch: ''
-    }
 	}
 
   delete = () => {
     const that = this;
-    let { branch } = this.state;
     let { callBack,closeModal,data } = this.props;
 
     that.props.actions.DeleteBranch(data[0])
@@ -30,29 +25,20 @@ export default class DeleteBranch extends React.PureComponent {
     })
     
   }
-  /* set input characters to uppercase */
-  handleChange = (event) => {
-    const input = event.target;
-    const start = input.selectionStart;
-    const end = input.selectionEnd;
-    let uppercasedValue = input.value.toUpperCase()
-
-    this.setState(
-      {branch: uppercasedValue},
-      () => input.setSelectionRange(start, end)
-    );
-  }
   modalClosed = () => {
     let { closeModal } = this.props;
-    this.setState({branch: ''});
     closeModal();
+  }
+  toggleCallback = () => {
+    let { toggle } = this.props;
+
+    toggle();
   }
 
 	render() {
-		let { modal,className,callBack,closeModal } = this.props;
-    let { branch } = this.state;
+		let { modal,className,callBack,closeModal,onOpened, } = this.props;
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false}>
+			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} centered={true} onOpened={onOpened}>
         <ModalHeader>Delete Branch</ModalHeader>
         <ModalBody>
         	<Row>
@@ -64,7 +50,7 @@ export default class DeleteBranch extends React.PureComponent {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.modalClosed}>Cancel</Button>{' '}
-          <Button color="danger" onClick={this.delete}>Delete</Button>
+          <Button id="delete" color="danger" onClick={this.delete}>Delete</Button>
         </ModalFooter>
       </Modal>
 		);
