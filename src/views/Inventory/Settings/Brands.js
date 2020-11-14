@@ -182,6 +182,23 @@ class Brands extends React.PureComponent {
 			default: return false;
 		}
 	}
+	toggle = (type) => {
+		const that = this;
+		let { brandAddMdlIsOpen,brandEditMdlIsOpen,brandDeleteMdlIsOpen } = this.state;
+
+		switch(type){
+			case 'add':
+				that.setState({brandAddMdlIsOpen: !brandAddMdlIsOpen}); break;
+			case 'edit':
+				that.setState({brandEditMdlIsOpen: !brandEditMdlIsOpen}); break;
+			case 'delete':
+				that.setState({brandDeleteMdlIsOpen: !brandDeleteMdlIsOpen}); break;
+			default: return false;
+		}
+	}
+	opened = () => {
+		$(".modal #delete").focus();
+	}
 
 	render() {
 		let { value, isOpen, brandAddMdlIsOpen,brandDeleteMdlIsOpen,brand,brandEditMdlIsOpen } = this.state;
@@ -192,9 +209,33 @@ class Brands extends React.PureComponent {
 		return (
 			<div>
 				<InventorySidebar history={this.props.history} component="Settings" />
-				<AddBrand modal={brandAddMdlIsOpen} className="es-modal" callBack={this.modalCallback} closeModal={() => this.showModal('add', false)} actions={actions} />
-				<DeleteBrand modal={brandDeleteMdlIsOpen} className="es-modal" callBack={this.modalCallback} closeModal={() => this.showModal('delete', false)} actions={actions} data={brand} />
-				<EditBrand modal={brandEditMdlIsOpen} className="es-modal" callBack={this.modalCallback} closeModal={() => this.showModal('edit', false)} actions={actions} data={brand} />
+				<AddBrand
+					modal={brandAddMdlIsOpen}
+					className="es-modal"
+					callBack={this.modalCallback}
+					closeModal={() => this.showModal('add', false)}
+					actions={actions}
+					toggle={() => this.toggle("add")}
+				/>
+				<EditBrand
+					modal={brandEditMdlIsOpen}
+					className="es-modal"
+					callBack={this.modalCallback}
+					closeModal={() => this.showModal('edit', false)}
+					actions={actions}
+					data={brand}
+					toggle={() => this.toggle("edit")}
+				/>
+				<DeleteBrand
+					modal={brandDeleteMdlIsOpen}
+					className="es-modal"
+					callBack={this.modalCallback}
+					closeModal={() => this.showModal('delete', false)}
+					actions={actions}
+					data={brand}
+					toggle={() => this.toggle("delete")}
+					onOpened={() => this.opened()}
+				/>
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{

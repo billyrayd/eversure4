@@ -64,7 +64,7 @@ export default class EditUserRole extends React.PureComponent {
 		let { modal,className,callBack,closeModal } = this.props;
     let { role } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false}>
+			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} centered={true}>
         <ModalHeader>Add User Role</ModalHeader>
         <ModalBody>
         	<Row>

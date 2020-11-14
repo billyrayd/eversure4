@@ -10,7 +10,7 @@ export default class AddUser extends React.PureComponent {
 	render() {
 		let { modal,className,callBack,closeModal } = this.props;
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} size="lg">
+			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} centered={true} size="lg">
         <ModalHeader>Add System User</ModalHeader>
         <ModalBody>
         	<Row>

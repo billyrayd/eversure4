@@ -31,6 +31,8 @@ import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import SettingsSubSidebar from 'components/SubSidebars/SettingsSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
 import AddModel from './Modals/AddModel';
+import EditModel from './Modals/EditModel';
+import DeleteModel from './Modals/DeleteModel';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -48,6 +50,7 @@ class Models extends React.PureComponent {
 			isOpenView: false,
 			value: '',
 			isOpen: false,
+			model: [],
 		}
 	}
 
@@ -94,6 +97,25 @@ class Models extends React.PureComponent {
 
 		$('.dt-search').keyup(function () {
       mainTable.search($(this).val()).draw();
+    });
+
+    $(mainTableClass).on("click",".edit", function(){
+    	const data = mainTable.row($(this).parents('tr')).data();
+    	const modelId = data[0];
+    	const modelName = data[2];
+    	const brandName = {value: data[5].brand_details._id, label: data[5].brand_details.brand_name};
+
+    	that.setState({model: [modelId,modelName,brandName]});
+    	that.showModal("edit", true);
+    });
+
+    $(mainTableClass).on("click",".delete", function(){
+    	const data = mainTable.row($(this).parents('tr')).data();
+    	const modelId = data[0];
+    	const modelName = data[2];
+
+    	that.setState({model: [modelId,modelName]});
+    	that.showModal("delete", true);
     });
 
     that.loadModels();
@@ -154,15 +176,32 @@ class Models extends React.PureComponent {
 			case 'add':
 			that.setState({modelAddMdlIsOpen: status}); break;
 			case 'edit':
-			that.setState({brandEditMdlIsOpen: status}); break;
+			that.setState({modelEditMdlIsOpen: status}); break;
 			case 'delete':
-			that.setState({brandDeleteMdlIsOpen: status}); break;
+			that.setState({modelDeleteMdlIsOpen: status}); break;
 			default: return false;
 		}
 	}
+	toggle = (type) => {
+		const that = this;
+		let { modelAddMdlIsOpen,modelEditMdlIsOpen,modelDeleteMdlIsOpen } = this.state;
+
+		switch(type){
+			case 'add':
+				that.setState({modelAddMdlIsOpen: !modelAddMdlIsOpen}); break;
+			case 'edit':
+				that.setState({modelEditMdlIsOpen: !modelEditMdlIsOpen}); break;
+			case 'delete':
+				that.setState({modelDeleteMdlIsOpen: !modelDeleteMdlIsOpen}); break;
+			default: return false;
+		}
+	}
+	opened = () => {
+		$(".modal #delete").focus();
+	}
 
 	render() {
-		let { value,isOpen,modelAddMdlIsOpen } = this.state;
+		let { value,isOpen,modelAddMdlIsOpen,modelEditMdlIsOpen,modelDeleteMdlIsOpen,model } = this.state;
 		let { actions } = this.props;
 		const permission = true;
 
@@ -170,7 +209,33 @@ class Models extends React.PureComponent {
 		return (
 			<div>
 				<InventorySidebar history={this.props.history} component="Settings" />
-				<AddModel modal={modelAddMdlIsOpen} className="es-modal add-model" callBack={this.modalCallback} closeModal={() => this.showModal('add', false)} actions={actions} />
+				<AddModel
+					modal={modelAddMdlIsOpen}
+					className="es-modal"
+					callBack={this.modalCallback}
+					closeModal={() => this.showModal('add', false)}
+					actions={actions}
+					toggle={() => this.toggle("add")}
+				/>
+				<EditModel
+					modal={modelEditMdlIsOpen}
+					className="es-modal"
+					callBack={this.modalCallback}
+					closeModal={() => this.showModal('edit', false)}
+					actions={actions}
+					toggle={() => this.toggle("edit")}
+					data={model}
+				/>
+				<DeleteModel
+					modal={modelDeleteMdlIsOpen}
+					className="es-modal"
+					callBack={this.modalCallback}
+					closeModal={() => this.showModal('delete', false)}
+					actions={actions}
+					toggle={() => this.toggle("delete")}
+					data={model}
+					onOpened={this.opened}
+				/>
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{

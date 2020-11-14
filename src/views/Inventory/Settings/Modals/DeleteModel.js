@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input } from 'reactstrap';
 import toastr from 'toastr';
 
-export default class DeleteBrand extends React.PureComponent {
+export default class DeleteModel extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -17,17 +17,28 @@ export default class DeleteBrand extends React.PureComponent {
     let { brand } = this.state;
     let { callBack,closeModal,data } = this.props;
 
-    that.props.actions.DeleteBrand(data[0])
-    .then((res) => {
-      toastr.remove();
-      if(res){
-        toastr.success("Brand successfully deleted");
+
+    that.props.actions.ModelNotInUse(data[0])
+    .then((cond) => {
+      if(cond.status){
+        that.props.actions.DeleteModel(data[0])
+        .then((res) => {
+          toastr.remove();
+          if(res){
+            toastr.success("Model successfully deleted");
+          }else{
+            toastr.error("Failed to delete model");
+          }
+          callBack();
+          closeModal();
+        })
       }else{
-        toastr.error("Failed to delete brand");
+        toastr.remove();
+        toastr.error(cond.message);
       }
-      callBack();
-      closeModal();
     })
+
+    
     
   }
   /* set input characters to uppercase */
@@ -58,11 +69,11 @@ export default class DeleteBrand extends React.PureComponent {
     let { brand } = this.state;
 		return (
 			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} centered={true} onOpened={onOpened}>
-        <ModalHeader>Delete Brand</ModalHeader>
+        <ModalHeader>Delete Model</ModalHeader>
         <ModalBody>
         	<Row>
           	<Col md="12">
-          		<label>Are you sure you want to delete this brand?</label> <br />
+          		<label>Are you sure you want to delete this model?</label> <br />
               <b>{this.props.data[1] || ''}</b>
           	</Col>
         	</Row>

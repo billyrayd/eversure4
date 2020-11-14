@@ -6,7 +6,7 @@ import * as AuthActions from 'actions/auth';
 import * as CategoryActions from 'actions/prev/category';
 
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input } from 'reactstrap';
-import Select from 'react-select'
+import Select from 'react-select';
 import toastr from 'toastr';
 
 class AddModel extends React.PureComponent {
@@ -76,6 +76,12 @@ class AddModel extends React.PureComponent {
         that.save();
     }
   }
+  toggleCallback = () => {
+    let { toggle } = this.props;
+    this.setState({model: '',selectedBrand: ''});
+
+    toggle();
+  }
 
 	render() {
 		let { modal,className,callBack,closeModal,brandsSelect,selectedBrand } = this.props;
@@ -84,7 +90,7 @@ class AddModel extends React.PureComponent {
     let brandOptions = brandsSelect.filter((v) => v.value != "all");
 
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} centered={true}>
+			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} centered={true}>
         <ModalHeader>Add Model</ModalHeader>
         <ModalBody>
         	<Row>

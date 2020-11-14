@@ -40,7 +40,7 @@ export function AddModel(modelName, brand) {
                     brand: brand
                 }).then((res) => {
                     output.status = true;
-                    output.message = "Model successfully addded";
+                    output.message = "Model successfully added";
                     return Promise.resolve(output);
                 }).catch((err) => {
                     console.log('err', err);
@@ -90,7 +90,7 @@ export function GetCategoryModels() {
     }
 }
 
-export function deleteModel(id) {
+export function deleteModelOld(id) {
     return (dispatch, getState) => {
         var modelService = feathers.service('motorcycle-models');
 
@@ -114,6 +114,48 @@ export function modelUpdateInfo(data) {
     }
 }
 
+export const UpdateModel = (modelId,modelName,brandId) => {
+    return (dispatch,getState) => {
+        let Service = feathers.service("motorcycle-models");
+        let output = {};
+
+        return Service.find({
+            query: {
+                model_name: modelName,
+                brand: brandId
+            }
+        }).then((model) => {
+            if (model.total) {
+                output.status = false;
+                output.message = `The model ${modelName} already exists`;
+                return Promise.resolve(output);
+            } else {
+                return Service.patch(modelId,{model_name: modelName,brand: brandId})
+                .then((res) => {
+                    output.status = true;
+                    output.message = "Model successfully updated";
+                    return Promise.resolve(output);
+                }).catch((err) => {
+                    console.log('err', err);
+                    if ((err.message).includes('already exists')) {
+                        output.status = false;
+                        output.message = `The model ${modelName} already exists`;
+                    } else {
+                        output.status = false;
+                        output.message = `Failed to update model`;
+                    }
+                    return Promise.resolve(output);
+                });
+            }
+        }).catch((err) => {
+            console.log('err', err);
+            output.status = false;
+            output.message = `Failed to update model`;
+            return Promise.resolve(output);
+        });
+    }
+}
+
 export function updateModel(id, query) {
     return (dispatch, getState) => {
         var modelService = feathers.service('motorcycle-models');
@@ -130,25 +172,45 @@ export function updateModel(id, query) {
     }
 }
 
-export function modelInUse(data) {
+export function DeleteModel(id) {
+    return (dispatch, getState) => {
+        var Service = feathers.service('motorcycle-models');
+
+        return Service.remove(id)
+        .then(() => {
+            return Promise.resolve(true);
+        })
+        .catch((err) => {
+            return Promise.resolve(false);
+        });
+    }
+}
+
+export function ModelNotInUse(modelId) {
     return (dispatch, getState) => {
         var Service = feathers.service('products');
+        let output = {};
 
         return Service.find({
             query: {
-                model: data
+                model: modelId
             }
         })
-            .then((data) => {
-                if (data.total) {
-                    return Promise.resolve(true)
-                } else {
-                    return Promise.resolve(false)
-                }
-            })
-            .catch(() => {
-                return Promise.resolve(false)
-            })
+        .then((data) => {
+            if (data.total) {
+                output.status = false;
+                output.message = "Model could not be deleted. <br /> It is still in use";
+                return Promise.resolve(output);
+            } else {
+                output.status = true;
+                return Promise.resolve(output);
+            }
+        })
+        .catch(() => {
+            output.status = false;
+            output.message = "An error occured. Please try again";
+            return Promise.resolve(output);
+        })
     }
 }
 

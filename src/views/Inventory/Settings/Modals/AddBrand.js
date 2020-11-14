@@ -59,12 +59,18 @@ export default class AddBrand extends React.PureComponent {
         that.save();
     }
   }
+  toggleCallback = () => {
+    let { toggle } = this.props;
+    this.setState({brand: ''});
+
+    toggle();
+  }
 
 	render() {
 		let { modal,className,callBack,closeModal } = this.props;
     let { brand } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} centered={true}>
+			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} centered={true}>
         <ModalHeader>Add Brand</ModalHeader>
         <ModalBody>
         	<Row>

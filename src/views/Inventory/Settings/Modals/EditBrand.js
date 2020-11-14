@@ -59,12 +59,18 @@ export default class EditBrand extends React.PureComponent {
         that.save();
     }
   }
+  toggleCallback = () => {
+    let { toggle } = this.props;
+    this.setState({brandValue: ''});
+
+    toggle();
+  }
 
 	render() {
 		let { modal,className,callBack,closeModal, data } = this.props;
     let { brandValue } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} centered={true}>
+			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} centered={true}>
         <ModalHeader>Edit Brand</ModalHeader>
         <ModalBody>
         	<Row>
