@@ -203,20 +203,37 @@ export function setUserInfo(userInfo) {
 export function GetUserDesignation() {
     return (dispatch, getState) => {
         const positionsService = feathers.service('user-position');
+        let query = {};
+        let { userData } = getState().login;
+        let session = {
+            branchId: userData.branch_info._id,
+            branchName: userData.branch_info.branch_name,
+        }
 
-        return positionsService.find().then((positions) => {
+        if(session.branchName !== "MAIN"){
+            query.position_type = {
+                $ne: "ADMINISTRATOR"
+            }
+        }
+
+        return positionsService.find({query: query}).then((positions) => {
             const results = positions.data,
-                data = [];
+                data = [],
+                designationList = [];
 
             results.forEach((value, index) => {
                 const actionBtn = '<tr><td><button id="' + value._id + '" class="btn btn-sm btn-block btn-primary ct-userPermission"><span class="fa fa-user" />' + value.position_type + '</button></td></tr>';
+                
                 data.push([value._id, index + 1, value.position_type, actionBtn]);
+                designationList.push({value: value._id, label: value.position_type});
             });
+
+            dispatch(SetDesignation(designationList));
 
             return Promise.resolve(data);
 
         }).catch((err) => {
-            return Promise.resolve(false)
+            return Promise.resolve(false);
         })
     }
 }
@@ -266,7 +283,7 @@ export const AddUserRole = (role) => {
     }
 }
 
-export function setDesignation(data) {
+export function SetDesignation(data) {
     return {
         type: DESIGNATION_LIST,
         data: data

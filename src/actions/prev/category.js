@@ -749,12 +749,12 @@ export const AddArea = (area) => {
                 })
                 .then(() => {
                     output.status = true;
-                    output.message = "Area successfully added";
+                    output.message = "Customer area successfully added";
                     return Promise.resolve(output);
                 })
                 .catch(() => {
                     output.status = false;
-                    output.message = "Failed to add area";
+                    output.message = "Failed to add customer area";
                     return Promise.resolve(output);
                 })
             }
@@ -762,6 +762,45 @@ export const AddArea = (area) => {
         .catch(() => {
             output.status = false;
             output.message = "Failed to add area";
+            return Promise.resolve(output);
+        })
+    }
+}
+
+export const UpdateArea = (id,areaName) => {
+    return (dispatch, getState) => {
+        let Service = feathers.service("customer-area");
+        let output = {};
+
+        return Service.find({
+            query: {
+                area_name: {
+                    name: areaName
+                }
+            }
+        })
+        .then((result) => {
+            if(result.data.length > 0){
+                output.status = false;
+                output.message = `The area ${areaName} already exists`;
+                return Promise.resolve(output);
+            }else{
+                return Service.patch(id,{area_name: {name: areaName}})
+                .then(() => {
+                    output.status = true;
+                    output.message = "Customer area successfully updated";
+                    return Promise.resolve(output);
+                })
+                .catch(() => {
+                    output.status = false;
+                    output.message = "Failed to update customer area";
+                    return Promise.resolve(output);
+                })
+            }
+        })
+        .catch(() => {
+            output.status = false;
+            output.message = "Failed to update customer area";
             return Promise.resolve(output);
         })
     }

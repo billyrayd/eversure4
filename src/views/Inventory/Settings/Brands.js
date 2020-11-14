@@ -51,6 +51,7 @@ class Brands extends React.PureComponent {
 			value: '',
 			isOpen: false,
 			brandAddMdlIsOpen: false,
+			brandEditMdlIsOpen: false,
 			brandDeleteMdlIsOpen: false,
 			brand: '',
 		}

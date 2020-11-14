@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as AuthActions from 'actions/auth';
 import * as CategoryActions from 'actions/prev/category';
+import * as UserActions from 'actions/prev/users';
 
 import {
   Button,
@@ -82,7 +83,7 @@ class NavBar extends React.PureComponent {
     })
     .catch(() => {
       if(authenticated){
-        toastr.error("Lost connection to the server");
+        // toastr.error("Lost connection to the server");
       }
     })
   }
@@ -107,6 +108,8 @@ class NavBar extends React.PureComponent {
     this.props.actions.GetAllBranches();
     /* set models for datatables and select options */
     this.props.actions.GetCategoryModels();
+    /* set positions/designation for datatables and select options */
+    this.props.actions.GetUserDesignation();
 
   }
 
@@ -218,7 +221,7 @@ const mapStateToProps = state => ({
 });
 
 function mapDispatchToProps(dispatch) {
-   return { actions: bindActionCreators(Object.assign({}, AuthActions, CategoryActions, ), dispatch) }
+   return { actions: bindActionCreators(Object.assign({}, AuthActions,CategoryActions,UserActions, ), dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
