@@ -76,7 +76,7 @@ class Roles extends React.PureComponent {
           {title: "no."},
           {title: "role name"},
           {title: "action", createdCell: (td, cellData, rowData, row, col) => {
-						ReactDOM.render(<div>
+						ReactDOM.render(rowData[2] == "ADMINISTRATOR" ? null : <div>
 										<Button color="primary" size="sm" className="edit">
 											Edit
 										</Button>

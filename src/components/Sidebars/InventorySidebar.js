@@ -36,8 +36,9 @@ export default class InventorySidebar extends React.PureComponent {
     })
 
     $("body").removeClass("disable-scroll");
-
-    window.addEventListener("resize", this.showSidebar.bind(this));
+		if(this.props.authenticated){
+    	window.addEventListener("resize", this.showSidebar.bind(this));
+		}
 	}
 	toggle = () => {
 		let { isOpen } = this.state;

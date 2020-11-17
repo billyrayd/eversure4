@@ -81,9 +81,10 @@ class NavBar extends React.PureComponent {
     feathers.reAuthenticate()
     .then(() => {
     })
-    .catch(() => {
-      if(authenticated){
-        // toastr.error("Lost connection to the server");
+    .catch((e) => {
+      if(e.code == "408"){
+        toastr.remove();
+        toastr.error("Lost connection to the server");
       }
     })
   }

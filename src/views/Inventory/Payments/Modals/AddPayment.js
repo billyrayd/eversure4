@@ -64,7 +64,7 @@ export default class AddPayment extends React.PureComponent {
 		let { modal,className,callBack,closeModal } = this.props;
     let { supplier_name,supplier_receipt,amount,date_paid,remarks } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false}>
+			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} centered={true}>
         <ModalHeader>Add Payment</ModalHeader>
         <ModalBody>
         	<Row>

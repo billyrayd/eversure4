@@ -59,7 +59,7 @@ class LandingPage extends React.PureComponent {
 		return (
 			<div>
 				<LoggingOut loggingOut={loggingOut} />
-				<InventorySidebar history={this.props.history} component="Landing" />
+				<InventorySidebar history={this.props.history} component="Landing" authenticated={this.props.authenticated} />
 				<div className="content" ref={this.mainContent}>
 						<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut} />
 						<Container fluid>

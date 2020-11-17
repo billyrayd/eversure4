@@ -222,8 +222,20 @@ export function ModelNotInUse(modelId) {
 export function GetAllBranches() {
     return (dispatch, getState) => {
         var branchService = feathers.service('branches');
+        let query = {};
+        let { userData } = getState().login;
+        let session = {
+            branchId: userData.branch_info._id,
+            branchName: userData.branch_info.branch_name,
+        }
 
-        return branchService.find().then((branches) => {
+        if(session.branchName !== "MAIN"){
+            query.branch_name = {
+                $ne: "MAIN"
+            }
+        }
+
+        return branchService.find({query: query}).then((branches) => {
             if(branches.data.length > 0){
                 var results = branches.data,
                     data = [];
@@ -443,44 +455,6 @@ export function AddBrand(brandName, branch) {
             output.message = `Error adding brand. Please try again`;
             return Promise.resolve(output);
         })
-
-        /*
-        return feathers.authenticate({
-            strategy: 'local',
-            username: _user,
-            password: _pass,
-        })
-            .then((a) => {
-                return brandsService.find({
-                    query: {
-                        brand_name: brandName,
-                        localbranch_id: branch
-                    }
-                })
-                    .then((data) => {
-                        if (data.total) {
-                            return Promise.resolve('exist');
-                        } else {
-                            return brandsService.create({
-                                brand_name: brandName,
-                                localbranch_id: branch
-                            }).then((result) => {
-                                return Promise.resolve('success');
-                            }).catch((err) => {
-                                if ((err.message).includes('already exists')) {
-                                    return Promise.resolve('exist');
-                                } else {
-                                    return Promise.resolve('failed');
-                                }
-                            });
-                        }
-                    })
-                    .catch((e) => {
-                        console.log(e)
-                        return Promise.resolve('failed')
-                    })
-            })
-            */
     }
 }
 
@@ -599,7 +573,7 @@ export function getAllPositions() {
                 data = [];
 
             results.forEach((value, index) => {
-                var actionBtn = '<button class="btn btn-sm btn-primary edit"><span class="fa fa-edit" /></button> <button class="btn btn-sm btn-danger delete"><span class="fa fa-trash" /> </button>';
+                var actionBtn = '';
 
                 data.push([value._id, index + 1, value.position_type, value.position_type === 'ADMINISTRATOR' ? '<br/>' : actionBtn]);
             });
