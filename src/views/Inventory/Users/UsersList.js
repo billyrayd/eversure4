@@ -20,6 +20,8 @@ import {
 	Input,
 } from 'reactstrap';
 
+import { _currency } from 'helpers/';
+
 import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import UsersSubSidebar from 'components/SubSidebars/UsersSubSidebar';

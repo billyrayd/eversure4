@@ -5,8 +5,8 @@ const auth = require('@feathersjs/authentication-client');
 
 const production = !true;
 const productionHost = "";
-// const localHost = "http://localhost";
-const localHost = "http://192.168.1.2";
+const localHost = "http://localhost";
+// const localHost = "http://192.168.1.2";
 
 const host = production ? productionHost : localHost;
 

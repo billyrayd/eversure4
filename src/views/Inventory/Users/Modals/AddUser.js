@@ -8,6 +8,7 @@ import * as CategoryActions from 'actions/prev/category';
 
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input } from 'reactstrap';
 import Select from 'react-select';
+import toastr from 'toastr';
 
 class AddUser extends React.PureComponent {
 
@@ -23,14 +24,23 @@ class AddUser extends React.PureComponent {
       address: '',
       password: '',
       confirm_pass: '',
+      designationList: []
     }
 	}
-
   handleChangeDesignation = (option) => {
-    this.setState({selectedDesignation: option})
+    this.setState({selectedDesignation: option});
   }
   handleChangeBranch = (option) => {
-    this.setState({selectedBranch: option})
+    const that = this;
+    let { designationSelect } = this.props;
+    let filteredDesignation = designationSelect.filter((v) => v.label !== "ADMINISTRATOR");
+    that.setState({selectedBranch: option, selectedDesignation: ''});
+
+    if(option.label === "MAIN"){
+      that.setState({designationList: designationSelect});
+    }else{
+      that.setState({designationList: filteredDesignation});
+    }
   }
   modalClosed = () => {
     let { closeModal } = this.props;
@@ -87,11 +97,75 @@ class AddUser extends React.PureComponent {
     }
   }
 
+  save = (e) => {
+    e.preventDefault();
+    const that = this;
+
+    let {
+      fullname,
+      username,
+      email,
+      selectedBranch,
+      selectedDesignation,
+      address,
+      password,
+      confirm_pass,
+    } = this.state;
+
+    if(fullname.trim() === ''){
+      that.setState({fullname: ''});
+      toastr.remove();
+      toastr.info("Please enter full name");
+    }
+    else if(username.trim() === ''){
+      that.setState({username: ''});
+      toastr.remove();
+      toastr.info("Please enter username");
+    }
+    else if(email.trim() === ''){
+      that.setState({email: ''});
+      toastr.remove();
+      toastr.info("Please enter email");
+    }
+    else if(selectedBranch === ''){
+      that.setState({selectedBranch: ''});
+      toastr.remove();
+      toastr.info("Please select branch");
+    }
+    else if(selectedDesignation === ''){
+      that.setState({selectedDesignation: ''});
+      toastr.remove();
+      toastr.info("Please select role");
+    }
+    else if(address.trim() === ''){
+      that.setState({address: ''});
+      toastr.remove();
+      toastr.info("Please enter address");
+    }
+    else if(password.trim() === ''){
+      that.setState({password: ''});
+      toastr.remove();
+      toastr.info("Please enter password");
+    }else{
+      console.log('submit')
+    }
+  }
+  modalOpened = () => {
+    let { designationList } = this.state;
+    let { designationSelect } = this.props;
+
+    this.setState({designationList: []});
+  }
+  noOptionsMessage = () => {
+    return "Please select branch first";
+  }
+
 	render() {
 		let { modal,className,callBack,closeModal,branchSelect,designationSelect } = this.props;
-    let { selectedDesignation,selectedBranch,fullname,username,email,address,password,confirm_pass, } = this.state;
+    let { selectedDesignation,selectedBranch,fullname,username,email,address,password,confirm_pass,designationList } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} centered={true} size="lg">
+			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} centered={true} size="lg" onOpened={this.modalOpened}>
+        <form onSubmit={this.save}>
         <ModalHeader>Add System User</ModalHeader>
         <ModalBody>
         	<Row>
@@ -123,7 +197,8 @@ class AddUser extends React.PureComponent {
             <Col md="6" className="react-select-wrap">
               <label>Role</label> <br />
               <Select
-                options={designationSelect}
+                options={designationList}
+                noOptionsMessage={this.noOptionsMessage}
                 placeholder="Select Role"
                 value={selectedDesignation}
                 onChange={this.handleChangeDesignation}
@@ -147,8 +222,9 @@ class AddUser extends React.PureComponent {
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.modalClosed}>Cancel</Button>{' '}
-          <Button color="primary" className="es-main-btn" onClick={callBack}>Save</Button>
+          <Button color="primary" className="es-main-btn">Save</Button>
         </ModalFooter>
+        </form>
       </Modal>
 		);
 	}

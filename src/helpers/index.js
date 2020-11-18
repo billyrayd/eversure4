@@ -51,3 +51,12 @@ export const detectMob = () => {
         return navigator.userAgent.match(toMatchItem);
     });
 }
+export const _currency = (char) => {
+    const options = { 
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2 
+    };
+    const formatted = Number(char).toLocaleString('en', options);
+
+    return formatted === "NaN" ? char : formatted;
+}
