@@ -8,6 +8,7 @@ import * as CategoryActions from 'actions/prev/category';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
+import toastr from 'toastr';
 
 //reactstrap
 import {
@@ -30,6 +31,7 @@ import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import SettingsSubSidebar from 'components/SubSidebars/SettingsSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
+import LoggingOut from 'components/CustomComponents/LoggingOut';
 import AddBrand from './Modals/AddBrand';
 import DeleteBrand from './Modals/DeleteBrand';
 import EditBrand from './Modals/EditBrand';
@@ -123,10 +125,17 @@ class Brands extends React.PureComponent {
 	}
 	logOut = () => {
 		const that = this;
-		this.props.actions.Authenticate(false)
+		$("body").addClass("disable-scroll");
+		that.props.actions.LoggingOut(true);
+		that.props.actions.Logout()
 		.then((res) => {
+			$("body").removeClass("disable-scroll");
+			that.props.actions.LoggingOut(false);
 			if(res){
-				that.props.history.push("/")
+				that.props.actions.LoginUser(false);
+				that.props.history.push("/");
+			}else{
+				toastr.error("Failed to logout");
 			}
 		})
 	}
@@ -203,12 +212,13 @@ class Brands extends React.PureComponent {
 
 	render() {
 		let { value, isOpen, brandAddMdlIsOpen,brandDeleteMdlIsOpen,brand,brandEditMdlIsOpen } = this.state;
-		let { actions } = this.props;
+		let { actions,loggingOut, } = this.props;
 		const permission = true;
 
 		const currentPage = ["Brands","/brands/"];
 		return (
 			<div>
+				<LoggingOut loggingOut={loggingOut} />
 				<InventorySidebar history={this.props.history} component="Settings" />
 				<AddBrand
 					modal={brandAddMdlIsOpen}
@@ -310,6 +320,7 @@ const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
   brandList: state.category.brandsList,
+  loggingOut: state.user_auth.loggingOut,
 });
 
 function mapDispatchToProps(dispatch) {

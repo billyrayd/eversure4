@@ -8,6 +8,7 @@ import * as AuthActions from 'actions/auth';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
+import toastr from 'toastr';
 
 //reactstrap
 import {
@@ -32,6 +33,7 @@ import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import ReportsSubSidebar from 'components/SubSidebars/ReportsSubSidebar';
 import GrowSpinner from 'components/Spinners/GrowSpinner';
 import NoAccess from 'components/CustomComponents/NoAccess';
+import LoggingOut from 'components/CustomComponents/LoggingOut';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -119,10 +121,17 @@ class NoClearance extends React.PureComponent {
 	}
 	logOut = () => {
 		const that = this;
-		this.props.actions.Authenticate(false)
+		$("body").addClass("disable-scroll");
+		that.props.actions.LoggingOut(true);
+		that.props.actions.Logout()
 		.then((res) => {
+			$("body").removeClass("disable-scroll");
+			that.props.actions.LoggingOut(false);
 			if(res){
-				that.props.history.push("/")
+				that.props.actions.LoginUser(false);
+				that.props.history.push("/");
+			}else{
+				toastr.error("Failed to logout");
 			}
 		})
 	}
@@ -162,11 +171,13 @@ class NoClearance extends React.PureComponent {
 
 	render() {
 		let { isOpenEdit, isOpenDelete, isOpenView, value, isOpen, spinnerIsVisible } = this.state;
+		let { loggingOut } = this.props;
 		const permission = true;
 
 		const currentPage = ["No Clearance","/no_clearance/"];
 		return (
 			<div>
+				<LoggingOut loggingOut={loggingOut} />
 				<InventorySidebar history={this.props.history} component="Reports" />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
@@ -241,6 +252,7 @@ class NoClearance extends React.PureComponent {
 const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
+  loggingOut: state.user_auth.loggingOut,
 });
 
 function mapDispatchToProps(dispatch) {

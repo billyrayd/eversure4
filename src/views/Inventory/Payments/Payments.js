@@ -8,6 +8,7 @@ import * as AuthActions from 'actions/auth';
 
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import toastr from 'toastr';
 
 //reactstrap
 import {
@@ -24,6 +25,7 @@ import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
 import AddPayment from './Modals/AddPayment';
+import LoggingOut from 'components/CustomComponents/LoggingOut';
 
 var $ = require( 'jquery' );
 
@@ -73,6 +75,22 @@ class Payments extends React.PureComponent {
 
     this.getPayments();
 	}
+	logOut = () => {
+		const that = this;
+		$("body").addClass("disable-scroll");
+		that.props.actions.LoggingOut(true);
+		that.props.actions.Logout()
+		.then((res) => {
+			$("body").removeClass("disable-scroll");
+			that.props.actions.LoggingOut(false);
+			if(res){
+				that.props.actions.LoginUser(false);
+				that.props.history.push("/");
+			}else{
+				toastr.error("Failed to logout");
+			}
+		})
+	}
 	getPayments = () => {
 		const dt_data = [
 			[
@@ -94,15 +112,6 @@ class Payments extends React.PureComponent {
 	  table.rows.add(data);
 	  table.draw();
 	}
-	logOut = () => {
-		const that = this;
-		this.props.actions.Authenticate(false)
-		.then((res) => {
-			if(res){
-				that.props.history.push("/")
-			}
-		})
-	}
 	addPaymentCb = () => {
 
 	}
@@ -118,11 +127,12 @@ class Payments extends React.PureComponent {
 
 	render() {
 		let { paymentAddMdlIsOpen } = this.state;
-		let { actions } = this.props;
+		let { actions,loggingOut, } = this.props;
 		const permission = true;
 
 		return (
 			<div>
+				<LoggingOut loggingOut={loggingOut} />
 				<InventorySidebar history={this.props.history} component="Payments" />
 				<AddPayment modal={paymentAddMdlIsOpen} className="es-modal payment" callBack={this.addPaymentCb} closeModal={() => this.showModal('delete', false)} actions={actions} />
 				<div className="content">
@@ -164,6 +174,7 @@ class Payments extends React.PureComponent {
 const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
+  loggingOut: state.user_auth.loggingOut,
 });
 
 function mapDispatchToProps(dispatch) {

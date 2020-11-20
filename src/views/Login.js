@@ -99,7 +99,7 @@ class Login extends React.PureComponent {
 									<Input type="password" placeholder="Enter Password" onChange={ (e) => this.setState({password: e.target.value}) } value={password} onKeyPress={(e) => this.submitInput(e)} />
 								</FormGroup>
 								<FormGroup>
-									<Button color="primary" className="es-main-btn" block onClick={this.login} disabled={loggingIn}>
+									<Button color="primary" className="es-main-btn" block onClick={this.login} disabled={loggingIn || username == '' && password == '' }>
 										{
 											loggingIn ? <Spinner color="light" size="sm" /> : "Login"
 										}

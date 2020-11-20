@@ -8,6 +8,7 @@ import * as AuthActions from 'actions/auth';
 import * as UsersActions from 'actions/prev/users';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import toastr from 'toastr';
 
 //reactstrap
 import {
@@ -26,6 +27,7 @@ import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import UsersSubSidebar from 'components/SubSidebars/UsersSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
+import LoggingOut from 'components/CustomComponents/LoggingOut';
 import AddUser from './Modals/AddUser';
 
 var $ = require( 'jquery' );
@@ -111,10 +113,17 @@ class UsersList extends React.PureComponent {
 	}
 	logOut = () => {
 		const that = this;
-		this.props.actions.Authenticate(false)
+		$("body").addClass("disable-scroll");
+		that.props.actions.LoggingOut(true);
+		that.props.actions.Logout()
 		.then((res) => {
+			$("body").removeClass("disable-scroll");
+			that.props.actions.LoggingOut(false);
 			if(res){
-				that.props.history.push("/")
+				that.props.actions.LoginUser(false);
+				that.props.history.push("/");
+			}else{
+				toastr.error("Failed to logout");
 			}
 		})
 	}
@@ -193,9 +202,11 @@ class UsersList extends React.PureComponent {
 
 	render() {
 		let { isOpenEdit, isOpenDelete, isOpenView, value, dtSearch, userAddMdlIsOpen } = this.state;
+		let { loggingOut } = this.props;
 		const permission = true;
 		return (
 			<div>
+				<LoggingOut loggingOut={loggingOut} />
 				<InventorySidebar history={this.props.history} component="Users" />
 				<AddUser modal={userAddMdlIsOpen} className="es-modal add-user" callBack={this.addUserCb} closeModal={() => this.closeModal('add')} />
 				<div className="content">
@@ -234,6 +245,7 @@ class UsersList extends React.PureComponent {
 const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
+  loggingOut: state.user_auth.loggingOut,
 });
 
 function mapDispatchToProps(dispatch) {

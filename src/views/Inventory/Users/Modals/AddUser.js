@@ -148,6 +148,9 @@ class AddUser extends React.PureComponent {
       toastr.info("Please enter password");
     }else{
       console.log('submit')
+      let formData = {
+        
+      }
     }
   }
   modalOpened = () => {

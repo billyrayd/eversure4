@@ -8,6 +8,7 @@ import * as UserActions from 'actions/prev/users';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
+import toastr from 'toastr';
 
 //reactstrap
 import {
@@ -30,6 +31,7 @@ import NavBar from 'components/Navbars/NavBar';
 import InventorySidebar from 'components/Sidebars/InventorySidebar';
 import UsersSubSidebar from 'components/SubSidebars/UsersSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
+import LoggingOut from 'components/CustomComponents/LoggingOut';
 import AddUserRole from './Modals/AddUserRole';
 
 var $ = require( 'jquery' );
@@ -98,10 +100,17 @@ class Roles extends React.PureComponent {
 	}
 	logOut = () => {
 		const that = this;
-		this.props.actions.Authenticate(false)
+		$("body").addClass("disable-scroll");
+		that.props.actions.LoggingOut(true);
+		that.props.actions.Logout()
 		.then((res) => {
+			$("body").removeClass("disable-scroll");
+			that.props.actions.LoggingOut(false);
 			if(res){
-				that.props.history.push("/")
+				that.props.actions.LoginUser(false);
+				that.props.history.push("/");
+			}else{
+				toastr.error("Failed to logout");
 			}
 		})
 	}
@@ -162,12 +171,13 @@ class Roles extends React.PureComponent {
 
 	render() {
 		let { value,isOpen,roleAddMdlIsOpen, } = this.state;
-		let { actions } = this.props;
+		let { actions,loggingOut, } = this.props;
 		const permission = true;
 
 		const currentPage = ["User Roles","/user_roles/"];
 		return (
 			<div>
+				<LoggingOut loggingOut={loggingOut} />
 				<InventorySidebar history={this.props.history} component="Users" />
 				<AddUserRole modal={roleAddMdlIsOpen} className="es-modal" callBack={this.modalCallback} closeModal={() => this.showModal('add', false)} actions={actions} />
 				<div className="content">
@@ -237,6 +247,7 @@ class Roles extends React.PureComponent {
 const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
+  loggingOut: state.user_auth.loggingOut,
 });
 
 function mapDispatchToProps(dispatch) {

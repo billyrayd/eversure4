@@ -9,6 +9,7 @@ import * as AuthActions from 'actions/auth';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
+import toastr from 'toastr';
 
 //reactstrap
 import {
@@ -34,6 +35,7 @@ import InventorySubSidebar from 'components/SubSidebars/InventorySubSidebar';
 import GrowSpinner from 'components/Spinners/GrowSpinner';
 import ConfirmDelete from 'components/Modals/ConfirmDelete';
 import NoAccess from 'components/CustomComponents/NoAccess';
+import LoggingOut from 'components/CustomComponents/LoggingOut';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -121,10 +123,17 @@ class SecondhandInStock extends React.PureComponent {
 	}
 	logOut = () => {
 		const that = this;
-		this.props.actions.Authenticate(false)
+		$("body").addClass("disable-scroll");
+		that.props.actions.LoggingOut(true);
+		that.props.actions.Logout()
 		.then((res) => {
+			$("body").removeClass("disable-scroll");
+			that.props.actions.LoggingOut(false);
 			if(res){
-				that.props.history.push("/")
+				that.props.actions.LoginUser(false);
+				that.props.history.push("/");
+			}else{
+				toastr.error("Failed to logout");
 			}
 		})
 	}
@@ -188,6 +197,7 @@ class SecondhandInStock extends React.PureComponent {
 
 	render() {
 		let { value, spinnerIsVisible, confirmDeleteShown, noEvent, isOpen } = this.state;
+		let { loggingOut } = this.props;
 		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
 
 		const currentPage = ["Secondhand - In Stock","/secondhand_in_stock/"];
@@ -195,6 +205,7 @@ class SecondhandInStock extends React.PureComponent {
 		const permission = true;
 		return (
 			<div>
+				<LoggingOut loggingOut={loggingOut} />
 				<InventorySidebar history={this.props.history} component="Inventory" />
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
@@ -284,6 +295,7 @@ class SecondhandInStock extends React.PureComponent {
 const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
+  loggingOut: state.user_auth.loggingOut,
 });
 
 function mapDispatchToProps(dispatch) {
