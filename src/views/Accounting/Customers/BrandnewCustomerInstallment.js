@@ -34,6 +34,7 @@ import CustomersSubSidebar from 'components/SubSidebars/CustomersSubSidebar';
 import GrowSpinner from 'components/Spinners/GrowSpinner';
 import ConfirmDelete from 'components/Modals/ConfirmDelete';
 import NoAccess from 'components/CustomComponents/NoAccess';
+import SelectUnitType from './Modals/SelectUnitType';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -52,6 +53,7 @@ class BrandnewCustomerInstallment extends React.PureComponent {
 			confirmDeleteShown: false,
 			noEvent: false,
 			isOpen: false,
+			selectUnitMdlIsOpen: false,
 		}
 	}
 
@@ -177,11 +179,30 @@ class BrandnewCustomerInstallment extends React.PureComponent {
 	toggleSubSidebar = () => {
 		let { isOpen } = this.state;
 
-		this.setState({isOpen: !isOpen})
+		this.setState({isOpen: !isOpen});
+	}
+	showModal = (type,status) => {
+		const that = this;
+		switch(type){
+			case 'selectUnitType':
+				that.setState({selectUnitMdlIsOpen: status}); return;
+			default:
+				return false;
+		}
+	}
+	toggle = (type) => {
+		const that = this;
+		let { selectUnitMdlIsOpen } = this.state;
+		switch(type){
+			case 'selectUnitType':
+				that.setState({selectUnitMdlIsOpen: !selectUnitMdlIsOpen}); return;
+			default:
+				return false;
+		}
 	}
 
 	render() {
-		let { value, spinnerIsVisible, confirmDeleteShown, noEvent, isOpen } = this.state;
+		let { value,spinnerIsVisible,confirmDeleteShown,noEvent,isOpen,selectUnitMdlIsOpen } = this.state;
 		let table_class_name = noEvent ? mainTableClassName : mainTableClassName;
 		const permission = true;
 		const currentPage = ["Brand New (Installment)","/brandnew_customer_installment/"];
@@ -189,13 +210,20 @@ class BrandnewCustomerInstallment extends React.PureComponent {
 		return (
 			<div>
 				<AccountingSidebar history={this.props.history} component="Customers" />
+				<SelectUnitType
+					modal={selectUnitMdlIsOpen}
+					className="es-modal select-unit"
+					callBack={this.modalCallback}
+					closeModal={() => this.showModal('selectUnitType', false)}
+					toggle={() => this.toggle('selectUnitType')}
+				/>
 				<div className="content">
 					<NavBar data={this.props} system="Accounting" history={this.props.history} logout={this.logOut}/>
 					<ConfirmDelete className="" modal={confirmDeleteShown} callBack={this.deleteFunction} closeModal={this.closeModal} />
 					{
 						permission ?
 						<div>
-							<CustomersSubSidebar subpage="/brandnew_customer_installment/" history={this.props.history} />
+							<CustomersSubSidebar subpage={currentPage[1]} history={this.props.history} openModal={() => this.showModal('selectUnitType',true)} />
 							<Container className="with-subsidebar" fluid>
 								<Row>
 									<Col xs="6">
@@ -235,7 +263,7 @@ class BrandnewCustomerInstallment extends React.PureComponent {
 								</Row>
 								<Row className="page-header">
 									<Col>
-										<h4>Customers with Brand New Units <small>(Installment)</small> <Button className="es-main-btn" color="primary" size="sm"><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
+										<h4>Customers with Brand New Units <small>(Installment)</small></h4>
 									</Col>
 								</Row>
 								<Row>

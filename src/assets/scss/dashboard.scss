@@ -242,7 +242,7 @@ input:active:focus,
   position: absolute;
   width: 180px;
   .ss-add-btn{
-    color: $white;
+    font-weight: bold;
   }
   ul{
     padding-left: 0;
@@ -639,6 +639,17 @@ td.txt-transform-i{
     text-transform: uppercase !important;
   }
 }
+
+/* sales customers */
+.select-unit{
+  .btn-wrap{
+    button{
+      margin: 20px 0;
+    }
+  }
+}
+
+
 
 /*
 *

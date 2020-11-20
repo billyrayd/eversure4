@@ -1,9 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+//redux
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as AuthActions from 'actions/auth';
 
 import { Button } from 'reactstrap';
 
-export default class CustomersSubSidebar extends React.PureComponent {
+class CustomersSubSidebar extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -17,6 +21,8 @@ export default class CustomersSubSidebar extends React.PureComponent {
 	}
 
 	render() {
+		let { userData } = this.props;
+		let { branch_name } = userData.branch_info;
 		let sublinks = [
 			{ name: 'Brand New', path: '/', visible: true, className: "nav-link-header", nonLink: true },
 			{ name: 'Installment', path: '/brandnew_customer_installment/', visible: true },
@@ -37,11 +43,10 @@ export default class CustomersSubSidebar extends React.PureComponent {
 						<span>Customers</span>
 					</li>
 					{
-						/*
+						branch_name === 'MAIN' ? null :
 							<li className="add-btn-wrap">
-								<Button className="ss-add-btn" color="warning" block>ADD</Button>
+								<Button className="ss-add-btn" color="warning" block onClick={this.props.openModal}>ADD CUSTOMER</Button>
 							</li>
-						*/
 					}
 					{
 						sublinks.map((link, key) => {
@@ -55,3 +60,15 @@ export default class CustomersSubSidebar extends React.PureComponent {
 		);
 	}
 }
+
+const mapStateToProps = state => ({
+  authenticated: state.user_auth.authenticated,
+  loggingIn: state.user_auth.loggingIn,
+  userData: state.login.userData
+});
+
+function mapDispatchToProps(dispatch) {
+   return { actions: bindActionCreators(Object.assign({}, AuthActions), dispatch) }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CustomersSubSidebar);

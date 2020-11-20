@@ -59,6 +59,27 @@ export function addUser(data) {
     }
 }
 
+export const AddSystemUser = (formData) => {
+    return (dispatch,getState) => {
+        let Service = feathers.service("users");
+        let output = {};
+
+        return Service.create(formData)
+        .then(() => {
+            output.status = true;
+            output.message = "User successfully added";
+
+            return Promise.resolve(output);
+        })
+        .catch(() => {
+            output.status = false;
+            output.message = "Failed to add user";
+
+            return Promise.resolve(output);
+        })
+    }
+}
+
 export const userNameExists = (username) => {
     return (dispatch, getState) => {
         let output = {};
