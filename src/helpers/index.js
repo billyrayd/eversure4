@@ -60,3 +60,26 @@ export const _currency = (char) => {
 
     return formatted === "NaN" ? char : formatted;
 }
+export const _groupBy = (obj_arr) => {
+    var f = Object.values(obj_arr.reduce((c, v) => {
+        let k;
+        k = v.system_type;
+        c[k] = c[k] || Object.assign(
+            // {...v},
+            {system_type: ''},
+            {permissions: []}
+        )
+
+        c[k].system_type = (v.system_type);
+        c[k].permissions.push({
+            id: v._id,
+            group: v.group,
+            page: v.page,
+            permission_name: v.permission_name,
+        })
+
+        return c;
+    }, {}))
+
+    return f;
+}

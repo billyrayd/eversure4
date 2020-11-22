@@ -9,7 +9,7 @@ import {
 } from 'constants/prev/users';
 
 import feathers from 'helpers/feathers';
-
+import { _groupBy } from 'helpers/';
 const _user = 'stratium', _pass = 'unitb1ts';
 
 export function addUser(data) {
@@ -608,6 +608,223 @@ export const saveUserUpdate = (id, data) => {
                 return Promise.resolve(output);
             });
         }
+    }
+}
+
+
+export const AddUserPermission = (groupName,permissionName,pageName,systemType) => {
+    return (dispatch,getState) => {
+        let Service = feathers.service("permission-list");
+        let output = {};
+
+        return  Service.find({
+            query: {
+                group: groupName,
+                permission_name: permissionName
+            }
+        })
+        .then((result) => {
+            if(result.data.length > 0){
+                output.status = false;
+                output.message = `Permission with name '${permissionName}' already exists`;
+                return Promise.resolve(output);
+            }else{
+
+                return Service.find({
+                    query: {
+                        $limit: 1,
+                        $sort: {
+                            createdAt: -1
+                        }
+                    }
+                })
+                .then((order) => {
+                    let orderNum = 1
+                    if(order.data.length > 0){
+                        orderNum = order.data[0].order + 1;
+                    }
+
+                    return Service.create({
+                        group: groupName,
+                        permission_name: permissionName,
+                        page: pageName,
+                        order: orderNum,
+                        system_type: systemType,
+                    })
+                    .then(() => {
+                        output.status = true;
+                        output.message = 'Permission successfully added';
+                        return Promise.resolve(output);
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                        output.status = false;
+                        output.message = 'Failed to add permission';
+                        return Promise.resolve(output);
+                    })
+                })
+                .catch((e) => {
+                    console.log('e')
+                    console.log(e)
+                    output.status = false;
+                    output.message = 'Failed to add permission';
+                    return Promise.resolve(output);
+                })
+            }
+        })
+        .catch(() => {
+            output.status = false;
+            output.message = 'Failed to add permission';
+            return Promise.resolve(output);
+        })
+    }
+}
+export const GetPermissionsList = () => {
+    return (dispatch,getState) =>{
+        let Service = feathers.service("permission-list");
+        let data = [];
+        let output = {};
+
+        return Service.find()
+        .then((result) => {
+            if(result.data.length > 0){
+                let col = result.data;
+                col.map((v,i) => {
+                    data.push([
+                        v._id,
+                        i + 1,
+                        v.system_type ? v.system_type : '',
+                        v.page ? v.page : '',
+                        v.group,
+                        v.permission_name,
+                        '',
+                    ])
+                })
+
+                output.status = true;
+                output.data = data;
+
+                return Promise.resolve(output);
+            }else{
+                output.status = true;
+                output.data = data;
+
+                return Promise.resolve(output);
+            }
+        })
+        .catch(() => {
+            output.status = false;
+            return Promise.resolve(output);
+        })
+
+    }
+}
+export const DeletePermission = (id) => {
+    return (dispatch,getState) =>{
+        let Service = feathers.service("permission-list");
+        let data = [];
+
+        return Service.remove(id)
+        .then((result) => {
+            return Promise.resolve(true);
+        })
+        .catch(() => {
+            return Promise.resolve(false);
+        })
+
+    }
+}
+export const UpdatePermission = (id,groupName,permissionName,pageName,systemType) => {
+    return (dispatch,getState) => {
+        let Service = feathers.service("permission-list");
+        let query = {};
+        let output = {};
+
+        if(groupName){
+            query.group = groupName
+        }
+        if(permissionName){
+            query.permission_name = permissionName
+        }
+        if(pageName){
+            query.page = pageName
+        }
+        if(systemType){
+            query.system_type = systemType
+        }
+
+        return Service.find({
+            query: {
+                system_type: systemType,
+                group: groupName,
+                permission_name: permissionName,
+            }
+        })
+        .then((result) => {
+            if(result.data.length > 0){
+                output.status = false;
+                output.message = `Permission with name '${permissionName}' already exists`;
+
+                return Promise.resolve(output);
+            }else{
+
+                return Service.patch(id,query)
+                .then((data) => {
+                    output.status = true;
+                    output.message = 'Permission successfully updated';
+                    return Promise.resolve(output);
+                })
+                .catch(() => {
+                    output.status = false;
+                    output.message = 'Failed to update permission';
+                    return Promise.resolve(output);
+                })
+            }
+        })
+        .catch(() => {
+            output.status = false;
+            output.message = 'Failed to update permission';
+            return Promise.resolve(output);
+        })
+
+    }
+}
+export const PermissionsListAssignment = () => {
+    return (dispatch,getState) => {
+        let Service = feathers.service("permission-list");
+        let data = [];
+        let output = {};
+
+        return Service.find()
+        .then((result) => {
+
+            if(result.data.length > 0){
+                let col = result.data;
+                col.map((v,i) => {
+                    data.push({
+                        _id: v._id,
+                        system_type: v.system_type,
+                        group: v.group,
+                        permission_name: v.permission_name,
+                        page: v.page,
+                    })
+                })
+
+                output.status = true;
+                output.data = _groupBy(data);
+
+                return Promise.resolve(output);
+            }else{
+                output.status = true;
+                output.data = data;
+
+                return Promise.resolve(output);
+            }
+        })
+        .catch(() => {
+            output.status = false;
+            return Promise.resolve(output);
+        })
     }
 }
 

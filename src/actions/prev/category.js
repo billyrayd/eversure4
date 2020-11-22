@@ -676,7 +676,6 @@ export const GetArea = () => {
             if(result.data.length > 0){
                 let col = result.data;
                 col.map((v,i) => {
-                    console.log(v)
                     data.push([
                         v,
                         i + 1,

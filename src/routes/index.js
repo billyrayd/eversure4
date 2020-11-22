@@ -32,6 +32,7 @@ import Bir from "views/Inventory/Reports/Bir";
 /* users */
 import UsersList from "views/Inventory/Users/UsersList";
 import UserRoles from "views/Inventory/Users/UserRoles";
+import UserPermissionList from "views/Inventory/Users/UserPermissionList";
 import UserPermissions from "views/Inventory/Users/UserPermissions";
 /* settings */
 import Brands from "views/Inventory/Settings/Brands";
@@ -226,6 +227,11 @@ var authenticated = [
     path: "/user_roles/",
     name: "UserRoles",
     component: UserRoles,
+  },
+  {
+    path: "/user_permission_list/",
+    name: "UserPermissionList",
+    component: UserPermissionList,
   },
   {
     path: "/user_permissions/",

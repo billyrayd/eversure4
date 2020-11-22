@@ -20,7 +20,8 @@ export default class UsersSubSidebar extends React.PureComponent {
 		let sublinks = [
 			{ name: 'User List', path: '/users/', visible: true },
 			{ name: 'Roles', path: '/user_roles/', visible: true },
-			{ name: 'Permissions', path: '/user_permissions/', visible: true },
+			{ name: 'Permission List', path: '/user_permission_list/', visible: true },
+			{ name: 'Assign Permissions', path: '/user_permissions/', visible: true },
 		]
 		return (
 			<div className="sub-sidebar">

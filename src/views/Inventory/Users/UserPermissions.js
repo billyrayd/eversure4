@@ -2,8 +2,8 @@ import React from 'react';
 //redux
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as DashboardActions from 'actions/dashboard';
 import * as AuthActions from 'actions/auth';
+import * as UserActions from 'actions/prev/users';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import toastr from 'toastr';
@@ -36,10 +36,8 @@ class UsersPermissions extends React.PureComponent {
 		super(props);
 
 		this.state = {
-			isOpenEdit: false,
-			isOpenDelete: false,
-			isOpenView: false,
-			value: ''
+			value: '',
+			tableData: [],
 		}
 	}
 
@@ -53,6 +51,8 @@ class UsersPermissions extends React.PureComponent {
 		$('.dt-search').keyup(function () {
       mainTable.search($(this).val()).draw();
     });
+
+    this.getPermissionsList();
 	}
 	logOut = () => {
 		const that = this;
@@ -70,18 +70,6 @@ class UsersPermissions extends React.PureComponent {
 			}
 		})
 	}
-	toggleEdit = () => {
-		let { isOpenEdit } = this.state;
-		this.setState({isOpenEdit: !isOpenEdit})
-	}
-	toggleDelete = () => {
-		let { isOpenDelete } = this.state;
-		this.setState({isOpenDelete: !isOpenDelete})
-	}
-	toggleView = () => {
-		let { isOpenView } = this.state;
-		this.setState({isOpenView: !isOpenView})
-	}
 	/* set input characters to uppercase */
 	handleChange = (event) => {
 	  const input = event.target;
@@ -94,14 +82,22 @@ class UsersPermissions extends React.PureComponent {
 	    () => input.setSelectionRange(start, end)
 	  );
 	}
-
 	advancedFilter = () => {
 		const that = this;
 		let { value } = this.state;
 	}
+	getPermissionsList = () => {
+		const that = this;
+
+		that.props.actions.PermissionsListAssignment()
+		.then((res) => {
+			console.log(res.data)
+			that.setState({tableData: res.data})
+		})
+	}
 
 	render() {
-		let { isOpenEdit, isOpenDelete, isOpenView, value } = this.state;
+		let { value,tableData } = this.state;
 		let { loggingOut } = this.props;
 		const permission = true;
 		return (
@@ -117,7 +113,7 @@ class UsersPermissions extends React.PureComponent {
 								<Container className="with-subsidebar" fluid>
 									<Row className="page-header">
 										<Col>
-											<h4>User Permissions</h4>
+											<h4>Assign Permissions</h4>
 										</Col>
 									</Row>
 									<Row>
@@ -135,7 +131,7 @@ class UsersPermissions extends React.PureComponent {
 										</Col>
 										<Col md="8">
 											<Col md="12" className="background-white" style={{padding: 20}}> 
-												<table className="table user-permissions">
+												<table className="table user-permissions-list">
 													<thead>
 														<tr>
 															<th></th>
@@ -145,39 +141,62 @@ class UsersPermissions extends React.PureComponent {
 														</tr>
 													</thead>
 													<tbody>
-														<tr>
-															<td width="200" style={{fontWeight: 'bold'}}>Inventory system</td>
-														</tr>
-														<tr>
-															<td>dashboard</td>
-															<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
-															<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-															<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-														</tr>
-														<tr>
-															<td>Inventory</td>
-															<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
-															<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-															<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-														</tr>
-														<tr>
-															<td width="200" style={{fontWeight: 'bold'}}>accounting system</td>
-														</tr>
-														<tr>
-															<td>customers</td>
-															<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-															<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
-															<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-														</tr>
-														<tr>
-															<td width="200" style={{fontWeight: 'bold'}}>old records system</td>
-														</tr>
-														<tr>
-															<td>customers</td>
-															<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-															<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
-															<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-														</tr>
+														{
+															tableData.map((v,i) => {
+																return <>
+																				<tr>
+																					<td width="200" style={{fontWeight: 'bold'}}>{v.system_type}</td>
+																				</tr>
+																				{
+																					v.permissions.map((value,key) => {
+																						return <tr key={key}>
+																										<td>{value.page}</td>
+																										<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
+																										<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
+																										<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
+																									</tr>
+																					})
+																				}
+																				</>
+															})
+														}
+														{
+															/*
+																<tr>
+																	<td width="200" style={{fontWeight: 'bold'}}>Inventory system</td>
+																</tr>
+																<tr>
+																	<td>dashboard</td>
+																	<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
+																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
+																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
+																</tr>
+																<tr>
+																	<td>Inventory</td>
+																	<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
+																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
+																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
+																</tr>
+																<tr>
+																	<td width="200" style={{fontWeight: 'bold'}}>accounting system</td>
+																</tr>
+																<tr>
+																	<td>customers</td>
+																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
+																	<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
+																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
+																</tr>
+																<tr>
+																	<td width="200" style={{fontWeight: 'bold'}}>old records system</td>
+																</tr>
+																<tr>
+																	<td>customers</td>
+																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
+																	<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
+																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
+																</tr>
+															*/
+														}
 													</tbody>
 												</table>
 												<Row>
@@ -207,7 +226,7 @@ const mapStateToProps = state => ({
 });
 
 function mapDispatchToProps(dispatch) {
-   return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
+   return { actions: bindActionCreators(Object.assign({}, AuthActions,UserActions,), dispatch) }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersPermissions);

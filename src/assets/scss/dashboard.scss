@@ -490,6 +490,10 @@ input:active:focus,
   background-color: $white;
 }
 .table.user-permissions{
+  thead{
+    background-color: $white;
+    color: $black;
+  }
   th, td{
     text-align: center;
     vertical-align: middle;
@@ -587,12 +591,6 @@ td.txt-transform-i{
     @include upperCased();
   }
 }
-.table.user-permissions{
-  thead{
-    background-color: $white;
-    color: $black;
-  }
-}
 #toast-container{
   div{
     opacity: 1 !important;
@@ -648,7 +646,32 @@ td.txt-transform-i{
     }
   }
 }
-
+/* user permissions list */
+.user-permissions-list{
+  thead{
+    background-color: $white;
+    color: $black;
+  }
+  th, td{
+    text-align: center;
+    vertical-align: middle;
+  }
+  th:nth-child(2),
+  th:nth-child(3),
+  th:nth-child(4),
+  td:nth-child(2),
+  td:nth-child(3),
+  td:nth-child(4)
+  {
+    border: 1px solid #ccc;
+  }
+  td{
+    padding: 0.2rem !important;
+    .btn{
+      padding: 2px 8px !important;
+    }
+  }
+}
 
 
 /*

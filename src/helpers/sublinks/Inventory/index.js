@@ -35,3 +35,10 @@ export const settings_sub_links = [
 	{ name: 'Customer Area', path: '/customer_area/', visible: true },
 ]
 
+export const users_sub_links = [
+	{ name: 'User List', path: '/users/', visible: true },
+	{ name: 'Roles', path: '/user_roles/', visible: true },
+	{ name: 'Permission List', path: '/user_permission_list/', visible: true },
+	{ name: 'Assign Permissions', path: '/user_permissions/', visible: true },
+]
+

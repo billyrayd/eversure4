@@ -1,8 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+//redux
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as AuthActions from 'actions/auth';
 
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { MY_APP } from 'helpers';
@@ -13,7 +17,7 @@ var $ = require( 'jquery' );
 
 var ps;
 
-export default class InventorySidebar extends React.PureComponent {
+class InventorySidebar extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -43,7 +47,7 @@ export default class InventorySidebar extends React.PureComponent {
 	toggle = () => {
 		let { isOpen } = this.state;
 
-		this.setState({isOpen: !isOpen})
+		this.setState({isOpen: !isOpen});
 	}
 	showSidebar = () => {
 		if(window.innerWidth > 415){
@@ -119,3 +123,15 @@ export default class InventorySidebar extends React.PureComponent {
 		);
 	}
 }
+
+const mapStateToProps = state => ({
+  authenticated: state.user_auth.authenticated,
+  loggingIn: state.user_auth.loggingIn,
+  loggingOut: state.user_auth.loggingOut,
+});
+
+function mapDispatchToProps(dispatch) {
+   return { actions: bindActionCreators(Object.assign({}, AuthActions), dispatch) }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(InventorySidebar);
