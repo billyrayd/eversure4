@@ -48,6 +48,12 @@ body{
   background-color: $esGray;
   font-family: 'Noto Sans';
 }
+h1,h2,h3,h4,h5,h6,
+span,a,label,p,button,
+strong,em,i,b,input,
+td,th{
+  font-family: 'Noto Sans';
+}
 
 button,
 button:active,
@@ -742,7 +748,7 @@ scrollbar appearance
       }
       li.app-version{
         bottom: -55px;
-        transition: 0.2s;
+        transition: 0.5s;
       }
     }
   }

@@ -89,9 +89,10 @@ export function SetUserData(data){
 	}
 }
 
-export function GetUserPermissions(id){
+export function GetUserPermissions(userid,usertype){
 	return (dispatch, getState) => {
 		var permissionService = feathers.service('permission');
+		var permissionListService = feathers.service("permission-list");
 		var defaultPermissions = {
         dashboard: 0,
         inventory: 0,
@@ -104,9 +105,50 @@ export function GetUserPermissions(id){
 
 		let trapper = {
 			query: {
-				user_id: id // user-position _id
+				user_id: userid // user-position _id
 			}
 		}
+
+		console.log('usertype')
+		console.log(usertype)
+
+		// permissionListService.find()
+		// .then((res) => {
+
+		// 	let def = [];
+
+		// 	if(res.data.length > 0){
+		// 		let pList = res.data;
+
+		// 		pList.map((v,i) => {
+		// 			def.push({permission: v.permission_name , level: 2})
+		// 		})
+
+		// 		permissionService.find({
+		// 			user_id: userid,
+		// 			user_type_id: usertype,
+		// 		})
+		// 		.then((find_permission) => {
+		// 			if(find_permission.data.length > 0){
+		// 				console.log('find_permission')
+		// 				console.log(find_permission.data)
+		// 			}else{
+		// 				permissionService.create({
+		// 					user_id: userid,
+		// 					user_type_id: usertype,
+		// 					permissions: def,
+		// 				})
+		// 				.then((c) => {
+		// 					console.log('create')
+		// 					console.log(c)
+		// 				})
+		// 			}
+		// 		})
+		// 	}
+		// })
+
+
+		// return true;
 
 		return permissionService.find(trapper)
 		.then((data) => {

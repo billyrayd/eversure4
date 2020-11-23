@@ -43,9 +43,11 @@ export default class InventorySidebar extends React.PureComponent {
 	showSidebar = () => {
 		if(window.innerWidth > 415){
 			document.getElementById("sideBar").style.width = "200px";
+			document.getElementById("appVersion").style.bottom = "0px";
 			$(".table").css({width: '100%'});
 		}else{
 			document.getElementById("sideBar").style.width = "0px";
+			document.getElementById("appVersion").style.bottom = "-55px";
 		}
 	}
 	closeSidebar = () => {

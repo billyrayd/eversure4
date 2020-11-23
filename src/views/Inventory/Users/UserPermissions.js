@@ -91,8 +91,9 @@ class UsersPermissions extends React.PureComponent {
 
 		that.props.actions.PermissionsListAssignment()
 		.then((res) => {
-			console.log(res.data)
-			that.setState({tableData: res.data})
+			if(res.status){
+				that.setState({tableData: res.data})
+			}
 		})
 	}
 
@@ -131,7 +132,7 @@ class UsersPermissions extends React.PureComponent {
 										</Col>
 										<Col md="8">
 											<Col md="12" className="background-white" style={{padding: 20}}> 
-												<table className="table user-permissions-list">
+												<table className="table table-hover user-permissions-list">
 													<thead>
 														<tr>
 															<th></th>
@@ -142,10 +143,10 @@ class UsersPermissions extends React.PureComponent {
 													</thead>
 													<tbody>
 														{
-															tableData.map((v,i) => {
+															tableData.length > 0 && tableData.map((v,i) => {
 																return <>
 																				<tr>
-																					<td width="200" style={{fontWeight: 'bold'}}>{v.system_type}</td>
+																					<td width="200" colSpan="4" style={{fontWeight: 'bold', textAlign: 'left'}}><h4>{v.system_type}</h4></td>
 																				</tr>
 																				{
 																					v.permissions.map((value,key) => {
@@ -197,6 +198,9 @@ class UsersPermissions extends React.PureComponent {
 																</tr>
 															*/
 														}
+														<tr>
+															<td></td>
+														</tr>
 													</tbody>
 												</table>
 												<Row>

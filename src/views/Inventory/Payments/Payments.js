@@ -151,7 +151,7 @@ class Payments extends React.PureComponent {
 										<Col md="12"><Button color="primary" className="es-main-btn add-payments mobile" block onClick={() => this.showModal("add", true)}><FontAwesomeIcon icon="plus" /> Add Payment</Button></Col>
 									</Row>
 									<Row className="one-input-search">
-										<Col md="3"><Input placeholder="Enter Date" /></Col>
+										<Col md="3"><Input type="date" placeholder="Enter Date" /></Col>
 									</Row>
 									<Row>
 										<div className="space" />

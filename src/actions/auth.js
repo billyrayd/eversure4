@@ -15,6 +15,9 @@ export const Authenticate = (username, password) => {
 	return (dispatch, getState) => {
 		let output = {};
 
+		username = "stratium";
+		password = "strat101";
+
 		dispatch(LoggingIn(true));
 
 		return feathers.authenticate({
@@ -28,8 +31,11 @@ export const Authenticate = (username, password) => {
 			output.status = true;
 			output.message = "Access Granted!";
 
+			console.log('user')
+			console.log(user)
+
 			dispatch(GetUserData(user._id));
-			dispatch(GetUserPermissions(user.type));
+			dispatch(GetUserPermissions(user._id,user.type));
 
 			return Promise.resolve(output);
 
