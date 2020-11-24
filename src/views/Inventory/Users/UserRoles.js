@@ -119,8 +119,8 @@ class Roles extends React.PureComponent {
 
 		that.props.actions.GetUserDesignation()
 		.then((res) => {
-			if(res){
-				that.reDrawDataTable(res);
+			if(res.status){
+				that.reDrawDataTable(res.data);
 			}
 		})
 

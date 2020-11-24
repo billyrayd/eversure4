@@ -29,6 +29,7 @@ import UsersSubSidebar from 'components/SubSidebars/UsersSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
 import LoggingOut from 'components/CustomComponents/LoggingOut';
 import AddUser from './Modals/AddUser';
+import DeleteUser from './Modals/DeleteUser';
 
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
@@ -43,12 +44,12 @@ class UsersList extends React.PureComponent {
 		super(props);
 
 		this.state = {
-			isOpenEdit: false,
-			isOpenDelete: false,
-			isOpenView: false,
 			value: '',
 			dtSearch: '',
-			userAddMdlIsOpen: false
+			userAddMdlIsOpen: false,
+			userEditMdlIsOpen: false,
+			userDeleteMdlIsOpen: false,
+			user: [],
 		}
 	}
 
@@ -92,7 +93,17 @@ class UsersList extends React.PureComponent {
 									</div>, td)
           }},
       ],
-		})
+		});
+
+    $(mainTableClass).on("click",".delete", function(){
+    	const data = mainTable.row($(this).parents('tr')).data();
+    	const userId = data[0]._id;
+    	const userFullName = data[1];
+    	const userUsername = data[2];
+
+    	that.setState({user: [userId,userFullName,userUsername]});
+    	that.showModal("delete", true);
+    });
 
 		// $('.dt-search').keyup(function (event) {
   //     // mainTable.search($(this).val()).draw();
@@ -126,18 +137,6 @@ class UsersList extends React.PureComponent {
 				toastr.error("Failed to logout");
 			}
 		})
-	}
-	toggleEdit = () => {
-		let { isOpenEdit } = this.state;
-		this.setState({isOpenEdit: !isOpenEdit})
-	}
-	toggleDelete = () => {
-		let { isOpenDelete } = this.state;
-		this.setState({isOpenDelete: !isOpenDelete})
-	}
-	toggleView = () => {
-		let { isOpenView } = this.state;
-		this.setState({isOpenView: !isOpenView})
 	}
 	/* set input characters to uppercase */
 	handleChange = (event) => {
@@ -183,32 +182,48 @@ class UsersList extends React.PureComponent {
 		const that = this;
 		let { value } = this.state;
 	}
-	closeModal = (action) => {
+	showModal = (action,status) => {
 		const that = this;
 		switch(action){
 			case 'add':
-			that.setState({userAddMdlIsOpen: false}); break;
+			that.setState({userAddMdlIsOpen: status}); break;
+			case 'edit':
+			that.setState({userEditMdlIsOpen: status}); break;
+			case 'delete':
+			that.setState({userDeleteMdlIsOpen: status}); break;
 
-			default:
-			that.setState({userAddMdlIsOpen: false}); break;
+			default: return false;
 		}
 	}
 	openModal = () => {
 		this.setState({userAddMdlIsOpen: true});
 	}
-	addUserCb = () => {
-
+	modalCallback = () => {
+		this.getUsers();
 	}
 
 	render() {
-		let { isOpenEdit, isOpenDelete, isOpenView, value, dtSearch, userAddMdlIsOpen } = this.state;
+		let { value,dtSearch,userAddMdlIsOpen,userEditMdlIsOpen,userDeleteMdlIsOpen,user, } = this.state;
 		let { loggingOut } = this.props;
 		const permission = true;
 		return (
 			<div>
 				<LoggingOut loggingOut={loggingOut} />
 				<InventorySidebar history={this.props.history} component="Users" />
-				<AddUser modal={userAddMdlIsOpen} className="es-modal add-user" callBack={this.addUserCb} closeModal={() => this.closeModal('add')} />
+				<AddUser
+					modal={userAddMdlIsOpen}
+					className="es-modal"
+					callBack={this.modalCallback}
+					closeModal={() => this.showModal('add', false)}
+				/>
+				<DeleteUser
+					modal={userDeleteMdlIsOpen}
+					className="es-modal"
+					callBack={this.modalCallback}
+					closeModal={() => this.showModal('delete', false)}
+					toggle={() => this.showModal('delete', false)}
+					data={user}
+				/>
 				<div className="content">
 					<NavBar data={this.props} system="Inventory" history={this.props.history} logout={this.logOut}/>
 						{

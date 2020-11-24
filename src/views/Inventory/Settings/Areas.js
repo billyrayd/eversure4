@@ -139,7 +139,6 @@ class Areas extends React.PureComponent {
 
 		that.props.actions.GetArea()
 		.then((res) => {
-			console.log(res)
 			if(res){
 				that.reDrawDataTable(res);
 			}

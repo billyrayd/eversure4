@@ -109,66 +109,68 @@ export function GetUserPermissions(userid,usertype){
 			}
 		}
 
-		console.log('usertype')
-		console.log(usertype)
+		permissionListService.find()
+		.then((res) => {
 
-		// permissionListService.find()
-		// .then((res) => {
+			let def = [];
 
-		// 	let def = [];
+			if(res.data.length > 0){
+				let pList = res.data;
 
-		// 	if(res.data.length > 0){
-		// 		let pList = res.data;
+				pList.map((v,i) => {
+					def.push({permission: v.permission_name , level: 0})
+				})
 
-		// 		pList.map((v,i) => {
-		// 			def.push({permission: v.permission_name , level: 2})
-		// 		})
+				permissionService.find({
+					query: {
+						user_id: userid,
+						user_type_id: usertype,
+					}
+				})
+				.then((find_permission) => {
+					if(find_permission.data.length > 0){
+						let col = find_permission.data;
+						let permissionsList = col[0].permissions;
 
-		// 		permissionService.find({
-		// 			user_id: userid,
-		// 			user_type_id: usertype,
-		// 		})
-		// 		.then((find_permission) => {
-		// 			if(find_permission.data.length > 0){
-		// 				console.log('find_permission')
-		// 				console.log(find_permission.data)
-		// 			}else{
-		// 				permissionService.create({
-		// 					user_id: userid,
-		// 					user_type_id: usertype,
-		// 					permissions: def,
-		// 				})
-		// 				.then((c) => {
-		// 					console.log('create')
-		// 					console.log(c)
-		// 				})
-		// 			}
-		// 		})
-		// 	}
-		// })
+						dispatch(SetUserPermissions(permissionsList))
+					}else{
+						permissionService.create({
+							user_id: userid,
+							user_type_id: usertype,
+							permissions: def,
+						})
+						.then((c) => {
+							let permissionsList = c.permissions;
 
-
-		// return true;
-
-		return permissionService.find(trapper)
-		.then((data) => {
-			if(data.total){
-				var permissions = data.data[0].permissions
-				dispatch(SetUserPermissions(permissions))
-
-				return Promise.resolve(true);
-			}else{
-				dispatch(SetUserPermissions(defaultPermissions))
-
-				return Promise.resolve(true);
+							dispatch(SetUserPermissions(permissionsList));
+						})
+					}
+				})
 			}
 		})
-		.catch((error) => {
-			console.log('error')
-			console.log(error)
 
-			return Promise.resolve(false);
-		})
+
+		return true;
+
+		// return permissionService.find(trapper)
+		// .then((data) => {
+		// 	if(data.total){
+		// 		var permissions = data.data[0].permissions
+		// 		dispatch(SetUserPermissions(permissions))
+
+		// 		return Promise.resolve(true);
+		// 	}else{
+		// 		dispatch(SetUserPermissions(defaultPermissions))
+
+		// 		return Promise.resolve(true);
+		// 	}
+		// })
+		// .catch((error) => {
+		// 	console.log('error')
+		// 	console.log(error)
+
+		// 	return Promise.resolve(false);
+		// })
 
 	}
 }

@@ -12,6 +12,8 @@ import feathers from 'helpers/feathers';
 import { _groupBy } from 'helpers/';
 const _user = 'stratium', _pass = 'unitb1ts';
 
+var async = require('async');
+
 export function addUser(data) {
     return (dispatch, getState) => {
         const userService = feathers.service('users'),
@@ -59,6 +61,66 @@ export function addUser(data) {
     }
 }
 
+export const UsernameOrEmailExists = (username,email) => {
+    return (dispatch,getState) => {
+        let Service = feathers.service("users");
+        let output = {};
+
+        return new Promise(function(resolve){
+            async.parallel({
+                username: (callback) => {
+                    let query = {};
+                    query.username = username;
+                    Service.find({query: query})
+                    .then((result) => {
+                        if(result.data.length > 0){
+                            callback(null,result.total)
+                        }else{
+                            callback(null,result.total)
+                        }
+                    })
+                    .catch((err) => {
+                        callback(err, false)
+                    })
+                },
+                email: (callback) => {
+                    let query = {};
+                    query.email = email;
+                    Service.find({query: query})
+                    .then((result) => {
+                        if(result.data.length > 0){
+                            callback(null,result.total)
+                        }else{
+                            callback(null,result.total)
+                        }
+                    })
+                    .catch((err) => {
+                        callback(err, false)
+                    })
+                }
+            }, (err,col) => {
+                // return resolve(col)
+
+                if(col.username > 0){
+                    output.status = false;
+                    output.message = "Username already taken";
+                    return resolve(output);
+                }
+                else if(col.email > 0){
+                    output.status = false;
+                    output.message = "Email already taken";
+                    return resolve(output);
+                }else{
+                    output.status = true;
+                    output.message = "OK";
+                    return resolve(output);
+                }
+            })
+        })
+
+    }
+}
+
 export const AddSystemUser = (formData) => {
     return (dispatch,getState) => {
         let Service = feathers.service("users");
@@ -76,6 +138,19 @@ export const AddSystemUser = (formData) => {
             output.message = "Failed to add user";
 
             return Promise.resolve(output);
+        })
+    }
+}
+export const DeleteSystemUser = (id) => {
+    return (dispatch,getState) => {
+        let Service = feathers.service("users");
+
+        return Service.remove(id)
+        .then(() => {
+            return Promise.resolve(true);
+        })
+        .catch(() => {
+            return Promise.resolve(false);
         })
     }
 }
@@ -144,32 +219,19 @@ export function getCheckEmailIfExist(email) {
 export function GetAllUsers(branch_name, branch) {
     return (dispatch, getState) => {
         const userService = feathers.service('users');
-        let query;
-        if (branch_name !== 'MAIN') {
-            query = {
-                query: {
-                    username: {
-                        $nin: ['test2', 'stratium']
-                    },
-                    status: {
-                        $ne: 0
-                    },
-                    branch: branch
-                }
-            }
-        } else {
-            query = {
-                query: {
-                    username: {
-                        $nin: ['test2', 'stratium']
-                    },
-                    status: {
-                        $ne: 0
-                    }
-                }
-            }
+        let query = {};
+
+        query.username = {
+            $nin: ['test2','stratium']
+        };
+        query.status = {
+            $ne: 0
+        };
+        if(branch_name !== 'MAIN'){
+            query.branch = branch;
         }
-        return userService.find(query).then((users) => {
+
+        return userService.find({query: query}).then((users) => {
             const results = users.data,
                 usersData = [];
 
@@ -225,6 +287,8 @@ export function GetUserDesignation() {
     return (dispatch, getState) => {
         const positionsService = feathers.service('user-position');
         let query = {};
+        let output = {};
+        let data = [];
         let { userData } = getState().login;
         let session = {
             branchId: userData.branch_info._id,
@@ -237,24 +301,36 @@ export function GetUserDesignation() {
             }
         }
 
-        return positionsService.find({query: query}).then((positions) => {
-            const results = positions.data,
-                data = [],
-                designationList = [];
+        return positionsService.find({query: query})
+        .then((positions) => {
+            if(positions.data.length > 0){
 
-            results.forEach((value, index) => {
-                const actionBtn = '<tr><td><button id="' + value._id + '" class="btn btn-sm btn-block btn-primary ct-userPermission"><span class="fa fa-user" />' + value.position_type + '</button></td></tr>';
-                
-                data.push([value._id, index + 1, value.position_type, actionBtn]);
-                designationList.push({value: value._id, label: value.position_type});
-            });
+                const results = positions.data,
+                    designationList = [];
 
-            dispatch(SetDesignation(designationList));
+                results.forEach((value, index) => {
+                    const actionBtn = '<tr><td><button id="' + value._id + '" class="btn btn-sm btn-block btn-primary ct-userPermission"><span class="fa fa-user" />' + value.position_type + '</button></td></tr>';
+                    
+                    data.push([value._id, index + 1, value.position_type, actionBtn]);
+                    designationList.push({value: value._id, label: value.position_type});
+                });
 
-            return Promise.resolve(data);
+                dispatch(SetDesignation(designationList));
+
+                output.status = true;
+                output.data = data;
+                return Promise.resolve(output);
+            }else{
+                output.status = true;
+                output.data = data;
+                return Promise.resolve(output);
+            }
 
         }).catch((err) => {
-            return Promise.resolve(false);
+            console.log('err')
+            console.log(err)
+            output.status = false;
+            return Promise.resolve(output);
         })
     }
 }
@@ -283,7 +359,7 @@ export const AddUserRole = (role) => {
                 })
                 .then(() => {
                     output.status = true;
-                    output.message = `The role successfully added`;
+                    output.message = `Role successfully added`;
 
                     return Promise.resolve(output);
                 })

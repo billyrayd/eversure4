@@ -34,7 +34,7 @@ class AddUser extends React.PureComponent {
     const that = this;
     let { designationSelect } = this.props;
     let filteredDesignation = designationSelect.filter((v) => v.label !== "ADMINISTRATOR");
-    that.setState({selectedBranch: option, selectedDesignation: ''});
+    that.setState({selectedBranch: option, selectedDesignation: '',branchSelectChanged: true});
 
     if(option.label === "MAIN"){
       that.setState({designationList: designationSelect});
@@ -44,7 +44,17 @@ class AddUser extends React.PureComponent {
   }
   modalClosed = () => {
     let { closeModal } = this.props;
-    this.setState({selectedDesignation: '',selectedBranch: ''});
+    this.setState({
+      selectedDesignation: '',
+      selectedBranch: '',
+      branchSelectChanged: false,
+      fullname: '',
+      username: '',
+      email: '',
+      address: '',
+      password: '',
+      confirm_pass: '',
+    });
     closeModal();
   }
   /* set input characters to uppercase */
@@ -147,10 +157,33 @@ class AddUser extends React.PureComponent {
       toastr.remove();
       toastr.info("Please enter password");
     }else{
-      console.log('submit')
       let formData = {
-        
+        fullname: fullname,
+        username: username,
+        email: email,
+        branch: selectedBranch.value,
+        type: selectedDesignation.value,
+        address: address,
+        password: password,
       }
+      // console.log('submit')
+      // console.log(formData)
+      that.props.actions.UsernameOrEmailExists(formData.username,formData.email)
+      .then((res) => {
+        toastr.remove();
+        if(res.status){
+          that.props.actions.AddSystemUser(formData)
+          .then((response) => {
+             if(response.status){
+               toastr.success(response.message);
+             }else{
+               toastr.error(response.message);
+             }
+          })
+        }else{
+          toastr.error(res.message)
+        }
+      })
     }
   }
   modalOpened = () => {
@@ -159,15 +192,20 @@ class AddUser extends React.PureComponent {
 
     this.setState({designationList: []});
   }
-  noOptionsMessage = () => {
-    return "Please select branch first";
+  toggleCallback = () => {
+     this.modalClosed(); 
   }
+  noOptionsMessage = () => {
+    let { branchSelectChanged } = this.state;
+    return branchSelectChanged ? "No role available" : "Please select branch first";
+  }
+
 
 	render() {
 		let { modal,className,callBack,closeModal,branchSelect,designationSelect } = this.props;
     let { selectedDesignation,selectedBranch,fullname,username,email,address,password,confirm_pass,designationList } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} centered={true} size="lg" onOpened={this.modalOpened}>
+			<Modal isOpen={modal} className={className} backdrop={true} centered={true} size="lg" onOpened={this.modalOpened} toggle={this.toggleCallback} >
         <form onSubmit={this.save}>
         <ModalHeader>Add System User</ModalHeader>
         <ModalBody>

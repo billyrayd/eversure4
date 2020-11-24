@@ -9,14 +9,16 @@ import {
 
 import feathers from 'helpers/feathers';
 
-import { GetUserData, GetUserPermissions } from 'actions/prev/login';
+import { GetUserData,GetUserPermissions,SetUserPermissions,SetUserData, } from 'actions/prev/login';
+
+var async = require("async");
 
 export const Authenticate = (username, password) => {
 	return (dispatch, getState) => {
 		let output = {};
 
-		username = "stratium";
-		password = "strat101";
+		// username = "stratium";
+		// password = "strat101";
 
 		dispatch(LoggingIn(true));
 
@@ -31,33 +33,14 @@ export const Authenticate = (username, password) => {
 			output.status = true;
 			output.message = "Access Granted!";
 
-			console.log('user')
-			console.log(user)
-
 			dispatch(GetUserData(user._id));
 			dispatch(GetUserPermissions(user._id,user.type));
 
 			return Promise.resolve(output);
-
-			// return GetUserData(data.user._id)
-			// .then((res) => {
-			// 	console.log('res')
-			// 	console.log(res)
-			// 	console.log(res)
-			// 	if(res){
-			// 		return Promise.resolve(output);
-			// 	}else{
-			// 		output.status = false;
-			// 		output.message = "An error occured. Please try again.";
-
-			// 		return Promise.resolve(output);
-			// 	}
-			// })
 		})
 		.catch((e) => {
-			console.log(e)
 			output.status = false;
-			output.message = "Invalid username or password";
+			output.message = "Incorrect username or password";
 			if(e.code == 408){
 				output.message = "Could not connect to the server";
 			}
@@ -73,21 +56,18 @@ export const Authenticate = (username, password) => {
 		})
 	}
 }
-
 export const LoggingIn = (status) => {
 	return {
 		type: LOGGING_IN,
 		status: status
 	}
 }
-
 export const LoggingOut = (status) => {
 	return {
 		type: LOGGING_OUT,
 		status: status
 	}
 }
-
 export function LoginUser(status){
 	return (dispatch, getState) => {
 		dispatch({
@@ -96,14 +76,14 @@ export function LoginUser(status){
 		})
 	}
 }
-
 export const Logout = () => {
 	return (dispatch, getState) => {
 		return feathers.logout()
 		.then(() => {
 			return new Promise(function(resolve){
 				setTimeout(() => {
-					
+					dispatch(SetUserPermissions([]));
+					dispatch(SetUserData([]));
 					dispatch(LoggingIn(false));
 					return resolve(true);
 				}, 1000 * 1.5)
@@ -114,10 +94,55 @@ export const Logout = () => {
 		})
 	}
 }
-
 export const SetActiveTime = (datetime) => {
 	return {
 		type: ACTIVE_TIME,
 		data: datetime
+	}
+}
+export const DeleteAllData = () => {
+	return (dispatch,getState) => {
+		return new Promise(function(resolve){
+			async.parallel({
+				userPermissionsList: (callback) => {
+					let Service = feathers.service("permission");
+
+					Service.find()
+					.then((result) => {
+						if(result.data.length > 0){
+							let col = result.data;
+
+							var recursive = (value) => {
+								if(value > 0){
+									Service.remove(col[value]._id)
+									.then(() => {
+										return recursive(value - 1);
+									})
+									.catch(() => {
+										return recursive(value - 1);
+									})
+								}else{
+									Service.remove(col[value]._id)
+									.then(() => {
+										callback(null, true);
+									})
+									.catch(() => {
+										callback(null, true);
+									})
+									
+								}
+							}
+
+							recursive(col.length - 1)
+						}else{
+							callback(null, true);
+						}
+					})
+				}
+			}, (error,collection) => {
+				console.log('collection')
+				console.log(collection)
+			})
+		})
 	}
 }
