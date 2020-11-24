@@ -38,6 +38,9 @@ class UsersPermissions extends React.PureComponent {
 		this.state = {
 			value: '',
 			tableData: [],
+			designationList: [],
+			currentPermissions: [],
+			permissionNames: [],
 		}
 	}
 
@@ -91,14 +94,32 @@ class UsersPermissions extends React.PureComponent {
 
 		that.props.actions.PermissionsListAssignment()
 		.then((res) => {
+			console.log(res)
 			if(res.status){
 				that.setState({tableData: res.data})
+			}
+		})
+
+
+		that.props.actions.GetUserDesignationList()
+		.then((res) => {
+			if(res.status){
+				// console.log(res.data)
+				// console.log(res.data[0].permission_info[0].permissions)
+				let permissionNames = [];
+				let userPermissions =  res.data[0].permission_info[0].permissions;
+
+				userPermissions.map((v,i) => {
+					permissionNames.push(v.permission)
+				})
+
+				that.setState({designationList: res.data, currentPermissions: userPermissions,permissionNames: permissionNames});
 			}
 		})
 	}
 
 	render() {
-		let { value,tableData } = this.state;
+		let { value,tableData,designationList,currentPermissions,permissionNames, } = this.state;
 		let { loggingOut } = this.props;
 		const permission = true;
 		return (
@@ -123,11 +144,12 @@ class UsersPermissions extends React.PureComponent {
 									<Row>
 										<Col md="4">
 											<ListGroup>
-								        <ListGroupItem tag="a" href="#" action>Administrator</ListGroupItem>
-								        <ListGroupItem active tag="a" href="#" action>branch admin</ListGroupItem>
-								        <ListGroupItem tag="a" href="#" action>employee</ListGroupItem>
-								        <ListGroupItem tag="a" href="#" action>encoder</ListGroupItem>
-								        <ListGroupItem tag="a" href="#" action>document specialist</ListGroupItem>
+												{
+													designationList.length > 0 && designationList.map((v,i) => {
+														let active = (i == 0);
+														return <ListGroupItem key={i} tag="span" href="#" action active={active}>{v.position_type}</ListGroupItem>
+													})
+												}
 								      </ListGroup>
 										</Col>
 										<Col md="8">
@@ -150,53 +172,26 @@ class UsersPermissions extends React.PureComponent {
 																				</tr>
 																				{
 																					v.permissions.map((value,key) => {
-																						return <tr key={key}>
-																										<td>{value.page}</td>
-																										<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
-																										<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-																										<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-																									</tr>
+																						console.log(value.permission_name)
+																						if(permissionNames.includes(value.permission_name)){
+																							return <tr key={key}>
+																											<td>{value.page}</td>
+																											<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
+																											<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
+																											<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
+																										</tr>
+																						}
+																						// currentPermissions.length && currentPermissions.map((permission,key) => {
+																						// 	console.log(value.permission_name)
+																						// 	console.log(permission.permission)
+																						// 	console.log('---')
+																						// 	if(value.permission_name === permission.permission){
+																						// 	}
+																						// })
 																					})
 																				}
 																				</>
 															})
-														}
-														{
-															/*
-																<tr>
-																	<td width="200" style={{fontWeight: 'bold'}}>Inventory system</td>
-																</tr>
-																<tr>
-																	<td>dashboard</td>
-																	<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
-																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-																</tr>
-																<tr>
-																	<td>Inventory</td>
-																	<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
-																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-																</tr>
-																<tr>
-																	<td width="200" style={{fontWeight: 'bold'}}>accounting system</td>
-																</tr>
-																<tr>
-																	<td>customers</td>
-																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-																	<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
-																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-																</tr>
-																<tr>
-																	<td width="200" style={{fontWeight: 'bold'}}>old records system</td>
-																</tr>
-																<tr>
-																	<td>customers</td>
-																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-																	<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
-																	<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-																</tr>
-															*/
 														}
 														<tr>
 															<td></td>
@@ -227,6 +222,7 @@ const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
   loggingOut: state.user_auth.loggingOut,
+  designationList: state.users.designationList,
 });
 
 function mapDispatchToProps(dispatch) {

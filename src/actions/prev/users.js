@@ -334,7 +334,51 @@ export function GetUserDesignation() {
         })
     }
 }
+export const GetUserDesignationList = () => {
+    return (dispatch, getState) => {
+        const positionsService = feathers.service('user-position');
+        let query = {};
+        let output = {};
+        let data = [];
+        let { userData } = getState().login;
+        let session = {
+            branchId: userData.branch_info._id,
+            branchName: userData.branch_info.branch_name,
+        }
 
+        query.position_type = {
+            $ne: "ADMINISTRATOR"
+        }
+
+        return positionsService.find({query: query})
+        .then((positions) => {
+            if(positions.data.length > 0){
+
+                const results = positions.data;
+
+                results.forEach((value, index) => {
+                    const actionBtn = '<tr><td><button id="' + value._id + '" class="btn btn-sm btn-block btn-primary ct-userPermission"><span class="fa fa-user" />' + value.position_type + '</button></td></tr>';
+                    
+                    data.push(value);
+                });
+
+                output.status = true;
+                output.data = data;
+                return Promise.resolve(output);
+            }else{
+                output.status = true;
+                output.data = data;
+                return Promise.resolve(output);
+            }
+
+        }).catch((err) => {
+            console.log('err')
+            console.log(err)
+            output.status = false;
+            return Promise.resolve(output);
+        })
+    }
+}
 
 
 export const AddUserRole = (role) => {
