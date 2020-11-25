@@ -479,7 +479,6 @@ export function getTermsCustomers(customerName, accountNumber) {
 
                     totalDebit.length > 0 && totalDebit.map((data) => {
                         total_debit += Number(data.debit ? data.debit : 0);
-                        console.log('DEBITTTTTTTTTTT', total_debit)
                     });
                     const remaining_balance = Number(promNote) - Number(total_payments) + Number(total_debit);
                     // var actionBtn = '<button class="btn border-radius-50 text-white table-btn view">View</button>';
@@ -494,7 +493,6 @@ export function getTermsCustomers(customerName, accountNumber) {
                         value]);
                 });
                 output['data'] = data;
-                console.log(output);
                 return Promise.resolve(output);
 
             }).catch((err) => {

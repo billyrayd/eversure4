@@ -9,7 +9,7 @@ import {
 } from 'constants/prev/users';
 
 import feathers from 'helpers/feathers';
-import { _groupBy } from 'helpers/';
+import { _groupBy,_jsonConf } from 'helpers/';
 const _user = 'stratium', _pass = 'unitb1ts';
 
 var async = require('async');
@@ -222,12 +222,12 @@ export function GetAllUsers(branch_name, branch) {
         let query = {};
 
         query.username = {
-            $nin: ['test2','stratium']
+            $nin: _jsonConf.defaults.username
         };
         query.status = {
             $ne: 0
         };
-        if(branch_name !== 'MAIN'){
+        if(branch_name !== _jsonConf.defaults.branch[0]){
             query.branch = branch;
         }
 
@@ -295,9 +295,9 @@ export function GetUserDesignation() {
             branchName: userData.branch_info.branch_name,
         }
 
-        if(session.branchName !== "MAIN"){
+        if(session.branchName !== _jsonConf.defaults.branch[0]){
             query.position_type = {
-                $ne: "ADMINISTRATOR"
+                $ne: _jsonConf.defaults.role[0]
             }
         }
 
@@ -310,8 +310,9 @@ export function GetUserDesignation() {
 
                 results.forEach((value, index) => {
                     const actionBtn = '<tr><td><button id="' + value._id + '" class="btn btn-sm btn-block btn-primary ct-userPermission"><span class="fa fa-user" />' + value.position_type + '</button></td></tr>';
-                    if(value.position_type !== 'ADMINISTRATOR'){
-                        data.push([value._id, index, value.position_type, actionBtn]);
+                    if(value.position_type !== _jsonConf.defaults.role[0]){
+                        let ind = (session.branchName !== _jsonConf.defaults.branch[0] ? index + 1 : index);
+                        data.push([value._id, ind, value.position_type, actionBtn]);
                     }
                     designationList.push({value: value._id, label: value.position_type});
                 });
@@ -348,7 +349,7 @@ export const GetUserDesignationList = (id = false) => {
         }
 
         query.position_type = {
-            $ne: "ADMINISTRATOR"
+            $ne: _jsonConf.defaults.role[0]
         }
 
         if(id){

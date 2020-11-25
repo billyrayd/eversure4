@@ -214,8 +214,8 @@ class UserPermissionList extends React.PureComponent {
 	render() {
 		let { isOpenEdit,isOpenDelete,isOpenView,value,isOpen,permissionAddMdlIsOpen,permissionEditMdlIsOpen,permissionDeleteMdlIsOpen,permissionVal, } = this.state;
 		let { loggingOut,userData, } = this.props;
-		// const permission = userData.username === 'stratium';
-		const permission = true;
+		const permission = userData.username === 'stratium';
+		// const permission = true;
 		const currentPage = ["Permission List","/user_permission_list/"];
 		return (
 			<div>

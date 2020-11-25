@@ -35,6 +35,7 @@ export const leadingZero = (num) => {
 }
 
 export const MY_APP = require('../../package.json');
+export const _jsonConf = require('../config.json');
 
 export const detectMob = () => {
     const toMatch = [

@@ -144,7 +144,21 @@ class NavBar extends React.PureComponent {
     this.props.history.push(path)
   }
   logOut = () => {
-    this.props.logout();
+    // this.props.logout();
+    const that = this;
+    $("body").addClass("disable-scroll");
+    that.props.actions.LoggingOut(true);
+    that.props.actions.Logout()
+    .then((res) => {
+      $("body").removeClass("disable-scroll");
+      that.props.actions.LoggingOut(false);
+      if(res){
+        that.props.actions.LoginUser(false);
+        that.props.history.push("/");
+      }else{
+        toastr.error("Failed to logout");
+      }
+    })
   }
   logoutTooltip = () => {
     let { tooltipOpen } = this.state;

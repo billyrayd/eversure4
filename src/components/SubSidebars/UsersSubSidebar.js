@@ -1,9 +1,14 @@
 import React from 'react';
+//redux
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as AuthActions from 'actions/auth';
+
 import { Link } from 'react-router-dom';
 
 import { Button } from 'reactstrap';
 
-export default class UsersSubSidebar extends React.PureComponent {
+class UsersSubSidebar extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -17,10 +22,11 @@ export default class UsersSubSidebar extends React.PureComponent {
 	}
 
 	render() {
+		let { userData } = this.props;
 		let sublinks = [
 			{ name: 'User List', path: '/users/', visible: true },
 			{ name: 'Roles', path: '/user_roles/', visible: true },
-			{ name: 'Permission List', path: '/user_permission_list/', visible: true },
+			{ name: 'Permission List', path: '/user_permission_list/', visible: (userData.username === 'stratium') },
 			{ name: 'Assign Permissions', path: '/user_permissions/', visible: true },
 		]
 		return (
@@ -48,3 +54,16 @@ export default class UsersSubSidebar extends React.PureComponent {
 		);
 	}
 }
+
+const mapStateToProps = state => ({
+  authenticated: state.user_auth.authenticated,
+  loggingIn: state.user_auth.loggingIn,
+  loggingOut: state.user_auth.loggingOut,
+  userData: state.login.userData,
+});
+
+function mapDispatchToProps(dispatch) {
+   return { actions: bindActionCreators(Object.assign({}, AuthActions,), dispatch) }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UsersSubSidebar);

@@ -1,0 +1,11 @@
+{
+	"auth": {
+		"username":"stratium",
+		"password":"unitb1ts"
+	},
+	"defaults": {
+		"username": ["stratium"],
+		"branch": ["MAIN"],
+		"role": ["ADMINISTRATOR"]
+	}
+}

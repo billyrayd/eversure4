@@ -13,6 +13,7 @@ import {
 
 import NavBar from 'components/Navbars/NavBar';
 import OldRecordsSidebar from 'components/Sidebars/OldRecordsSidebar';
+import LoggingOut from 'components/CustomComponents/LoggingOut';
 
 class OldRecordsLandingPage extends React.PureComponent {
 	constructor(props) {
@@ -20,8 +21,10 @@ class OldRecordsLandingPage extends React.PureComponent {
 	}
 
 	render() {
+		let { loggingOut } = this.props;
 		return (
 			<div>
+				<LoggingOut loggingOut={loggingOut} />
 				<OldRecordsSidebar history={this.props.history} component="Landing" />
 				<div className="content">
 						<NavBar data={this.props} history={this.props.history} system="OldRecords" />
@@ -41,6 +44,7 @@ class OldRecordsLandingPage extends React.PureComponent {
 const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
+  loggingOut: state.user_auth.loggingOut,
 });
 
 function mapDispatchToProps(dispatch) {

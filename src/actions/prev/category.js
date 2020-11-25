@@ -11,6 +11,7 @@ import {
     UPDATE_DESIGNATION_INFO,
 } from 'constants/prev/category';
 
+import { _jsonConf } from 'helpers/';
 import feathers from 'helpers/feathers'
 
 const _user = 'stratium', _pass = 'unitb1ts'
@@ -229,9 +230,9 @@ export function GetAllBranches() {
             branchName: userData.branch_info.branch_name,
         }
 
-        if(session.branchName !== "MAIN"){
+        if(session.branchName !== _jsonConf.defaults.branch[0]){
             query.branch_name = {
-                $ne: "MAIN"
+                $ne: _jsonConf.defaults.branch[0]
             }
         }
 
