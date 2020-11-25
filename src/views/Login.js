@@ -108,6 +108,7 @@ class Login extends React.PureComponent {
 								<FormGroup>
 									<Link className="esBlue" to="/reset_password/">Forgot Password?</Link>
 									<div id="sideBar" />
+									<div id="appVersion" />
 								</FormGroup>
 							</div>
 						</div>

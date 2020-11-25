@@ -111,6 +111,9 @@ class AddUser extends React.PureComponent {
     e.preventDefault();
     const that = this;
 
+    // this.props.actions.DeleteAllData();
+    // return;
+
     let {
       fullname,
       username,

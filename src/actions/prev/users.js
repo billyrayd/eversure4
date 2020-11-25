@@ -310,8 +310,9 @@ export function GetUserDesignation() {
 
                 results.forEach((value, index) => {
                     const actionBtn = '<tr><td><button id="' + value._id + '" class="btn btn-sm btn-block btn-primary ct-userPermission"><span class="fa fa-user" />' + value.position_type + '</button></td></tr>';
-                    
-                    data.push([value._id, index + 1, value.position_type, actionBtn]);
+                    if(value.position_type !== 'ADMINISTRATOR'){
+                        data.push([value._id, index, value.position_type, actionBtn]);
+                    }
                     designationList.push({value: value._id, label: value.position_type});
                 });
 
@@ -334,7 +335,7 @@ export function GetUserDesignation() {
         })
     }
 }
-export const GetUserDesignationList = () => {
+export const GetUserDesignationList = (id = false) => {
     return (dispatch, getState) => {
         const positionsService = feathers.service('user-position');
         let query = {};
@@ -348,6 +349,10 @@ export const GetUserDesignationList = () => {
 
         query.position_type = {
             $ne: "ADMINISTRATOR"
+        }
+
+        if(id){
+            query._id = id;
         }
 
         return positionsService.find({query: query})

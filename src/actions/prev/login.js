@@ -6,6 +6,7 @@ import {
 } from 'constants/prev/action_types';
 
 import feathers from 'helpers/feathers';
+import { _groupBy } from 'helpers/';
 
 import toastr from 'toastr';
 
@@ -117,9 +118,19 @@ export function GetUserPermissions(userid,usertype){
 			if(res.data.length > 0){
 				let pList = res.data;
 
+				// pList.map((v,i) => {
+				// 	def.push({permission: v.permission_name , level: 0})
+				// })
+
 				pList.map((v,i) => {
-					def.push({permission: v.permission_name , level: 0})
-				})
+            def.push({
+                _id: v._id,
+                system_type: v.system_type,
+                group: v.group,
+                permission_name: v.permission_name,
+                page: v.page,
+            })
+        })
 
 				permissionService.find({
 					query: {
@@ -137,7 +148,7 @@ export function GetUserPermissions(userid,usertype){
 						permissionService.create({
 							user_id: userid,
 							user_type_id: usertype,
-							permissions: def,
+							permissions: _groupBy(def),
 						})
 						.then((c) => {
 							let permissionsList = c.permissions;

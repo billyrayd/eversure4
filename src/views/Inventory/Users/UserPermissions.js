@@ -37,10 +37,10 @@ class UsersPermissions extends React.PureComponent {
 
 		this.state = {
 			value: '',
-			tableData: [],
 			designationList: [],
 			currentPermissions: [],
 			permissionNames: [],
+			activeRole: 0
 		}
 	}
 
@@ -92,34 +92,32 @@ class UsersPermissions extends React.PureComponent {
 	getPermissionsList = () => {
 		const that = this;
 
-		that.props.actions.PermissionsListAssignment()
-		.then((res) => {
-			console.log(res)
-			if(res.status){
-				that.setState({tableData: res.data})
-			}
-		})
-
+		// that.props.actions.PermissionsListAssignment()
+		// .then((res) => {
+		// 	console.log(res)
+		// })
 
 		that.props.actions.GetUserDesignationList()
 		.then((res) => {
 			if(res.status){
-				// console.log(res.data)
-				// console.log(res.data[0].permission_info[0].permissions)
-				let permissionNames = [];
 				let userPermissions =  res.data[0].permission_info[0].permissions;
-
-				userPermissions.map((v,i) => {
-					permissionNames.push(v.permission)
-				})
-
-				that.setState({designationList: res.data, currentPermissions: userPermissions,permissionNames: permissionNames});
+				that.setState({designationList: res.data, currentPermissions: userPermissions,});
+			}
+		})
+	}
+	getPermissions = (id,index) => {
+		const that = this;
+		that.props.actions.GetUserDesignationList(id)
+		.then((res) => {
+			if(res.status){
+				let userPermissions =  res.data[0].permission_info.length > 0 ? res.data[0].permission_info[0].permissions : [];
+				that.setState({currentPermissions: userPermissions,activeRole: index});
 			}
 		})
 	}
 
 	render() {
-		let { value,tableData,designationList,currentPermissions,permissionNames, } = this.state;
+		let { value,designationList,currentPermissions,permissionNames,activeRole, } = this.state;
 		let { loggingOut } = this.props;
 		const permission = true;
 		return (
@@ -146,14 +144,14 @@ class UsersPermissions extends React.PureComponent {
 											<ListGroup>
 												{
 													designationList.length > 0 && designationList.map((v,i) => {
-														let active = (i == 0);
-														return <ListGroupItem key={i} tag="span" href="#" action active={active}>{v.position_type}</ListGroupItem>
+														let active = (i == activeRole);
+														return <ListGroupItem key={i} tag="span" href="#" action active={active} onClick={() => this.getPermissions(v._id,i)}>{v.position_type}</ListGroupItem>
 													})
 												}
 								      </ListGroup>
 										</Col>
 										<Col md="8">
-											<Col md="12" className="background-white" style={{padding: 20}}> 
+											<Col md="12" className="background-white" style={{padding: 20, marginBottom: 20}}> 
 												<table className="table table-hover user-permissions-list">
 													<thead>
 														<tr>
@@ -165,29 +163,23 @@ class UsersPermissions extends React.PureComponent {
 													</thead>
 													<tbody>
 														{
-															tableData.length > 0 && tableData.map((v,i) => {
+															currentPermissions.length > 0 && currentPermissions.map((v,i) => {
 																return <>
 																				<tr>
 																					<td width="200" colSpan="4" style={{fontWeight: 'bold', textAlign: 'left'}}><h4>{v.system_type}</h4></td>
 																				</tr>
 																				{
 																					v.permissions.map((value,key) => {
-																						console.log(value.permission_name)
-																						if(permissionNames.includes(value.permission_name)){
+																							var FullAccessBtn = value.level == 2 ? ["success","check"] : ["secondary","ban"];
+																							var ViewOnlyBtn = value.level == 1 ? ["success","check"] : ["secondary","ban"];
+																							var NoAccessBtn = value.level == 0 ? ["success","check"] : ["secondary","ban"];
+
 																							return <tr key={key}>
 																											<td>{value.page}</td>
-																											<td><Button color="success"><FontAwesomeIcon icon="check" /></Button></td>
-																											<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
-																											<td><Button><FontAwesomeIcon icon="ban" /></Button></td>
+																											<td><Button color={FullAccessBtn[0]}><FontAwesomeIcon icon={FullAccessBtn[1]} /></Button></td>
+																											<td><Button color={ViewOnlyBtn[0]}><FontAwesomeIcon icon={ViewOnlyBtn[1]} /></Button></td>
+																											<td><Button color={NoAccessBtn[0]}><FontAwesomeIcon icon={NoAccessBtn[1]} /></Button></td>
 																										</tr>
-																						}
-																						// currentPermissions.length && currentPermissions.map((permission,key) => {
-																						// 	console.log(value.permission_name)
-																						// 	console.log(permission.permission)
-																						// 	console.log('---')
-																						// 	if(value.permission_name === permission.permission){
-																						// 	}
-																						// })
 																					})
 																				}
 																				</>
@@ -201,7 +193,7 @@ class UsersPermissions extends React.PureComponent {
 												<Row>
 													<Col md="12">
 														<Col md="5" className="float-right">
-															<Button className="es-main-btn" block>Save</Button>
+															<Button className="es-main-btn" block>{currentPermissions.length == 0 ? "Add Default Permissions" : "Save Permissions"}</Button>
 														</Col>
 													</Col>
 												</Row>

@@ -189,6 +189,14 @@ input:active:focus,
   }
 }
 .main-nav{
+  &.scrolled{
+    background: $esGray;
+    box-shadow: -2px 1px 3px #ccc;
+    position: fixed;
+    transition: 0.3s;
+    width: calc(100% - 200px);
+    z-index: 3;
+  }
 	.main-link{
 		@include esThemeBlue();
 		font-weight: bolder;
@@ -716,7 +724,7 @@ scrollbar appearance
     background-color: rgba(0,0,0,0.2);
     position: fixed;
     height: 100%;
-    z-index: 3;
+    z-index: 4;
   }
   .sidebar{
     // display: none;
@@ -753,6 +761,14 @@ scrollbar appearance
     }
   }
   .main-nav{
+    &.scrolled{
+      background: $esGray;
+      box-shadow: -2px 1px 3px #ccc;
+      position: fixed;
+      transition: 0.3s;
+      width: 100%;
+      z-index: 3;
+    }
     padding: 5px;
     .main-link{
       display: none;

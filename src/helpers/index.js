@@ -76,6 +76,7 @@ export const _groupBy = (obj_arr) => {
             group: v.group,
             page: v.page,
             permission_name: v.permission_name,
+            level: 0,
         })
 
         return c;

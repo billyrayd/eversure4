@@ -60,6 +60,16 @@ class NavBar extends React.PureComponent {
       }
     })
 
+    window.addEventListener("scroll", function(){
+      var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
+
+      if(scrollTop > 50){
+        $(".main-nav").addClass("scrolled");
+      }else{
+        $(".main-nav").removeClass("scrolled");
+      }
+    })
+
     this.loadListeners();
     this.loadSettings();
 
