@@ -823,6 +823,7 @@ export const GetPermissionsList = () => {
                         v.page ? v.page : '',
                         v.group,
                         v.permission_name,
+                        v.order,
                         '',
                     ])
                 })
@@ -860,7 +861,7 @@ export const DeletePermission = (id) => {
 
     }
 }
-export const UpdatePermission = (id,groupName,permissionName,pageName,systemType) => {
+export const UpdatePermission = (id,groupName,permissionName,pageName,systemType,order,) => {
     return (dispatch,getState) => {
         let Service = feathers.service("permission-list");
         let query = {};
@@ -878,6 +879,10 @@ export const UpdatePermission = (id,groupName,permissionName,pageName,systemType
         if(systemType){
             query.system_type = systemType
         }
+        if(order){
+            query.order = order
+        }
+
 
         return Service.find({
             query: {
@@ -896,6 +901,8 @@ export const UpdatePermission = (id,groupName,permissionName,pageName,systemType
 
                 return Service.patch(id,query)
                 .then((data) => {
+                    console.log(query)
+                    console.log(data)
                     output.status = true;
                     output.message = 'Permission successfully updated';
                     return Promise.resolve(output);

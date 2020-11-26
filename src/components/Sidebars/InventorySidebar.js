@@ -51,21 +51,18 @@ class InventorySidebar extends React.PureComponent {
 	}
 	showSidebar = () => {
 		if(window.innerWidth > 415){
-			document.getElementById("sideBar").style.width = "200px";
-    	document.getElementById("appVersion").style.bottom = "0px";
+			$("#sideBar").css({width: '200px'});
+			$("#appVersion").css({bottom: '0px'});
 			$(".table").css({width: '100%'});
 		}else{
-			document.getElementById("sideBar").style.width = "0px";
-    	document.getElementById("appVersion").style.bottom = "-55px";
+			$("#sideBar").css({width: '0px'});
+			$("#appVersion").css({bottom: '-55px'});
 		}
 	}
 	closeSidebar = () => {
-		// $(".sidebar").toggle();
-
-    document.getElementById("sideBar").style.width = "0px";
-    document.getElementById("appVersion").style.bottom = "-55px";
+		$("#sideBar").css({width: '0px'});
+		$("#appVersion").css({bottom: '-55px'});
 		$(".sidebar-wrap").removeClass("es-overlay");
-    // document.body.classList.toggle("disable-scroll");
     $("body").removeClass("disable-scroll");
 		
 	}

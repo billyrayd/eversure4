@@ -126,8 +126,10 @@ class NavBar extends React.PureComponent {
 
   openSidebar = () => {
     // $(".sidebar").toggle();
-    document.getElementById("sideBar").style.width = "200px";
-    document.getElementById("appVersion").style.bottom = "0px";
+    // document.getElementById("sideBar").style.width = "200px";
+    // document.getElementById("appVersion").style.bottom = "0px";
+    $("#sideBar").css({width: '200px'});
+    $("#appVersion").css({bottom: '0px'});
     $("#customMenu").removeClass("open");
     $(".sidebar-wrap").addClass("es-overlay");
     // document.body.classList.toggle("disable-scroll");

@@ -17,16 +17,17 @@ class EditPermission extends React.PureComponent {
       group: '',
       permission: '',
       page: '',
-      systemType: ''
+      systemType: '',
+      order: '',
     }
 	}
 
   save = () => {
     const that = this;
-    let { group,permission,page,systemType, } = this.state;
+    let { group,permission,page,systemType,order } = this.state;
     let { callBack,data } = this.props;
 
-    if(group.trim() === "" && permission.trim() === "" && page.trim() === "" && systemType.trim() === ""){
+    if(group.trim() === "" && permission.trim() === "" && page.trim() === "" && systemType.trim() === "" && order.trim() === ""){
       that.setState({group: '',permission: '',page: '',systemType: ''});
       toastr.remove();
       toastr.info("No changes made");
@@ -35,15 +36,17 @@ class EditPermission extends React.PureComponent {
         toastr.info("No changes made");
       }else if(permission == data[2]){
         toastr.info("No changes made");
+      }else if(order == data[5]){
+        toastr.info("No changes made");
       }else{
-        this.props.actions.UpdatePermission(data[0],group,permission,page,systemType)
+        this.props.actions.UpdatePermission(data[0],group,permission,page,systemType,order,)
         .then((res) => {
           if(res.status){
               toastr.success(res.message);
               that.modalClosed();
               callBack();
           }else{
-            that.setState({group: '',permission: '',page: '',systemType: ''});
+            that.setState({group: '',permission: '',page: '',systemType: '',order: ''});
             toastr.error(res.message);
           }
         })
@@ -94,9 +97,20 @@ class EditPermission extends React.PureComponent {
       () => input.setSelectionRange(start, end)
     );
   }
+  changeOrder = (event) => {
+    const input = event.target;
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    let uppercasedValue = input.value.toUpperCase()
+
+    this.setState(
+      {order: uppercasedValue},
+      () => input.setSelectionRange(start, end)
+    );
+  }
   modalClosed = () => {
     let { closeModal } = this.props;
-    this.setState({group: '', permission: '',page: '',systemType: ''});
+    this.setState({group: '', permission: '',page: '',systemType: '',order: ''});
     closeModal();
   }
   submitForm = (e) => {
@@ -112,7 +126,7 @@ class EditPermission extends React.PureComponent {
 
 	render() {
 		let { modal,className,callBack,closeModal,data } = this.props;
-    let { group,permission,page,systemType, } = this.state;
+    let { group,permission,page,systemType,order, } = this.state;
 		return (
 			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} keyboard={true} centered={true}>
         <ModalHeader>Edit Permission</ModalHeader>
@@ -133,6 +147,10 @@ class EditPermission extends React.PureComponent {
             <Col md="12">
               <label>Page Name</label> <br />
               <Input autoComplete="off" placeholder={data[3]} onChange={(e) => this.changePage(e)} value={page} onKeyPress={(e) => this.submitForm(e)} />
+            </Col>
+            <Col md="12">
+              <label>Order Number</label> <br />
+              <Input autoComplete="off" placeholder={data[5]} onChange={(e) => this.changeOrder(e)} value={order} onKeyPress={(e) => this.submitForm(e)} />
             </Col>
         	</Row>
         </ModalBody>

@@ -66,7 +66,7 @@ class UserPermissionList extends React.PureComponent {
 			"sDom": '<"bottom"<t>ip><"clear">',
 			"columnDefs": [
 				{
-					"targets": 0,
+					"targets": [0],
 					"visible": false,
 				},
 				{
@@ -79,7 +79,7 @@ class UserPermissionList extends React.PureComponent {
 				},
 				{
 					"orderable": false,
-					"targets": 6,
+					"targets": 7,
 					"width": 100
 				}
 			],
@@ -90,6 +90,7 @@ class UserPermissionList extends React.PureComponent {
           {title: "page"},
           {title: "permission group name", className: "txt-transform-i"},
           {title: "permission name", className: "txt-transform-i"},
+          {title: "order number"},
           {title: "action", createdCell: (td, cellData, rowData, row, col) => {
 						ReactDOM.render(<div>
 										<Button color="primary" size="sm" className="edit">
@@ -125,8 +126,9 @@ class UserPermissionList extends React.PureComponent {
     	const permissionPage = data[3];
     	const permissionGroupName = data[4];
     	const permissionName = data[5];
+    	const orderNumber = data[6];
 
-    	that.setState({permissionVal: [id,permissionGroupName,permissionName,permissionPage,systemType]});
+    	that.setState({permissionVal: [id,permissionGroupName,permissionName,permissionPage,systemType,orderNumber]});
     	that.showModal("edit", true);
     });
 
@@ -205,7 +207,7 @@ class UserPermissionList extends React.PureComponent {
 		}
 	}
 	modalCallback = () => {
-		this.loadPermissionsList();
+		// this.loadPermissionsList();
 	}
 	opened = () => {
 		$(".modal #delete").focus();
