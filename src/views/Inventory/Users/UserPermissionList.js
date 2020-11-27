@@ -126,7 +126,7 @@ class UserPermissionList extends React.PureComponent {
     	const permissionPage = data[3];
     	const permissionGroupName = data[4];
     	const permissionName = data[5];
-    	const orderNumber = data[6];
+    	const orderNumber = data[1];
 
     	that.setState({permissionVal: [id,permissionGroupName,permissionName,permissionPage,systemType,orderNumber]});
     	that.showModal("edit", true);

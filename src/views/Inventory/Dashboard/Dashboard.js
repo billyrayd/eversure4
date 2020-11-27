@@ -54,7 +54,7 @@ class Dashboard extends React.PureComponent {
 	}
 
 	render() {
-		let { loggingOut } = this.props;
+		let { loggingOut,userPermission } = this.props;
 		var data = [
 			{ letter: 'A' },
 			{ letter: 'B' },
@@ -63,7 +63,7 @@ class Dashboard extends React.PureComponent {
 			{ letter: 'E' },
 		];
 
-		const permission = true;
+		const permission = userPermission.length > 0 ? (userPermission[0].permissions[0].level > 0) : false;
 		return (
 			<div>
 				<LoggingOut loggingOut={loggingOut} />
@@ -104,6 +104,7 @@ const mapStateToProps = state => ({
   authenticated: state.user_auth.authenticated,
   loggingIn: state.user_auth.loggingIn,
   loggingOut: state.user_auth.loggingOut,
+  userPermission: state.login.userPermission,
 });
 
 function mapDispatchToProps(dispatch) {

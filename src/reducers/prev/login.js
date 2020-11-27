@@ -2,14 +2,12 @@ import {
   LOGIN,
   USER_DATA,
   USER_PERMISSION,
-  HOST_IP,
 } from 'constants/prev/action_types';
 
 const initialState = {
     loginStatus : false,
     userData: [],
     userPermission: [],
-    host_ip: false
 }
 
 export default function login(state = initialState, action) {
@@ -34,7 +32,6 @@ export default function login(state = initialState, action) {
                 userPermission: action.data
             }
         break;
-        case HOST_IP: return {...state, host_ip: action.data}
 
         default: return state;
   }

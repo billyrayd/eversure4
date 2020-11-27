@@ -92,15 +92,12 @@ class UsersPermissions extends React.PureComponent {
 	getPermissionsList = () => {
 		const that = this;
 
-		// that.props.actions.PermissionsListAssignment()
-		// .then((res) => {
-		// 	console.log(res)
-		// })
+		that.props.actions.PermissionsListAssignment();
 
 		that.props.actions.GetUserDesignationList()
 		.then((res) => {
 			if(res.status){
-				let userPermissions =  res.data[0].permission_info[0].permissions;
+				let userPermissions =  res.data[0].length > 0 ? res.data[0].permission_info[0].permissions : [];
 				that.setState({designationList: res.data, currentPermissions: userPermissions,});
 			}
 		})

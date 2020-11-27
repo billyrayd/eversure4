@@ -6,7 +6,7 @@ import {
 } from 'constants/prev/action_types';
 
 import feathers from 'helpers/feathers';
-import { _groupBy } from 'helpers/';
+import { _groupByProp,_sortByProp, } from 'helpers/';
 
 import toastr from 'toastr';
 
@@ -94,6 +94,7 @@ export function GetUserPermissions(userid,usertype){
 	return (dispatch, getState) => {
 		var permissionService = feathers.service('permission');
 		var permissionListService = feathers.service("permission-list");
+		let query = {};
 		var defaultPermissions = {
         dashboard: 0,
         inventory: 0,
@@ -110,7 +111,13 @@ export function GetUserPermissions(userid,usertype){
 			}
 		}
 
-		permissionListService.find()
+		// query.order = {
+		// 	$in: [123,1234]
+		// }
+
+		permissionListService.find({
+			query: query
+		})
 		.then((res) => {
 
 			let def = [];
@@ -129,7 +136,18 @@ export function GetUserPermissions(userid,usertype){
                 group: v.group,
                 permission_name: v.permission_name,
                 page: v.page,
+                order: v.order
             })
+        })
+
+        let groupedData = _groupByProp(def);
+        let sortedPermissions = [];
+
+        groupedData.map((v) => {
+          sortedPermissions.push({
+            system_type: v.system_type,
+            permissions: _sortByProp(v.permissions, ['order'], ['ASC'])
+          })
         })
 
 				permissionService.find({
@@ -148,7 +166,7 @@ export function GetUserPermissions(userid,usertype){
 						permissionService.create({
 							user_id: userid,
 							user_type_id: usertype,
-							permissions: _groupBy(def),
+							permissions: sortedPermissions,
 						})
 						.then((c) => {
 							let permissionsList = c.permissions;

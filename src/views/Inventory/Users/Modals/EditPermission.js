@@ -32,14 +32,10 @@ class EditPermission extends React.PureComponent {
       toastr.remove();
       toastr.info("No changes made");
     }else{
-      if(group == data[1]){
-        toastr.info("No changes made");
-      }else if(permission == data[2]){
-        toastr.info("No changes made");
-      }else if(order == data[5]){
+      if(group == data[1] && permission == data[2] && page == data[3] && systemType == data[4] && order == data[5]){
         toastr.info("No changes made");
       }else{
-        this.props.actions.UpdatePermission(data[0],group,permission,page,systemType,order,)
+        this.props.actions.UpdatePermissionList(data[0],group,permission,page,systemType,order,)
         .then((res) => {
           if(res.status){
               toastr.success(res.message);

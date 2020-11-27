@@ -9,7 +9,7 @@ import {
 } from 'constants/prev/users';
 
 import feathers from 'helpers/feathers';
-import { _groupBy,_jsonConf } from 'helpers/';
+import { _groupByProp,_sortByProp,_jsonConf } from 'helpers/';
 const _user = 'stratium', _pass = 'unitb1ts';
 
 var async = require('async');
@@ -867,7 +867,7 @@ export const DeletePermission = (id) => {
 
     }
 }
-export const UpdatePermission = (id,groupName,permissionName,pageName,systemType,order,) => {
+export const UpdatePermissionList = (id,groupName,permissionName,pageName,systemType,order,) => {
     return (dispatch,getState) => {
         let Service = feathers.service("permission-list");
         let query = {};
@@ -907,8 +907,6 @@ export const UpdatePermission = (id,groupName,permissionName,pageName,systemType
 
                 return Service.patch(id,query)
                 .then((data) => {
-                    console.log(query)
-                    console.log(data)
                     output.status = true;
                     output.message = 'Permission successfully updated';
                     return Promise.resolve(output);
@@ -946,11 +944,22 @@ export const PermissionsListAssignment = () => {
                         group: v.group,
                         permission_name: v.permission_name,
                         page: v.page,
+                        order: v.order
+                    })
+                })
+
+                let groupedData = _groupByProp(data);
+                let sortedData = [];
+
+                groupedData.map((v) => {
+                    sortedData.push({
+                        system_type: v.system_type,
+                        permissions: _sortByProp(v.permissions, ['order'], ['ASC'])
                     })
                 })
 
                 output.status = true;
-                output.data = _groupBy(data);
+                output.data = _groupByProp(data);
 
                 return Promise.resolve(output);
             }else{

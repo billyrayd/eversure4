@@ -106,6 +106,7 @@ export const DeleteAllData = () => {
 			async.parallel({
 				userPermissionsList: (callback) => {
 					let Service = feathers.service("permission");
+					let DataWithStatus = [];
 
 					Service.find()
 					.then((result) => {
@@ -116,18 +117,22 @@ export const DeleteAllData = () => {
 								if(value > 0){
 									Service.remove(col[value]._id)
 									.then(() => {
+										DataWithStatus.push({data: col[value], deleted: true});
 										return recursive(value - 1);
 									})
 									.catch(() => {
+										DataWithStatus.push({data: col[value], deleted: false});
 										return recursive(value - 1);
 									})
 								}else{
 									Service.remove(col[value]._id)
 									.then(() => {
-										callback(null, true);
+										DataWithStatus.push({data: col[value], deleted: true});
+										callback(null, DataWithStatus);
 									})
 									.catch(() => {
-										callback(null, true);
+										DataWithStatus.push({data: col[value], deleted: true});
+										callback(null, DataWithStatus);
 									})
 									
 								}
@@ -135,7 +140,8 @@ export const DeleteAllData = () => {
 
 							recursive(col.length - 1)
 						}else{
-							callback(null, true);
+							DataWithStatus.push({data: 'no data found'});
+							callback(null, DataWithStatus);
 						}
 					})
 				}
