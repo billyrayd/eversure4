@@ -75,14 +75,15 @@ class UserPermissionList extends React.PureComponent {
 				},
 				{
 					"targets": 3,
-					"width": 250,
+					"width": 200,
 				},
 				{
 					"orderable": false,
-					"targets": 7,
+					"targets": 6,
 					"width": 100
 				}
 			],
+			"order": [[1, 'asc']],
       "columns": [
           {title: "DATA OBJECT"},
           {title: "no."},
@@ -90,7 +91,6 @@ class UserPermissionList extends React.PureComponent {
           {title: "page"},
           {title: "permission group name", className: "txt-transform-i"},
           {title: "permission name", className: "txt-transform-i"},
-          {title: "order number"},
           {title: "action", createdCell: (td, cellData, rowData, row, col) => {
 						ReactDOM.render(<div>
 										<Button color="primary" size="sm" className="edit">

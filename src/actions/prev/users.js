@@ -810,20 +810,26 @@ export const GetPermissionsList = () => {
         let Service = feathers.service("permission-list");
         let data = [];
         let output = {};
+        let query = {
+            $sort: {
+                order: 1
+            }
+        };
 
-        return Service.find()
+        return Service.find({query: query})
         .then((result) => {
             if(result.data.length > 0){
                 let col = result.data;
+                let num = 1;
                 col.map((v,i) => {
+                    num++;
                     data.push([
                         v._id,
-                        i + 1,
+                        v.order,
                         v.system_type ? v.system_type : '',
                         v.page ? v.page : '',
                         v.group,
                         v.permission_name,
-                        v.order,
                         '',
                     ])
                 })
