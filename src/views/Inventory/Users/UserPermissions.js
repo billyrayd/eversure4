@@ -40,7 +40,8 @@ class UsersPermissions extends React.PureComponent {
 			designationList: [],
 			currentPermissions: [],
 			permissionNames: [],
-			activeRole: 0
+			activeRole: 0,
+			editing: false,
 		}
 	}
 
@@ -98,23 +99,39 @@ class UsersPermissions extends React.PureComponent {
 		.then((res) => {
 			if(res.status){
 				let userPermissions =  res.data[0].length > 0 ? res.data[0].permission_info[0].permissions : [];
-				that.setState({designationList: res.data, currentPermissions: userPermissions,});
+				that.setState({designationList: res.data, currentPermissions: userPermissions,activeRole: 0});
+				that.getPermissions(res.data[0]._id,0);
 			}
 		})
 	}
 	getPermissions = (id,index) => {
 		const that = this;
+		that.setState({editing: false});
 		that.props.actions.GetUserDesignationList(id)
 		.then((res) => {
 			if(res.status){
 				let userPermissions =  res.data[0].permission_info.length > 0 ? res.data[0].permission_info[0].permissions : [];
-				that.setState({currentPermissions: userPermissions,activeRole: index});
+				that.setState({currentPermissions: userPermissions,permissionForm: userPermissions,activeRole: index});
 			}
 		})
 	}
+	enableEditing = (data) => {
+		const that = this;
+		if(!data){
+			that.setState({editing: true});
+		}
+	}
+	updatePermission = (data) => {
+		let { permissionForm } = this.state;
+		console.log(data)
+		console.log(permissionForm)
+	}
+	savePermissions = () => {
+
+	}
 
 	render() {
-		let { value,designationList,currentPermissions,permissionNames,activeRole, } = this.state;
+		let { value,designationList,currentPermissions,permissionNames,activeRole,editing,permissionForm, } = this.state;
 		let { loggingOut } = this.props;
 		const permission = true;
 		return (
@@ -149,6 +166,24 @@ class UsersPermissions extends React.PureComponent {
 										</Col>
 										<Col md="8">
 											<Col md="12" className="background-white" style={{padding: 20, marginBottom: 20}}> 
+												<Col md="12" style={{marginBottom: 50}}>
+													<Col md="5" className="float-right">
+														{
+															editing ? 
+														<div>
+															<Button style={{display: 'inline-block'}} color="secondary" block onClick={() => this.setState({editing: false})}>
+															Cancel
+														</Button>
+														<Button style={{display: 'inline-block'}} className="es-main-btn" block onClick={() => this.savePermissions()}>
+															Save
+														</Button>
+														</div> : 
+														<Button className="es-main-btn" block onClick={() => this.enableEditing(currentPermissions.length == 0)}>
+															{currentPermissions.length == 0 ? "Add Default Permissions" : "Edit Permissions"}
+														</Button>
+														}
+													</Col>
+												</Col>
 												<table className="table table-hover user-permissions-list">
 													<thead>
 														<tr>
@@ -160,7 +195,7 @@ class UsersPermissions extends React.PureComponent {
 													</thead>
 													<tbody>
 														{
-															currentPermissions.length > 0 && currentPermissions.map((v,i) => {
+															editing && permissionForm.length > 0 && permissionForm.map((v,i) => {
 																return <>
 																				<tr>
 																					<td width="200" colSpan="4" style={{fontWeight: 'bold', textAlign: 'left'}}><h4>{v.system_type}</h4></td>
@@ -173,9 +208,32 @@ class UsersPermissions extends React.PureComponent {
 
 																							return <tr key={key}>
 																											<td>{value.page}</td>
-																											<td><Button color={FullAccessBtn[0]}><FontAwesomeIcon icon={FullAccessBtn[1]} /></Button></td>
-																											<td><Button color={ViewOnlyBtn[0]}><FontAwesomeIcon icon={ViewOnlyBtn[1]} /></Button></td>
-																											<td><Button color={NoAccessBtn[0]}><FontAwesomeIcon icon={NoAccessBtn[1]} /></Button></td>
+																											<td><Button color={FullAccessBtn[0]} onClick={() => this.updatePermission(value)}><FontAwesomeIcon icon={FullAccessBtn[1]} /></Button></td>
+																											<td><Button color={ViewOnlyBtn[0]} onClick={() => this.updatePermission(value)}><FontAwesomeIcon icon={ViewOnlyBtn[1]} /></Button></td>
+																											<td><Button color={NoAccessBtn[0]} onClick={() => this.updatePermission(value)}><FontAwesomeIcon icon={NoAccessBtn[1]} /></Button></td>
+																										</tr>
+																					})
+																				}
+																				</>
+															})
+														}
+														{
+															!editing && currentPermissions.length > 0 && currentPermissions.map((v,i) => {
+																return <>
+																				<tr>
+																					<td width="200" colSpan="4" style={{fontWeight: 'bold', textAlign: 'left'}}><h4>{v.system_type}</h4></td>
+																				</tr>
+																				{
+																					v.permissions.map((value,key) => {
+																							var FullAccessBtn = value.level == 2 ? ["success","check"] : ["secondary","ban"];
+																							var ViewOnlyBtn = value.level == 1 ? ["success","check"] : ["secondary","ban"];
+																							var NoAccessBtn = value.level == 0 ? ["success","check"] : ["secondary","ban"];
+
+																							return <tr key={key}>
+																											<td>{value.page}</td>
+																											<td><FontAwesomeIcon icon={FullAccessBtn[1]} /></td>
+																											<td><FontAwesomeIcon icon={ViewOnlyBtn[1]} /></td>
+																											<td><FontAwesomeIcon icon={NoAccessBtn[1]} /></td>
 																										</tr>
 																					})
 																				}
@@ -188,9 +246,11 @@ class UsersPermissions extends React.PureComponent {
 													</tbody>
 												</table>
 												<Row>
-													<Col md="12">
+													<Col md="12" style={{display: currentPermissions.length == 0 ? "none" : ""}}>
 														<Col md="5" className="float-right">
-															<Button className="es-main-btn" block>{currentPermissions.length == 0 ? "Add Default Permissions" : "Save Permissions"}</Button>
+															<Button className="es-main-btn" block onClick={() => this.enableEditing(currentPermissions.length == 0)}>
+																{currentPermissions.length == 0 ? "Add Default Permissions" : "Edit Permissions"}
+															</Button>
 														</Col>
 													</Col>
 												</Row>
