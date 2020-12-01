@@ -976,3 +976,32 @@ export const PermissionsListAssignment = () => {
     }
 }
 
+export const UpdatePermissionAssignment = (role_id, permissions) => {
+    return (dispatch,getState) => {
+        let Service = feathers.service("permission");
+        let output = {};
+
+        return Service.find({query: {user_type_id: role_id}})
+        .then((result) => {
+            let permissionId = result.data[0]._id;
+
+            return Service.patch(permissionId, {permissions: permissions})
+            .then(() => {
+                output.status = true;
+                output.message = "Permissions successfully updated";
+                return Promise.resolve(output);
+            })
+            .catch(() => {
+                output.status = false;
+                output.message = "Failed to update permissions";
+                return Promise.resolve(output);
+            })
+        })
+        .catch((error) => {
+            output.status = false;
+            output.message = "Failed to update permissions";
+            return Promise.resolve(output);
+        })
+    }
+}
+

@@ -143,8 +143,9 @@ export function GetUserPermissions(userid,usertype){
         let groupedData = _groupByProp(def);
         let sortedPermissions = [];
 
-        groupedData.map((v) => {
+        groupedData.map((v,i) => {
           sortedPermissions.push({
+          	index: i,
             system_type: v.system_type,
             permissions: _sortByProp(v.permissions, ['order'], ['ASC'])
           })
@@ -152,7 +153,7 @@ export function GetUserPermissions(userid,usertype){
 
 				permissionService.find({
 					query: {
-						user_id: userid,
+						// user_id: userid,
 						user_type_id: usertype,
 					}
 				})
@@ -164,7 +165,7 @@ export function GetUserPermissions(userid,usertype){
 						dispatch(SetUserPermissions(permissionsList))
 					}else{
 						permissionService.create({
-							user_id: userid,
+							// user_id: userid,
 							user_type_id: usertype,
 							permissions: sortedPermissions,
 						})

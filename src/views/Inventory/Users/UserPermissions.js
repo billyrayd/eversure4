@@ -28,6 +28,8 @@ import UsersSubSidebar from 'components/SubSidebars/UsersSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
 import LoggingOut from 'components/CustomComponents/LoggingOut';
 
+import { _sortByProp } from 'helpers/';
+
 var $ = require( 'jquery' );
 $.DataTable = require('datatables.net');
 
@@ -40,7 +42,8 @@ class UsersPermissions extends React.PureComponent {
 			designationList: [],
 			currentPermissions: [],
 			permissionNames: [],
-			activeRole: 0,
+			activeRole: [],
+			activeRoleIndex: 0,
 			editing: false,
 		}
 	}
@@ -99,19 +102,20 @@ class UsersPermissions extends React.PureComponent {
 		.then((res) => {
 			if(res.status){
 				let userPermissions =  res.data[0].length > 0 ? res.data[0].permission_info[0].permissions : [];
-				that.setState({designationList: res.data, currentPermissions: userPermissions,activeRole: 0});
-				that.getPermissions(res.data[0]._id,0);
+				that.setState({designationList: res.data, currentPermissions: userPermissions,activeRoleIndex: 0});
+				that.getPermissions(res.data[0]._id,0,res.data[0]);
 			}
 		})
 	}
-	getPermissions = (id,index) => {
+	getPermissions = (currentRole,index,) => {
 		const that = this;
-		that.setState({editing: false});
-		that.props.actions.GetUserDesignationList(id)
+		that.setState({editing: false,activeRole: currentRole, activeRoleIndex: index});
+		that.props.actions.GetUserDesignationList(currentRole._id)
 		.then((res) => {
 			if(res.status){
 				let userPermissions =  res.data[0].permission_info.length > 0 ? res.data[0].permission_info[0].permissions : [];
-				that.setState({currentPermissions: userPermissions,permissionForm: userPermissions,activeRole: index});
+				that.setState({currentPermissions: userPermissions,permissionForm: userPermissions,activeRoleIndex: index});
+				console.log(userPermissions)
 			}
 		})
 	}
@@ -121,19 +125,70 @@ class UsersPermissions extends React.PureComponent {
 			that.setState({editing: true});
 		}
 	}
-	updatePermission = (data) => {
+	updatePermission = (systemtype,data,access) => {
+		const that = this;
 		let { permissionForm } = this.state;
-		console.log(data)
-		console.log(permissionForm)
+		let selectedType = permissionForm.filter((v) => v.system_type == systemtype);
+		let notSelected = permissionForm.filter((v) => v.system_type !== systemtype);
+		let permissions = selectedType[0].permissions;
+		let updatedPermissions = [];
+
+
+		console.log(access)
+
+		permissions.map((v,i) => {
+			if(v.id == data.id){
+				updatedPermissions.push({
+					id: v.id,
+					group: v.group,
+					page: v.page,
+					level: access,
+					order: v.order,
+					permission_name: v.permission_name,
+				})
+			}else{
+				updatedPermissions.push({
+					id: v.id,
+					group: v.group,
+					page: v.page,
+					level: v.level,
+					order: v.order,
+					permission_name: v.permission_name,
+				})
+			}
+		})
+
+		let newPermissions = {index: selectedType[0].index ,system_type: systemtype, permissions: updatedPermissions};
+		notSelected.push(newPermissions);
+		_sortByProp(notSelected, ['index'], ['ASC','DESC']);
+		that.setState({permissionForm: notSelected});
+
+		console.log(notSelected)
 	}
 	savePermissions = () => {
+		const that = this;
+		let { permissionForm,activeRole } = this.state;
 
+		// console.log(activeRole._id)
+		// console.log(permissionForm)
+
+		that.props.actions.UpdatePermissionAssignment(activeRole._id, permissionForm)
+		.then((res) => {
+			toastr.remove();
+			that.getPermissionsList();
+			that.setState({editing: false});
+			if(res.status){
+				toastr.success(res.message);
+			}else{
+				toastr.error(res.message);
+			}
+		})
 	}
 
 	render() {
-		let { value,designationList,currentPermissions,permissionNames,activeRole,editing,permissionForm, } = this.state;
-		let { loggingOut } = this.props;
-		const permission = true;
+		let { value,designationList,currentPermissions,permissionNames,activeRoleIndex,editing,permissionForm, } = this.state;
+		let { loggingOut,userPermission, } = this.props;
+		const permission = userPermission.length > 0 ? (userPermission[0].permissions[26].level > 0) : false;;
 		return (
 			<div>
 				<LoggingOut loggingOut={loggingOut} />
@@ -158,8 +213,8 @@ class UsersPermissions extends React.PureComponent {
 											<ListGroup>
 												{
 													designationList.length > 0 && designationList.map((v,i) => {
-														let active = (i == activeRole);
-														return <ListGroupItem key={i} tag="span" href="#" action active={active} onClick={() => this.getPermissions(v._id,i)}>{v.position_type}</ListGroupItem>
+														let active = (i == activeRoleIndex);
+														return <ListGroupItem key={i} tag="span" href="#" action active={active} onClick={() => this.getPermissions(v,i)}>{v.position_type}</ListGroupItem>
 													})
 												}
 								      </ListGroup>
@@ -171,10 +226,10 @@ class UsersPermissions extends React.PureComponent {
 														{
 															editing ? 
 														<div>
-															<Button style={{display: 'inline-block'}} color="secondary" block onClick={() => this.setState({editing: false})}>
+															<Button style={{width: 100, marginRight:20}} color="secondary" onClick={() => this.setState({editing: false})}>
 															Cancel
 														</Button>
-														<Button style={{display: 'inline-block'}} className="es-main-btn" block onClick={() => this.savePermissions()}>
+														<Button style={{width: 100}} className="es-main-btn" onClick={() => this.savePermissions()}>
 															Save
 														</Button>
 														</div> : 
@@ -208,9 +263,9 @@ class UsersPermissions extends React.PureComponent {
 
 																							return <tr key={key}>
 																											<td>{value.page}</td>
-																											<td><Button color={FullAccessBtn[0]} onClick={() => this.updatePermission(value)}><FontAwesomeIcon icon={FullAccessBtn[1]} /></Button></td>
-																											<td><Button color={ViewOnlyBtn[0]} onClick={() => this.updatePermission(value)}><FontAwesomeIcon icon={ViewOnlyBtn[1]} /></Button></td>
-																											<td><Button color={NoAccessBtn[0]} onClick={() => this.updatePermission(value)}><FontAwesomeIcon icon={NoAccessBtn[1]} /></Button></td>
+																											<td><Button color={FullAccessBtn[0]} onClick={() => this.updatePermission(v.system_type,value,2)}><FontAwesomeIcon icon={FullAccessBtn[1]} /></Button></td>
+																											<td><Button color={ViewOnlyBtn[0]} onClick={() => this.updatePermission(v.system_type,value,1)}><FontAwesomeIcon icon={ViewOnlyBtn[1]} /></Button></td>
+																											<td><Button color={NoAccessBtn[0]} onClick={() => this.updatePermission(v.system_type,value,0)}><FontAwesomeIcon icon={NoAccessBtn[1]} /></Button></td>
 																										</tr>
 																					})
 																				}
@@ -248,9 +303,20 @@ class UsersPermissions extends React.PureComponent {
 												<Row>
 													<Col md="12" style={{display: currentPermissions.length == 0 ? "none" : ""}}>
 														<Col md="5" className="float-right">
+															{
+																editing ? 
+															<div>
+																<Button style={{width: 100, marginRight:20}} color="secondary" onClick={() => this.setState({editing: false})}>
+																Cancel
+															</Button>
+															<Button style={{width: 100}} className="es-main-btn" onClick={() => this.savePermissions()}>
+																Save
+															</Button>
+															</div> : 
 															<Button className="es-main-btn" block onClick={() => this.enableEditing(currentPermissions.length == 0)}>
 																{currentPermissions.length == 0 ? "Add Default Permissions" : "Edit Permissions"}
 															</Button>
+															}
 														</Col>
 													</Col>
 												</Row>
@@ -272,6 +338,7 @@ const mapStateToProps = state => ({
   loggingIn: state.user_auth.loggingIn,
   loggingOut: state.user_auth.loggingOut,
   designationList: state.users.designationList,
+  userPermission: state.login.userPermission,
 });
 
 function mapDispatchToProps(dispatch) {

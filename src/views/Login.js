@@ -52,10 +52,12 @@ class Login extends React.PureComponent {
 		
 		toastr.remove();
 
-		if(username == ""){
+		if(username.trim() == ""){
+			that.setState({username:''})
 			toastr.info("Please enter username");
 		}
-		else if(password == ""){
+		else if(password.trim() == ""){
+			that.setState({password:''})
 			toastr.info("Please enter password");
 		}else{
 			that.props.actions.Authenticate(username,password)
@@ -99,7 +101,7 @@ class Login extends React.PureComponent {
 									<Input type="password" placeholder="Enter Password" onChange={ (e) => this.setState({password: e.target.value}) } value={password} onKeyPress={(e) => this.submitInput(e)} />
 								</FormGroup>
 								<FormGroup>
-									<Button color="primary" className="es-main-btn" block onClick={this.login} disabled={loggingIn || username == '' && password == '' }>
+									<Button color="primary" className="es-main-btn" block onClick={this.login} disabled={loggingIn || username.trim() == '' && password.trim() == '' }>
 										{
 											loggingIn ? <Spinner color="light" size="sm" /> : "Login"
 										}
