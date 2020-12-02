@@ -951,15 +951,17 @@ export const PermissionsListAssignment = () => {
                 let groupedData = _groupByProp(data);
                 let sortedData = [];
 
-                groupedData.map((v) => {
+                groupedData.map((v,i) => {
                     sortedData.push({
+                        index: i,
                         system_type: v.system_type,
                         permissions: _sortByProp(v.permissions, ['order'], ['ASC'])
                     })
                 })
 
                 output.status = true;
-                output.data = _groupByProp(data);
+                // output.data = _groupByProp(data);
+                output.data = sortedData;
 
                 return Promise.resolve(output);
             }else{
@@ -975,11 +977,33 @@ export const PermissionsListAssignment = () => {
         })
     }
 }
+export const AddPermissionAssignment = (role_id,permissions) => {
+    return (dispatch,getState) => {
+        let Service = feathers.service("permission");
+        let output = {};
 
+        return Service.create({
+            user_type_id: role_id,
+            permissions: permissions,
+        })
+        .then((result) => {
+            output.status = true;
+            output.message = 'Permissions successfully added';
+            return Promise.resolve(output);
+        })
+        .catch(() => {
+            output.status = false;
+            output.message = 'Failed to add permissions';
+            return Promise.resolve(output);
+        })
+    }
+}
 export const UpdatePermissionAssignment = (role_id, permissions) => {
     return (dispatch,getState) => {
         let Service = feathers.service("permission");
         let output = {};
+
+        // return Promise.resolve({status: true, message: 'Hello World'})
 
         return Service.find({query: {user_type_id: role_id}})
         .then((result) => {

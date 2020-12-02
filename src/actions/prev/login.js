@@ -131,12 +131,12 @@ export function GetUserPermissions(userid,usertype){
 
 				pList.map((v,i) => {
             def.push({
-                _id: v._id,
-                system_type: v.system_type,
-                group: v.group,
-                permission_name: v.permission_name,
-                page: v.page,
-                order: v.order
+              _id: v._id,
+              system_type: v.system_type,
+              group: v.group,
+              permission_name: v.permission_name,
+              page: v.page,
+              order: v.order
             })
         })
 

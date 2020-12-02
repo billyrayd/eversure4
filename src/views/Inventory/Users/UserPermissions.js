@@ -41,10 +41,12 @@ class UsersPermissions extends React.PureComponent {
 			value: '',
 			designationList: [],
 			currentPermissions: [],
+			initialPermissions: [],
 			permissionNames: [],
 			activeRole: [],
 			activeRoleIndex: 0,
 			editing: false,
+			btnDisabled: false
 		}
 	}
 
@@ -96,14 +98,12 @@ class UsersPermissions extends React.PureComponent {
 	getPermissionsList = () => {
 		const that = this;
 
-		that.props.actions.PermissionsListAssignment();
-
 		that.props.actions.GetUserDesignationList()
 		.then((res) => {
 			if(res.status){
 				let userPermissions =  res.data[0].length > 0 ? res.data[0].permission_info[0].permissions : [];
-				that.setState({designationList: res.data, currentPermissions: userPermissions,activeRoleIndex: 0});
-				that.getPermissions(res.data[0]._id,0,res.data[0]);
+				that.setState({designationList: res.data, currentPermissions: userPermissions,activeRole: res.data[0],activeRoleIndex: 0});
+				that.getPermissions(res.data[0]._id,0);
 			}
 		})
 	}
@@ -114,15 +114,42 @@ class UsersPermissions extends React.PureComponent {
 		.then((res) => {
 			if(res.status){
 				let userPermissions =  res.data[0].permission_info.length > 0 ? res.data[0].permission_info[0].permissions : [];
-				that.setState({currentPermissions: userPermissions,permissionForm: userPermissions,activeRoleIndex: index});
-				console.log(userPermissions)
+				that.setState({currentPermissions: userPermissions,initialPermissions: userPermissions,permissionForm: userPermissions,activeRole: res.data[0],activeRoleIndex: index});
 			}
 		})
 	}
+	cancelEditing = () => {
+		const that = this;
+		let { initialPermissions } = this.state;
+
+		that.setState({editing: false,permissionForm: initialPermissions})
+	}
 	enableEditing = (data) => {
 		const that = this;
+		let { activeRole,activeRoleIndex } = this.state;
 		if(!data){
 			that.setState({editing: true});
+		}else{
+			that.setState({btnDisabled: true});
+			that.props.actions.PermissionsListAssignment()
+			.then((res) => {
+				if(res.status){
+					let permissions = res.data;
+					that.props.actions.AddPermissionAssignment(activeRole._id,permissions)
+					.then((result) => {
+						that.setState({btnDisabled: false});
+						that.getPermissions(activeRole,activeRoleIndex);
+						if(result.status){
+							toastr.success(result.message);
+						}else{
+							toastr.error(result.message);
+						}
+					})
+				}else{
+					that.setState({btnDisabled: false});
+					toastr.error("Failed to add permissions");
+				}
+			})
 		}
 	}
 	updatePermission = (systemtype,data,access) => {
@@ -132,9 +159,6 @@ class UsersPermissions extends React.PureComponent {
 		let notSelected = permissionForm.filter((v) => v.system_type !== systemtype);
 		let permissions = selectedType[0].permissions;
 		let updatedPermissions = [];
-
-
-		console.log(access)
 
 		permissions.map((v,i) => {
 			if(v.id == data.id){
@@ -162,20 +186,15 @@ class UsersPermissions extends React.PureComponent {
 		notSelected.push(newPermissions);
 		_sortByProp(notSelected, ['index'], ['ASC','DESC']);
 		that.setState({permissionForm: notSelected});
-
-		console.log(notSelected)
 	}
 	savePermissions = () => {
 		const that = this;
-		let { permissionForm,activeRole } = this.state;
-
-		// console.log(activeRole._id)
-		// console.log(permissionForm)
+		let { permissionForm,activeRole,activeRoleIndex, } = this.state;
 
 		that.props.actions.UpdatePermissionAssignment(activeRole._id, permissionForm)
 		.then((res) => {
 			toastr.remove();
-			that.getPermissionsList();
+			that.getPermissions(activeRole,activeRoleIndex);
 			that.setState({editing: false});
 			if(res.status){
 				toastr.success(res.message);
@@ -186,7 +205,7 @@ class UsersPermissions extends React.PureComponent {
 	}
 
 	render() {
-		let { value,designationList,currentPermissions,permissionNames,activeRoleIndex,editing,permissionForm, } = this.state;
+		let { value,designationList,currentPermissions,permissionNames,activeRoleIndex,editing,permissionForm,btnDisabled, } = this.state;
 		let { loggingOut,userPermission, } = this.props;
 		const permission = userPermission.length > 0 ? (userPermission[0].permissions[26].level > 0) : false;;
 		return (
@@ -222,19 +241,19 @@ class UsersPermissions extends React.PureComponent {
 										<Col md="8">
 											<Col md="12" className="background-white" style={{padding: 20, marginBottom: 20}}> 
 												<Col md="12" style={{marginBottom: 50}}>
-													<Col md="5" className="float-right">
+													<Col md="6" className="float-right">
 														{
 															editing ? 
 														<div>
-															<Button style={{width: 100, marginRight:20}} color="secondary" onClick={() => this.setState({editing: false})}>
+															<Button style={{width: 90, marginRight:20}} color="secondary" onClick={() => this.cancelEditing()}>
 															Cancel
 														</Button>
-														<Button style={{width: 100}} className="es-main-btn" onClick={() => this.savePermissions()}>
+														<Button style={{width: 90}} className="es-main-btn" onClick={() => this.savePermissions()}>
 															Save
 														</Button>
 														</div> : 
-														<Button className="es-main-btn" block onClick={() => this.enableEditing(currentPermissions.length == 0)}>
-															{currentPermissions.length == 0 ? "Add Default Permissions" : "Edit Permissions"}
+														<Button className="es-main-btn" block onClick={() => this.enableEditing(currentPermissions.length == 0)} disabled={btnDisabled} >
+															{currentPermissions.length == 0 ? "Add Permissions" : "Edit Permissions"}
 														</Button>
 														}
 													</Col>
@@ -302,19 +321,19 @@ class UsersPermissions extends React.PureComponent {
 												</table>
 												<Row>
 													<Col md="12" style={{display: currentPermissions.length == 0 ? "none" : ""}}>
-														<Col md="5" className="float-right">
+														<Col md="6" className="float-right">
 															{
 																editing ? 
 															<div>
-																<Button style={{width: 100, marginRight:20}} color="secondary" onClick={() => this.setState({editing: false})}>
+																<Button style={{width: 90, marginRight:20}} color="secondary" onClick={() => this.cancelEditing()}>
 																Cancel
 															</Button>
-															<Button style={{width: 100}} className="es-main-btn" onClick={() => this.savePermissions()}>
+															<Button style={{width: 90}} className="es-main-btn" onClick={() => this.savePermissions()}>
 																Save
 															</Button>
 															</div> : 
-															<Button className="es-main-btn" block onClick={() => this.enableEditing(currentPermissions.length == 0)}>
-																{currentPermissions.length == 0 ? "Add Default Permissions" : "Edit Permissions"}
+															<Button className="es-main-btn" block onClick={() => this.enableEditing(currentPermissions.length == 0)} disabled={btnDisabled}>
+																{currentPermissions.length == 0 ? "Add Permissions" : "Edit Permissions"}
 															</Button>
 															}
 														</Col>

@@ -111,9 +111,6 @@ class AddUser extends React.PureComponent {
     e.preventDefault();
     const that = this;
 
-    this.props.actions.DeleteAllData();
-    return;
-
     let {
       fullname,
       username,
@@ -179,6 +176,7 @@ class AddUser extends React.PureComponent {
           .then((response) => {
              if(response.status){
                toastr.success(response.message);
+               that.modalClosed();
              }else{
                toastr.error(response.message);
              }
