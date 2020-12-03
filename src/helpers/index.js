@@ -131,3 +131,14 @@ export const _sortByProp = (arr, columns, order_by) => {
 
     // _sortByProp(ArrayOfObjects, ['propertyValue'], ['ASC','DESC'])
 }
+export const _isEmail = (email) => {
+    const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
+    return email ? validEmailRegex.test(email) : false;
+}
+export const _passwordIsStrong = (password) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+    const m = password.match(regex);
+    const matched = !!m;
+
+    return password ? matched : false;
+}

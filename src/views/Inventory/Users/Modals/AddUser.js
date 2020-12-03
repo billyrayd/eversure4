@@ -6,9 +6,13 @@ import * as AuthActions from 'actions/auth';
 import * as UserActions from 'actions/prev/users';
 import * as CategoryActions from 'actions/prev/category';
 
-import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Input } from 'reactstrap';
+import { Row,Col,Button,Modal,ModalHeader,ModalBody,ModalFooter,FormGroup,Input,UncontrolledPopover,PopoverHeader,PopoverBody, } from 'reactstrap';
 import Select from 'react-select';
 import toastr from 'toastr';
+
+import { _isEmail,_passwordIsStrong, } from 'helpers/';
+const passwordValidationMessage = "Passwords must at least have: <br />- a minimum of 6 characters <br />- 1 uppercased letter <br />- 1 lowercased letter <br />- 1 number <br />";
+const tempPassword = "Pass123";
 
 class AddUser extends React.PureComponent {
 
@@ -121,71 +125,110 @@ class AddUser extends React.PureComponent {
       password,
       confirm_pass,
     } = this.state;
+    let { callBack } = this.props;
 
     if(fullname.trim() === ''){
       that.setState({fullname: ''});
       toastr.remove();
       toastr.info("Please enter full name");
+      return;
     }
-    else if(username.trim() === ''){
+    if(username.trim() === ''){
       that.setState({username: ''});
       toastr.remove();
       toastr.info("Please enter username");
+      return;
     }
-    else if(email.trim() === ''){
+    if(email.trim() === ''){
       that.setState({email: ''});
       toastr.remove();
       toastr.info("Please enter email");
+      return;
+    }else{
+      if(!_isEmail(email)){
+        toastr.remove();
+        toastr.info("Please use a valid email");
+        return;
+      }
     }
-    else if(selectedBranch === ''){
+    if(selectedBranch === ''){
       that.setState({selectedBranch: ''});
       toastr.remove();
       toastr.info("Please select branch");
+      return;
     }
-    else if(selectedDesignation === ''){
+    if(selectedDesignation === ''){
       that.setState({selectedDesignation: ''});
       toastr.remove();
       toastr.info("Please select role");
+      return;
     }
-    else if(address.trim() === ''){
-      that.setState({address: ''});
-      toastr.remove();
-      toastr.info("Please enter address");
-    }
-    else if(password.trim() === ''){
+    // if(address.trim() === ''){
+    //   that.setState({address: ''});
+    //   toastr.remove();
+    //   toastr.info("Please enter address");
+    //   return;
+    // }
+    if(password.trim() === ''){
       that.setState({password: ''});
       toastr.remove();
       toastr.info("Please enter password");
+      return;
     }else{
-      let formData = {
-        fullname: fullname,
-        username: username,
-        email: email,
-        branch: selectedBranch.value,
-        type: selectedDesignation.value,
-        address: address,
-        password: password,
-      }
-      // console.log('submit')
-      // console.log(formData)
-      that.props.actions.UsernameOrEmailExists(formData.username,formData.email)
-      .then((res) => {
+      if(!_passwordIsStrong(password)){
         toastr.remove();
-        if(res.status){
-          that.props.actions.AddSystemUser(formData)
-          .then((response) => {
-             if(response.status){
-               toastr.success(response.message);
-               that.modalClosed();
-             }else{
-               toastr.error(response.message);
-             }
-          })
+        toastr.error(passwordValidationMessage);
+        return;
+      }
+      if(password === tempPassword){
+        toastr.remove();
+        toastr.info("Please use another password");
+        return;
+      }
+      if(confirm_pass.trim() === ''){
+        that.setState({confirm_pass: ''});
+        toastr.remove();
+        toastr.info("Please confirm password");
+        return;
+      }else{
+        if(password !== confirm_pass){
+          toastr.remove();
+          toastr.error("Passwords do not match");
+          that.setState({confirm_pass: ''});
+          return;
         }else{
-          toastr.error(res.message)
+
         }
-      })
+      }
     }
+
+    let formData = {
+      fullname: fullname,
+      username: username,
+      email: email,
+      branch: selectedBranch.value,
+      type: selectedDesignation.value,
+      address: address,
+      password: password,
+    }
+    that.props.actions.UsernameOrEmailExists(formData.username,formData.email)
+    .then((res) => {
+      toastr.remove();
+      if(res.status){
+        that.props.actions.AddSystemUser(formData)
+        .then((response) => {
+           if(response.status){
+             toastr.success(response.message);
+             that.modalClosed();
+              callBack();
+           }else{
+             toastr.error(response.message);
+           }
+        })
+      }else{
+        toastr.error(res.message)
+      }
+    })
   }
   modalOpened = () => {
     let { designationList } = this.state;
@@ -206,7 +249,7 @@ class AddUser extends React.PureComponent {
 		let { modal,className,callBack,closeModal,branchSelect,designationSelect } = this.props;
     let { selectedDesignation,selectedBranch,fullname,username,email,address,password,confirm_pass,designationList } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} centered={true} size="lg" onOpened={this.modalOpened} toggle={this.toggleCallback} >
+			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} centered={true} size="lg" onOpened={this.modalOpened} toggle={this.toggleCallback} >
         <form onSubmit={this.save}>
         <ModalHeader>Add System User</ModalHeader>
         <ModalBody>
@@ -254,7 +297,19 @@ class AddUser extends React.PureComponent {
         	<Row>
           	<Col md="6">
           		<label>Password</label> <br />
-          		<Input type="password" placeholder="Enter password" onChange={(e) => this.handleChangeInputs(e,'password')} value={password}/>
+          		<Input id="PopoverFocus" type="password" placeholder="Enter password" onChange={(e) => this.handleChangeInputs(e,'password')} value={password}/>
+              <UncontrolledPopover trigger="focus" placement="top" target="PopoverFocus">
+                <PopoverHeader></PopoverHeader>
+                <PopoverBody>
+                  Passwords must at least have: <br />
+                  - 1 uppercased letter <br />
+                  - 1 lowercased letter <br />
+                  - 1 number <br />
+                  - a minimum of 6 characters <br />
+                  <br />
+                  e.g. <i>{tempPassword}</i>
+                </PopoverBody>
+              </UncontrolledPopover>
           	</Col>
           	<Col md="6">
           		<label>Confirm Password</label> <br />
