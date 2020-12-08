@@ -8,6 +8,7 @@ import LandingPage from "views/Inventory/LandingPage";
 import Dashboard from "views/Inventory/Dashboard/Dashboard";
 import Notifications from "views/Inventory/Dashboard/Notifications";
 /* inventory */
+import AddBrandNewUnit from "views/Inventory/Inventory/AddBrandNewUnit";
 import BrandNewInStock from "views/Inventory/Inventory/BrandNewInStock";
 import BrandNewSold from "views/Inventory/Inventory/BrandNewSold";
 import BrandNewTransfer from "views/Inventory/Inventory/BrandNewTransfer";
@@ -114,6 +115,11 @@ var authenticated = [
 
   /* == inventory */
 
+  {
+    path: "/add_brand_new_unit/",
+    name: "AddBrandNewUnit",
+    component: AddBrandNewUnit,
+  },
   {
     path: "/brand_new_in_stock/",
     name: "In Stock",

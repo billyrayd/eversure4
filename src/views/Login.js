@@ -23,21 +23,27 @@ import PageFooter from 'components/CustomComponents/PageFooter';
 
 import EversureLogo from 'assets/logo/eversure_logo.png';
 
+
 class Login extends React.PureComponent {
+	_isMounted = false;
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			username: '',
-			password: ''
+			password: '',
+			active: true,
 		}
 	}
 	componentDidMount(){
 		const that = this;
 		that.props.actions.LoggingIn(false);
+		that._isMounted = true;
 	}
 	componentWillUnmount(){
+		const that = this;
 		toastr.remove();
+		that._isMounted = false;
 	}
 	submitInput = (e) => {
 		const that = this;
@@ -48,7 +54,7 @@ class Login extends React.PureComponent {
 	}
 	login = () => {
 		const that = this;
-		let { username,password } = this.state;
+		let { username,password,active } = this.state;
 		
 		toastr.remove();
 
@@ -62,16 +68,18 @@ class Login extends React.PureComponent {
 		}else{
 			that.props.actions.Authenticate(username,password)
 			.then((res) => {
-				if(res.status){
-					toastr.success(res.message);
-					setTimeout(() => {
-						let now = new Date();
-    				that.props.actions.SetActiveTime(now);
-						that.props.actions.LoginUser(true);
-					}, 1000 * 1.5)
-				}else{
-					toastr.error(res.message);
-					that.setState({password: ''});
+				if(that._isMounted){
+					if(res.status){
+						toastr.success(res.message);
+						setTimeout(() => {
+							let now = new Date();
+	    				that.props.actions.SetActiveTime(now);
+							that.props.actions.LoginUser(true);
+						}, 1000 * 1.5)
+					}else{
+						toastr.error(res.message);
+						that.setState({password: ''});
+					}
 				}
 			})
 		}

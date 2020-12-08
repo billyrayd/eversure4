@@ -9,6 +9,7 @@ import * as AuthActions from 'actions/auth';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
+import Select from 'react-select';
 import toastr from 'toastr';
 
 //reactstrap
@@ -25,6 +26,9 @@ import {
 	DropdownToggle,
 	DropdownMenu,
 	DropdownItem,
+	Breadcrumb,
+	BreadcrumbItem,
+	FormGroup,
 } from 'reactstrap';
 
 import { inventory_sublinks } from 'helpers/sublinks/Inventory/';
@@ -43,7 +47,7 @@ $.DataTable = require('datatables.net');
 const mainTableClass = ".bn-in-stock-table";
 const mainTableClassName = "bn-in-stock-table";
 
-class BrandNewInStock extends React.PureComponent {
+class AddBrandNewUnit extends React.PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -54,6 +58,7 @@ class BrandNewInStock extends React.PureComponent {
 			confirmDeleteShown: false,
 			noEvent: false,
 			isOpen: false,
+			selectedBrand: '',
 		}
 	}
 
@@ -193,17 +198,16 @@ class BrandNewInStock extends React.PureComponent {
 
 		this.setState({isOpen: !isOpen})
 	}
-	goTo = (path) => {
-		this.props.history.push(path);
-	}
+  handleChangeBrand = (option) => {
+    this.setState({selectedBrand: option})
+  }
 
 	render() {
-		let { value, spinnerIsVisible, confirmDeleteShown, noEvent, isOpen } = this.state;
-		let { loggingOut } = this.props;
+		let { value,spinnerIsVisible,confirmDeleteShown,noEvent,isOpen,selectedBrand, } = this.state;
+		let { loggingOut,brandsSelect, } = this.props;
 		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
-
+		let brandOptions = brandsSelect.filter((v) => v.value != "all");
 		const currentPage = ["Brand New - In Stock","/brand_new_in_stock/"];
-
 		const permission = true;
 		return (
 			<div>
@@ -216,7 +220,7 @@ class BrandNewInStock extends React.PureComponent {
 							permission ?
 							<div>
 								<InventorySubSidebar subpage={currentPage[1]} history={this.props.history} />
-								<Container className="with-subsidebar" fluid>
+								<Container className="with-subsidebar" fluid style={{paddingBottom: 20}}>
 									<Row>
 										<Col xs="6">
 											<h1 className="page-title inner">Inventory</h1>
@@ -253,36 +257,133 @@ class BrandNewInStock extends React.PureComponent {
 											<div className="space20" />
 										</Col>
 									</Row>
+									<Row>
+										<Breadcrumb>
+							        <BreadcrumbItem><a href="#">Inventory</a></BreadcrumbItem>
+							        <BreadcrumbItem active>Add Brand New Units</BreadcrumbItem>
+							      </Breadcrumb>
+									</Row>
 									<Row className="page-header">
 										<Col>
-											<h4>Units in Stock <Button className="es-main-btn" color="primary" size="sm" onClick={() => this.goTo('/add_brand_new_unit/')}><FontAwesomeIcon className="font10" icon="plus" />  Add</Button> </h4>
-										</Col>
-									</Row>
-									<Row>
-										<Col>
-											<Col className="advanced-filter">
-												<h5>Advanced Filter</h5>
-												<Row>
-													<Col md="4"><Input placeholder="Select Date" onChange={(e) => this.handleChange(e)} value={value} /></Col>
-													<Col md="4"><Input placeholder="Enter Brand" /></Col>
-													<Col md="4"><Input placeholder="Enter Model" /></Col>
-												</Row>
-												<div className="space" />
-												<Row>
-													<Col md="4"><Input placeholder="Enter Engine Number" /></Col>
-													<Col md="4"><Input placeholder="Select Branch" /></Col>
-													<Col md="4"><Button className="es-main-btn" color="primary" block onClick={this.advancedFilter} disabled={spinnerIsVisible}>Apply Filter</Button> </Col>
-												</Row>
-											</Col>
+											<h4>Add Brand New Units </h4>
 										</Col>
 									</Row>
 									<Row>
 										<br />
 									</Row>
 									<Row>
-										<Col className="allowScrollX">
-											<GrowSpinner visible={spinnerIsVisible} />
-											<Table className={table_class_name} />
+										<Col md="6">
+											<FormGroup>
+												<label>Brand</label><br />
+					          		<Select
+					                options={brandOptions}
+					                placeholder="Select Brand"
+					                value={selectedBrand}
+					                onChange={this.handleChangeBrand}
+					              />
+											</FormGroup>
+											<FormGroup>
+												<label>Model</label><br />
+					          		<Select
+					                options={brandOptions}
+					                placeholder="Select Model"
+					                value={selectedBrand}
+					                onChange={this.handleChangeBrand}
+					              />
+											</FormGroup>
+											<FormGroup>
+												<label>Engine Number</label><br />
+					          		<Input />
+											</FormGroup>
+											<FormGroup>
+												<label>Chassis Number</label><br />
+					          		<Input />
+											</FormGroup>
+											<FormGroup>
+												<label>Color</label><br />
+					          		<Input />
+											</FormGroup>
+											<FormGroup>
+												<label>Date Received</label><br />
+					          		<Input />
+											</FormGroup>
+										</Col>
+										<Col md="6">
+											<FormGroup>
+												<label>Branch</label><br />
+					          		<Select
+					                options={brandOptions}
+					                placeholder="Select Branch"
+					                value={selectedBrand}
+					                onChange={this.handleChangeBrand}
+					              />
+											</FormGroup>
+											<FormGroup>
+												<label>Delivery Receipt Number</label><br />
+					          		<Input />
+											</FormGroup>
+											<FormGroup>
+												<label>Delivery Receipt Date</label><br />
+					          		<Input />
+											</FormGroup>
+											<FormGroup>
+												<label>Invoice Number</label><br />
+					          		<Input />
+											</FormGroup>
+											<FormGroup>
+												<label>Invoice Date</label><br />
+					          		<Input />
+											</FormGroup>
+											<FormGroup>
+												<label>Price</label><br />
+					          		<Input />
+											</FormGroup>
+										</Col>
+									</Row>
+									<Row>
+										<Col md="3">
+											<FormGroup>
+					          		<Button size="sm" color="primary"><FontAwesomeIcon icon="check" /></Button>{' '}
+												<label>Warranty Booklet</label><br />
+											</FormGroup>
+										</Col>
+										<Col md="3">
+											<FormGroup>
+					          		<Button size="sm" color="primary"><FontAwesomeIcon icon="check" /></Button>{' '}
+												<label>Clearances</label><br />
+											</FormGroup>
+										</Col>
+										<Col md="3">
+											<FormGroup>
+					          		<Button size="sm" color="primary"><FontAwesomeIcon icon="check" /></Button>{' '}
+												<label>TBA's</label><br />
+											</FormGroup>
+										</Col>
+									</Row>
+									<Row>
+										<Col md="12">
+											<FormGroup>
+					          		<Button size="sm" color="primary"><FontAwesomeIcon icon="check" /></Button>{' '}
+												<label>Save template for next entry (Except for Chassis and Engine Numbers)</label><br />
+											</FormGroup>
+										</Col>
+									</Row>
+									<Row>
+										<Col md="2">
+											<FormGroup>
+					          		<Button color="secondary" block>Cancel</Button>
+											</FormGroup>
+										</Col>
+										<Col />
+										<Col md="4">
+											<FormGroup>
+					          		<Button color="primary" block>Save and Add New Entry</Button>
+											</FormGroup>
+										</Col>
+										<Col md="4">
+											<FormGroup>
+					          		<Button color="info" block>Save and Close</Button>
+											</FormGroup>
 										</Col>
 									</Row>
 								</Container>
@@ -300,10 +401,11 @@ const mapStateToProps = state => ({
   loggingIn: state.user_auth.loggingIn,
   userData: state.login.userData,
   loggingOut: state.user_auth.loggingOut,
+  brandsSelect: state.category.brandsSelect,
 });
 
 function mapDispatchToProps(dispatch) {
    return { actions: bindActionCreators(Object.assign({}, DashboardActions, AuthActions), dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrandNewInStock);
+export default connect(mapStateToProps, mapDispatchToProps)(AddBrandNewUnit);
