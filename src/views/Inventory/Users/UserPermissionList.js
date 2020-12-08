@@ -207,7 +207,7 @@ class UserPermissionList extends React.PureComponent {
 		}
 	}
 	modalCallback = () => {
-		// this.loadPermissionsList();
+		this.loadPermissionsList();
 	}
 	opened = () => {
 		$(".modal #delete").focus();

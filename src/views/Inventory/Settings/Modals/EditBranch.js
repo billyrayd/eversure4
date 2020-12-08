@@ -29,7 +29,7 @@ export default class EditBranch extends React.PureComponent {
       if(branch == data[1]){
         toastr.info("No changes made");
       }else{
-        this.props.actions.UpdateBranch(data[0],branch)
+        this.props.actions.UpdateBranchInfo(data[0],branch)
         .then((res) => {
           if(res.status){
               toastr.success(res.message);
@@ -73,12 +73,16 @@ export default class EditBranch extends React.PureComponent {
 
     toggle();
   }
+  onOpened = () => {
+    let { data } = this.props;
+    this.setState({branch: data[1]});
+  }
 
 	render() {
 		let { modal,className,callBack,closeModal,data } = this.props;
     let { branch } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} keyboard={true} centered={true}>
+			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} keyboard={true} centered={true} onOpened={this.onOpened}>
         <ModalHeader>Edit Branch</ModalHeader>
         <ModalBody>
         	<Row>

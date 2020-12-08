@@ -22,7 +22,7 @@ export default class EditBrand extends React.PureComponent {
       toastr.remove();
       toastr.info("Please enter brand name");
     }else{
-      this.props.actions.UpdateBrand(data[0],brandValue)
+      this.props.actions.UpdateBrandInfo(data[0],brandValue)
       .then((res) => {
         if(res.status){
             toastr.success(res.message);
@@ -65,12 +65,16 @@ export default class EditBrand extends React.PureComponent {
 
     toggle();
   }
+  onOpened = () => {
+    let { data } = this.props;
+    this.setState({brandValue: data[1]});
+  }
 
 	render() {
 		let { modal,className,callBack,closeModal, data } = this.props;
     let { brandValue } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} centered={true}>
+			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} centered={true} onOpened={this.onOpened}>
         <ModalHeader>Edit Brand</ModalHeader>
         <ModalBody>
         	<Row>

@@ -895,6 +895,7 @@ export const UpdatePermissionList = (id,groupName,permissionName,pageName,system
                 system_type: systemType,
                 group: groupName,
                 permission_name: permissionName,
+                order: order
             }
         })
         .then((result) => {
@@ -911,14 +912,21 @@ export const UpdatePermissionList = (id,groupName,permissionName,pageName,system
                     output.message = 'Permission successfully updated';
                     return Promise.resolve(output);
                 })
-                .catch(() => {
+                .catch((err) => {
+                    console.log(err)
                     output.status = false;
                     output.message = 'Failed to update permission';
+
+                    if(err.name == "Conflict"){
+                        // output.name = err.name;
+                        output.message = "Order Number already exists";
+                    }
                     return Promise.resolve(output);
                 })
             }
         })
-        .catch(() => {
+        .catch((err) => {
+            console.log(err)
             output.status = false;
             output.message = 'Failed to update permission';
             return Promise.resolve(output);

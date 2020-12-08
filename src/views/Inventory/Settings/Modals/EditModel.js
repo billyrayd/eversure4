@@ -105,6 +105,10 @@ class EditModel extends React.PureComponent {
 
     toggle();
   }
+  onOpened = () => {
+    let { data } = this.props;
+    this.setState({model: data[1]});
+  }
 
 	render() {
 		let { modal,className,callBack,closeModal,data,brandsSelect } = this.props;
@@ -112,7 +116,7 @@ class EditModel extends React.PureComponent {
 
     let brandOptions = brandsSelect.filter((v) => v.value != "all");
 		return (
-			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} keyboard={true} centered={true}>
+			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} keyboard={true} centered={true} onOpened={this.onOpened}>
         <ModalHeader>Edit Model</ModalHeader>
         <ModalBody>
         	<Row>

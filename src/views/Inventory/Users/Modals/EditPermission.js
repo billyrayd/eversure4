@@ -42,8 +42,8 @@ class EditPermission extends React.PureComponent {
               that.modalClosed();
               callBack();
           }else{
-            that.setState({group: '',permission: '',page: '',systemType: '',order: ''});
-            toastr.error(res.message);
+            // that.setState({group: '',permission: '',page: '',systemType: '',order: ''});
+            toastr.error(res.message, (res.name ? res.name : ''));
           }
         })
       }
@@ -119,12 +119,16 @@ class EditPermission extends React.PureComponent {
   toggleCallback = () => {
     this.modalClosed();
   }
+  onOpened = () => {
+    let { data } = this.props;
+    this.setState({group: data[1], permission: data[2],page: data[3],systemType: data[4],order: data[5]});
+  }
 
 	render() {
 		let { modal,className,callBack,closeModal,data } = this.props;
     let { group,permission,page,systemType,order, } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} keyboard={true} centered={true}>
+			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} keyboard={true} centered={true} onOpened={this.onOpened}>
         <ModalHeader>Edit Permission</ModalHeader>
         <ModalBody>
         	<Row>

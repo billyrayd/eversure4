@@ -69,12 +69,16 @@ export default class EditArea extends React.PureComponent {
 
     toggle();
   }
+  onOpened = () => {
+    let { data } = this.props;
+    this.setState({area: data[1]});
+  }
 
 	render() {
 		let { modal,className,callBack,closeModal,data } = this.props;
     let { area } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} keyboard={true} centered={true}>
+			<Modal isOpen={modal} className={className} toggle={this.toggleCallback} backdrop={true} keyboard={true} centered={true} onOpened={this.onOpened} >
         <ModalHeader>Edit Customer Area</ModalHeader>
         <ModalBody>
         	<Row>

@@ -297,10 +297,13 @@ export function SetBranches(data) {
     }
 }
 
-export const UpdateBranch = (id,branchName) => {
+export const UpdateBranchInfo = (id,branchName) => {
     return (dispatch, getState) => {
         var branchService = feathers.service('branches');
         let output = {};
+
+        console.log(id)
+        console.log(typeof id)
 
         return branchService.find({
             query: {
@@ -466,7 +469,7 @@ export function SetBrands(data) {
     }
 }
 
-export const UpdateBrand = (id,brandName) => {
+export const UpdateBrandInfo = (id,brandName) => {
     return (dispatch, getState) => {
         var brandsService = feathers.service('brands');
         let output = {};
@@ -489,16 +492,18 @@ export const UpdateBrand = (id,brandName) => {
                     output.message = `Brand successfully updated`;
                     return Promise.resolve(output);
                 })
-                .catch(() => {
+                .catch((err) => {
+                    console.log(err)
                     output.status = false;
-                    output.message = `Error adding brand. Please try again`;
+                    output.message = `Error updating brand. Please try again`;
                     return Promise.resolve(output);
                 })
             }
         })
         .catch((err) => {
+            console.log(err)
             output.status = false;
-            output.message = `Error adding brand. Please try again`;
+            output.message = `Error updating brand. Please try again`;
             return Promise.resolve(output);
         })
     }
