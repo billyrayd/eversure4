@@ -5,7 +5,11 @@ export function numberWithCommas(x){
 	parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	return parts.join(".");
 }
-
+export function _numberWithCommas(x){
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
 //encode string to number with prefix "0x"
 export function encodeToString(string) {
     var number = "0x";

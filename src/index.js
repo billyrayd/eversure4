@@ -41,6 +41,7 @@ import {
   faTimes,
   faCheck,
   faBan,
+  faMinus,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
@@ -85,6 +86,7 @@ library.add(
   faTimes,
   faCheck,
   faBan,
+  faMinus,
 )
 
 ReactDOM.render(

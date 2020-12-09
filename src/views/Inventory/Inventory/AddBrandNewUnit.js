@@ -31,6 +31,7 @@ import {
 	FormGroup,
 } from 'reactstrap';
 
+import { _currency,_numberWithCommas } from 'helpers/';
 import { inventory_sublinks } from 'helpers/sublinks/Inventory/';
 
 import NavBar from 'components/Navbars/NavBar';
@@ -42,10 +43,6 @@ import NoAccess from 'components/CustomComponents/NoAccess';
 import LoggingOut from 'components/CustomComponents/LoggingOut';
 
 var $ = require( 'jquery' );
-$.DataTable = require('datatables.net');
-
-const mainTableClass = ".bn-in-stock-table";
-const mainTableClassName = "bn-in-stock-table";
 
 class AddBrandNewUnit extends React.PureComponent {
 	constructor(props) {
@@ -58,72 +55,28 @@ class AddBrandNewUnit extends React.PureComponent {
 			confirmDeleteShown: false,
 			noEvent: false,
 			isOpen: false,
+
 			selectedBrand: '',
+			selectedModel: '',
+			engine_number: '',
+			chassis_number: '',
+			color: '',
+			date_received: '',
+			selectedBranch: '',
+			dr_number: '',
+			dr_date: '',
+			invoice_number: '',
+			invoice_date: '',
+			price: '',
+			warranty_booklet: false,
+			clearances: false,
+			tba: false,
+			saveTemplate: false,
 		}
 	}
 
 	componentDidMount(){
 		const that = this;
-		let { value, spinnerIsVisible, dt_data } = this.state;
-		var mainTable = $(mainTableClass).DataTable({
-			"data": dt_data,
-			"columnDefs": [
-				{
-					"targets": 0,
-					"visible": false,
-				},
-				{
-					"targets": 6,
-					"width": 150
-				}
-			],
-      "columns": [
-          {title: "DATA OBJECT"},
-          {title: "MODEL"},
-          {title: "CHASSIS NO."},
-          {title: "ENGINE NO."},
-          {title: "BRANCH"},
-          {title: "DATE"},
-          {title: "ACTION", createdCell: (td, cellData, rowData, row, col) => {
-						ReactDOM.render(<div>
-										<Button color="primary" size="sm" className="edit">
-											Edit
-										</Button>
-										<Button color="warning" size="sm" className="view">
-											View
-										</Button>
-										<Button color="danger" size="sm" className="delete">
-											Delete
-										</Button>
-									</div>, td)
-          }},
-      ],
-			"sDom": '<"bottom"<t>ip><"clear">',
-			initComplete: () => {
-
-			},
-			"drawCallBack": (a,b,c) => {
-				console.log(a)
-				console.log(b)
-				console.log(c)
-			}
-		})
-
-		$(`${mainTableClass}`).on("click", ".edit", function(){
-			var data = mainTable.row($(this).parents('tr')).data();
-			console.log("edit")
-		})
-
-		$(`${mainTableClass}`).on("click", ".delete", function(){
-			var data = mainTable.row($(this).parents('tr')).data();
-			console.log("delete")
-			that.setState({confirmDeleteShown: true})
-		})
-
-		$(`${mainTableClass}`).on("click", ".view", function(){
-			var data = mainTable.row($(this).parents('tr')).data();
-			console.log("view")
-		})
 	}
 	logOut = () => {
 		const that = this;
@@ -179,12 +132,6 @@ class AddBrandNewUnit extends React.PureComponent {
 			that.reDrawDataTable(dt_data)
 		}, 1000 * 2)
 	}
-	reDrawDataTable = (data) => {
-	  const table = $(mainTableClass).DataTable();
-	  table.clear();
-	  table.rows.add(data);
-	  table.draw();
-	}
 	closeModal = () => {
 		const that = this;
 
@@ -201,9 +148,84 @@ class AddBrandNewUnit extends React.PureComponent {
   handleChangeBrand = (option) => {
     this.setState({selectedBrand: option})
   }
+  handleChangeModel = (option) => {
+    this.setState({selectedModel: option})
+  }
+  handleChangeBranch = (option) => {
+    this.setState({selectedBranch: option})
+  }
+	changeInput = (event,name) => {
+		const that = this;
+	  const input = event.target;
+	  const start = input.selectionStart;
+	  const end = input.selectionEnd;
+		let inputVal = input.value;
+	  let uppercasedValue = inputVal.toUpperCase();
+
+	  switch(name){
+  		case 'engine_number':
+			  that.setState(
+			    {engine_number: uppercasedValue},
+			    () => input.setSelectionRange(start, end)
+			  ); break;
+  		case 'chassis_number':
+			  that.setState(
+			    {chassis_number: uppercasedValue},
+			    () => input.setSelectionRange(start, end)
+			  ); break;
+  		case 'color':
+			  that.setState(
+			    {color: uppercasedValue},
+			    () => input.setSelectionRange(start, end)
+			  ); break;
+  		case 'dr_number':
+			  that.setState(
+			    {dr_number: uppercasedValue},
+			    () => input.setSelectionRange(start, end)
+			  ); break;
+  		case 'invoice_number':
+			  that.setState(
+			    {invoice_number: uppercasedValue},
+			    () => input.setSelectionRange(start, end)
+			  ); break;
+  		case 'price':
+  			if(isNaN(inputVal)){
+  				return;
+  			}else{
+	  				that.setState(
+					    {price: inputVal > 0 ? uppercasedValue : ''},
+					    () => input.setSelectionRange(start, end)
+					  );
+  			} break;
+			default: return false;
+	  }
+	}
+  updateState = (state,value) => {
+  	const that = this;
+  	let { date_received,dr_date,invoice_date,warranty_booklet,clearances,tba,saveTemplate, }  = this.state;
+
+  	switch(state){
+  		case 'date_received':
+  			that.setState({date_received: !date_received}); break;
+  		case 'dr_date':
+  			that.setState({dr_date: !dr_date}); break;
+  		case 'invoice_date':
+  			that.setState({invoice_date: !invoice_date}); break;
+  		case 'warranty_booklet':
+  			that.setState({warranty_booklet: !warranty_booklet}); break;
+  		case 'clearances':
+  			that.setState({clearances: !clearances}); break;
+  		case 'tba':
+  			that.setState({tba: !tba}); break;
+  		case 'saveTemplate':
+  			that.setState({saveTemplate: !saveTemplate}); break;
+  		default: return false;
+  	}
+  }
 
 	render() {
-		let { value,spinnerIsVisible,confirmDeleteShown,noEvent,isOpen,selectedBrand, } = this.state;
+		let { value,spinnerIsVisible,confirmDeleteShown,noEvent,isOpen,selectedBrand,selectedModel,engine_number,chassis_number,color,date_received,
+					selectedBranch,dr_number,dr_date,invoice_number,invoice_date,price,warranty_booklet,clearances,tba,saveTemplate, } = this.state;
 		let { loggingOut,brandsSelect, } = this.props;
 		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
 		let brandOptions = brandsSelect.filter((v) => v.value != "all");
@@ -293,15 +315,15 @@ class AddBrandNewUnit extends React.PureComponent {
 											</FormGroup>
 											<FormGroup>
 												<label>Engine Number</label><br />
-					          		<Input />
+					          		<Input onChange={(e) => this.changeInput(e,'engine_number')} value={engine_number}/>
 											</FormGroup>
 											<FormGroup>
 												<label>Chassis Number</label><br />
-					          		<Input />
+					          		<Input onChange={(e) => this.changeInput(e,'chassis_number')} value={chassis_number}/>
 											</FormGroup>
 											<FormGroup>
 												<label>Color</label><br />
-					          		<Input />
+					          		<Input onChange={(e) => this.changeInput(e,'color')} value={color}/>
 											</FormGroup>
 											<FormGroup>
 												<label>Date Received</label><br />
@@ -320,7 +342,7 @@ class AddBrandNewUnit extends React.PureComponent {
 											</FormGroup>
 											<FormGroup>
 												<label>Delivery Receipt Number</label><br />
-					          		<Input />
+					          		<Input onChange={(e) => this.changeInput(e,'dr_number')} value={dr_number}/>
 											</FormGroup>
 											<FormGroup>
 												<label>Delivery Receipt Date</label><br />
@@ -328,7 +350,7 @@ class AddBrandNewUnit extends React.PureComponent {
 											</FormGroup>
 											<FormGroup>
 												<label>Invoice Number</label><br />
-					          		<Input />
+					          		<Input onChange={(e) => this.changeInput(e,'invoice_number')} value={invoice_number}/>
 											</FormGroup>
 											<FormGroup>
 												<label>Invoice Date</label><br />
@@ -336,38 +358,39 @@ class AddBrandNewUnit extends React.PureComponent {
 											</FormGroup>
 											<FormGroup>
 												<label>Price</label><br />
-					          		<Input />
+					          		<Input onChange={(e) => this.changeInput(e,'price')} value={price} maxLength={15} />
 											</FormGroup>
 										</Col>
 									</Row>
 									<Row>
 										<Col md="3">
 											<FormGroup>
-					          		<Button size="sm" color="primary"><FontAwesomeIcon icon="check" /></Button>{' '}
-												<label>Warranty Booklet</label><br />
+					          		<Button size="sm" color={warranty_booklet ? "primary" : "secondary"} onClick={() => this.updateState('warranty_booklet')}><FontAwesomeIcon icon={warranty_booklet ? "check" : "minus"} /></Button>{' '}
+												<label className="checkbox-label" onClick={() => this.updateState('warranty_booklet')}>Warranty Booklet</label><br />
 											</FormGroup>
 										</Col>
 										<Col md="3">
 											<FormGroup>
-					          		<Button size="sm" color="primary"><FontAwesomeIcon icon="check" /></Button>{' '}
-												<label>Clearances</label><br />
+					          		<Button size="sm" color={clearances ? "primary" : "secondary"} onClick={() => this.updateState('clearances')}><FontAwesomeIcon icon={clearances ? "check" : "minus"} /></Button>{' '}
+												<label className="checkbox-label" onClick={() => this.updateState('clearances')}>Clearances</label><br />
 											</FormGroup>
 										</Col>
 										<Col md="3">
 											<FormGroup>
-					          		<Button size="sm" color="primary"><FontAwesomeIcon icon="check" /></Button>{' '}
-												<label>TBA's</label><br />
+					          		<Button size="sm" color={tba ? "primary" : "secondary"} onClick={() => this.updateState('tba')}><FontAwesomeIcon icon={tba ? "check" : "minus"} /></Button>{' '}
+												<label className="checkbox-label" onClick={() => this.updateState('tba')}>TBA's</label><br />
 											</FormGroup>
 										</Col>
 									</Row>
 									<Row>
 										<Col md="12">
 											<FormGroup>
-					          		<Button size="sm" color="primary"><FontAwesomeIcon icon="check" /></Button>{' '}
-												<label>Save template for next entry (Except for Chassis and Engine Numbers)</label><br />
+					          		<Button size="sm" color={saveTemplate ? "primary" : "secondary"} onClick={() => this.updateState('saveTemplate')}><FontAwesomeIcon icon={saveTemplate ? "check" : "minus"} /></Button>{' '}
+												<label className="checkbox-label" onClick={() => this.updateState('saveTemplate')}>Save template for next entry (Except for Chassis and Engine Numbers)</label><br />
 											</FormGroup>
 										</Col>
 									</Row>
+									<Row style={{padding: 20}} />
 									<Row>
 										<Col md="2">
 											<FormGroup>
