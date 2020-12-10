@@ -249,7 +249,7 @@ class AddUser extends React.PureComponent {
 		let { modal,className,callBack,closeModal,branchSelect,designationSelect } = this.props;
     let { selectedDesignation,selectedBranch,fullname,username,email,address,password,confirm_pass,designationList } = this.state;
 		return (
-			<Modal isOpen={modal} className={className} backdrop={true} keyboard={false} centered={true} size="lg" onOpened={this.modalOpened} toggle={this.toggleCallback} >
+			<Modal isOpen={modal} className={className} backdrop={"static"} keyboard={true} centered={true} size="lg" onOpened={this.modalOpened} toggle={this.toggleCallback} >
         <form onSubmit={this.save}>
         <ModalHeader>Add System User</ModalHeader>
         <ModalBody>

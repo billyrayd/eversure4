@@ -64,7 +64,12 @@ class UsersList extends React.PureComponent {
 					"visible": false,
 				},
 				{
+					"targets": 1,
+					"width": 200,
+				},
+				{
 					"targets": 2,
+					"width": 100,
 					"className": "txt-transform-i"
 				},
 				{

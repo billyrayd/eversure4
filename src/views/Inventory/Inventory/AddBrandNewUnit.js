@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import Select from 'react-select';
 import toastr from 'toastr';
+import InputMask from "react-input-mask";
 
 //reactstrap
 import {
@@ -72,6 +73,8 @@ class AddBrandNewUnit extends React.PureComponent {
 			clearances: false,
 			tba: false,
 			saveTemplate: false,
+
+			modelOptions: [],
 		}
 	}
 
@@ -106,32 +109,6 @@ class AddBrandNewUnit extends React.PureComponent {
 	    () => input.setSelectionRange(start, end)
 	  );
 	}
-	advancedFilter = () => {
-		const dt_data = [
-			[
-				[],'fury', '4234234', '567765756', 'silay', '05/23/2020', '',
-			],
-			[
-				[],'raider 115', '87987905', '234234231', 'talisay', '09/23/2020', '',
-			],
-			[
-				[],'sniper 150', '34534006', '653234436', 'bacolod', '08/23/2020', '',
-			]
-		]
-
-		const that = this;
-		let { value } = this.state;
-
-		this.setState({spinnerIsVisible: true,noEvent: true})
-
-		$(".dataTables_empty").html("<br />")
-
-		setTimeout(() => {
-			that.setState({spinnerIsVisible: false, noEvent: false})
-			$(".dataTables_empty").html("<span>No data available in table</span>")
-			that.reDrawDataTable(dt_data)
-		}, 1000 * 2)
-	}
 	closeModal = () => {
 		const that = this;
 
@@ -146,7 +123,21 @@ class AddBrandNewUnit extends React.PureComponent {
 		this.setState({isOpen: !isOpen})
 	}
   handleChangeBrand = (option) => {
-    this.setState({selectedBrand: option})
+  	const that = this;
+  	let { modelsSelect } = that.props;
+  	let { selectedBrand } = that.state;
+  	let modelOpt = modelsSelect.filter(v => v.brand == option.value);
+
+  	let update = {
+  		selectedBrand: option,
+  		modelOptions: modelOpt
+  	}
+
+  	if(selectedBrand !== option){
+  		update.selectedModel = ''
+  	}
+
+    that.setState(update);
   }
   handleChangeModel = (option) => {
     this.setState({selectedModel: option})
@@ -205,8 +196,6 @@ class AddBrandNewUnit extends React.PureComponent {
   	let { date_received,dr_date,invoice_date,warranty_booklet,clearances,tba,saveTemplate, }  = this.state;
 
   	switch(state){
-  		case 'date_received':
-  			that.setState({date_received: !date_received}); break;
   		case 'dr_date':
   			that.setState({dr_date: !dr_date}); break;
   		case 'invoice_date':
@@ -223,12 +212,31 @@ class AddBrandNewUnit extends React.PureComponent {
   	}
   }
 
+  saveUnit = (saveAndAdd) => {
+  	let { date_received } = this.refs;
+
+  	console.log('date_received')
+  	console.log(Date.parse(date_received.value))
+  	console.log(date_received.value)
+  }
+
 	render() {
 		let { value,spinnerIsVisible,confirmDeleteShown,noEvent,isOpen,selectedBrand,selectedModel,engine_number,chassis_number,color,date_received,
-					selectedBranch,dr_number,dr_date,invoice_number,invoice_date,price,warranty_booklet,clearances,tba,saveTemplate, } = this.state;
-		let { loggingOut,brandsSelect, } = this.props;
+					selectedBranch,dr_number,dr_date,invoice_number,invoice_date,price,warranty_booklet,clearances,tba,saveTemplate,modelOptions, } = this.state;
+		let { loggingOut,brandsSelect,modelsSelect,branchesSelect, } = this.props;
 		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
 		let brandOptions = brandsSelect.filter((v) => v.value != "all");
+
+		const digit1 = /[0-9]/;
+		const digit2 = /^(?:[5-9]|(?:[1-9][0-9])|(?:[1-4][0-9][0-9])|(?:500))$/;
+		const digit3 = /[0-9]/;
+
+		const firstLetter = /(?!.*[DFIOQU])[A-VXY]/i;
+		const letter = /(?!.*[DFIOQU])[A-Z]/i;
+		const digit = /[0-9]/;
+
+		const mask = [digit1+"/"+digit2+"/"+digit3];
+		const mask2 = [firstLetter, digit, letter, " ", digit, letter, digit];
 		const currentPage = ["Brand New - In Stock","/brand_new_in_stock/"];
 		const permission = true;
 		return (
@@ -307,10 +315,10 @@ class AddBrandNewUnit extends React.PureComponent {
 											<FormGroup>
 												<label>Model</label><br />
 					          		<Select
-					                options={brandOptions}
+					                options={modelOptions}
 					                placeholder="Select Model"
-					                value={selectedBrand}
-					                onChange={this.handleChangeBrand}
+					                value={selectedModel}
+					                onChange={this.handleChangeModel}
 					              />
 											</FormGroup>
 											<FormGroup>
@@ -327,17 +335,17 @@ class AddBrandNewUnit extends React.PureComponent {
 											</FormGroup>
 											<FormGroup>
 												<label>Date Received</label><br />
-					          		<Input />
+					          		<InputMask className="form-control" mask="99/99/9999" maskPlaceholder="MM/DD/YYYY" ref="date_received" />
 											</FormGroup>
 										</Col>
 										<Col md="6">
 											<FormGroup>
 												<label>Branch</label><br />
 					          		<Select
-					                options={brandOptions}
+					                options={branchesSelect}
 					                placeholder="Select Branch"
-					                value={selectedBrand}
-					                onChange={this.handleChangeBrand}
+					                value={selectedBranch}
+					                onChange={this.handleChangeBranch}
 					              />
 											</FormGroup>
 											<FormGroup>
@@ -346,7 +354,7 @@ class AddBrandNewUnit extends React.PureComponent {
 											</FormGroup>
 											<FormGroup>
 												<label>Delivery Receipt Date</label><br />
-					          		<Input />
+					          		<InputMask className="form-control" mask="99/99/9999" maskPlaceholder="MM/DD/YYYY" ref="dr_date" />
 											</FormGroup>
 											<FormGroup>
 												<label>Invoice Number</label><br />
@@ -354,7 +362,7 @@ class AddBrandNewUnit extends React.PureComponent {
 											</FormGroup>
 											<FormGroup>
 												<label>Invoice Date</label><br />
-					          		<Input />
+					          		<InputMask className="form-control" mask="99/99/9999" maskPlaceholder="MM/DD/YYYY" ref="invoice_date" />
 											</FormGroup>
 											<FormGroup>
 												<label>Price</label><br />
@@ -365,19 +373,19 @@ class AddBrandNewUnit extends React.PureComponent {
 									<Row>
 										<Col md="3">
 											<FormGroup>
-					          		<Button size="sm" color={warranty_booklet ? "primary" : "secondary"} onClick={() => this.updateState('warranty_booklet')}><FontAwesomeIcon icon={warranty_booklet ? "check" : "minus"} /></Button>{' '}
+					          		<Button className={warranty_booklet ? "es-main-btn" : ""} size="sm" color={warranty_booklet ? "primary" : "secondary"} onClick={() => this.updateState('warranty_booklet')}><FontAwesomeIcon icon={warranty_booklet ? "check" : "minus"} /></Button>{' '}
 												<label className="checkbox-label" onClick={() => this.updateState('warranty_booklet')}>Warranty Booklet</label><br />
 											</FormGroup>
 										</Col>
 										<Col md="3">
 											<FormGroup>
-					          		<Button size="sm" color={clearances ? "primary" : "secondary"} onClick={() => this.updateState('clearances')}><FontAwesomeIcon icon={clearances ? "check" : "minus"} /></Button>{' '}
+					          		<Button className={clearances ? "es-main-btn" : ""} size="sm" color={clearances ? "primary" : "secondary"} onClick={() => this.updateState('clearances')}><FontAwesomeIcon icon={clearances ? "check" : "minus"} /></Button>{' '}
 												<label className="checkbox-label" onClick={() => this.updateState('clearances')}>Clearances</label><br />
 											</FormGroup>
 										</Col>
 										<Col md="3">
 											<FormGroup>
-					          		<Button size="sm" color={tba ? "primary" : "secondary"} onClick={() => this.updateState('tba')}><FontAwesomeIcon icon={tba ? "check" : "minus"} /></Button>{' '}
+					          		<Button className={tba ? "es-main-btn" : ""} size="sm" color={tba ? "primary" : "secondary"} onClick={() => this.updateState('tba')}><FontAwesomeIcon icon={tba ? "check" : "minus"} /></Button>{' '}
 												<label className="checkbox-label" onClick={() => this.updateState('tba')}>TBA's</label><br />
 											</FormGroup>
 										</Col>
@@ -385,7 +393,7 @@ class AddBrandNewUnit extends React.PureComponent {
 									<Row>
 										<Col md="12">
 											<FormGroup>
-					          		<Button size="sm" color={saveTemplate ? "primary" : "secondary"} onClick={() => this.updateState('saveTemplate')}><FontAwesomeIcon icon={saveTemplate ? "check" : "minus"} /></Button>{' '}
+					          		<Button className={saveTemplate ? "es-main-btn" : ""} size="sm" color={saveTemplate ? "primary" : "secondary"} onClick={() => this.updateState('saveTemplate')}><FontAwesomeIcon icon={saveTemplate ? "check" : "minus"} /></Button>{' '}
 												<label className="checkbox-label" onClick={() => this.updateState('saveTemplate')}>Save template for next entry (Except for Chassis and Engine Numbers)</label><br />
 											</FormGroup>
 										</Col>
@@ -394,18 +402,18 @@ class AddBrandNewUnit extends React.PureComponent {
 									<Row>
 										<Col md="2">
 											<FormGroup>
-					          		<Button color="secondary" block>Cancel</Button>
+					          		<Button color="danger" block>Cancel</Button>
 											</FormGroup>
 										</Col>
 										<Col />
 										<Col md="4">
 											<FormGroup>
-					          		<Button color="primary" block>Save and Add New Entry</Button>
+					          		<Button className="es-main-btn" color="primary" block onClick={() => this.saveUnit(true)}>Save and Add New Entry</Button>
 											</FormGroup>
 										</Col>
 										<Col md="4">
 											<FormGroup>
-					          		<Button color="info" block>Save and Close</Button>
+					          		<Button color="primary" block onClick={() => this.saveUnit(false)}>Save and Close</Button>
 											</FormGroup>
 										</Col>
 									</Row>
@@ -425,6 +433,8 @@ const mapStateToProps = state => ({
   userData: state.login.userData,
   loggingOut: state.user_auth.loggingOut,
   brandsSelect: state.category.brandsSelect,
+  modelsSelect: state.category.modelsSelect,
+  branchesSelect: state.category.branchesSelect,
 });
 
 function mapDispatchToProps(dispatch) {

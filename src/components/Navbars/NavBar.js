@@ -63,7 +63,7 @@ class NavBar extends React.PureComponent {
     window.addEventListener("scroll", function(){
       var scrollTop = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
 
-      if(scrollTop > 50){
+      if(scrollTop > 100){
         $(".main-nav").addClass("scrolled");
       }else{
         $(".main-nav").removeClass("scrolled");
@@ -73,17 +73,8 @@ class NavBar extends React.PureComponent {
     this.loadListeners();
     this.loadSettings();
 
-    if(activeTime){
-      let timeNow = new Date();
-      let lastActiveTime = activeTime;
-
-      let diff = ((timeNow - new Date(lastActiveTime) ) / 1000);
-
-      if(diff > 3600){ // logout if inactivity lasts more than 3600 seconds or 1 hour
-        that.props.actions.LoginUser(false);
-        that.props.history.push("/");
-      }
-    }
+    this.CheckWhenIdle();
+    this.WindowFocused();
 
     let now = new Date();
     that.props.actions.SetActiveTime(now);
@@ -104,14 +95,36 @@ class NavBar extends React.PureComponent {
       // this.props.history.push("/")
     }
   }
+  WindowFocused = () => {
+    const that = this;
+    document.addEventListener("visibilitychange", function() {
+      if (!document.hidden){
+        that.CheckWhenIdle();
+      }
+    });
+  }
+  CheckWhenIdle = () => {
+    const that = this;
+    let { activeTime } = this.props;
 
+    if(activeTime){
+      let timeNow = new Date();
+      let lastActiveTime = activeTime;
+
+      let diff = ((timeNow - new Date(lastActiveTime) ) / 1000);
+
+      if(diff > 3600){ // logout if inactivity lasts more than 3600 seconds or 1 hour
+        that.props.actions.LoginUser(false);
+        that.props.history.push("/");
+      }
+    }
+  }
   loadListeners = () => {
     const that = this;
     feathers.service("branches").on("created", function(s){
       // that.loadSettings();
     })
   }
-
   loadSettings = () => {
     /* set brands for datatables and select options */
     this.props.actions.GetAllBrands();
@@ -123,7 +136,6 @@ class NavBar extends React.PureComponent {
     this.props.actions.GetUserDesignation();
 
   }
-
   openSidebar = () => {
     // $(".sidebar").toggle();
     // document.getElementById("sideBar").style.width = "200px";
@@ -209,12 +221,13 @@ class NavBar extends React.PureComponent {
             <Nav className="mr-auto" navbar>
             </Nav>
             <NavbarText id="notif" className="notification-icon" onClick={() => this.goTo("/reset_password_notifications/")} style={{cursor: 'pointer'}}>
-              <FontAwesomeIcon className="esBlue" icon="bell" /><Badge color="danger" style={{pointerEvents: 'none'}}>{notifCount}</Badge>
+              <FontAwesomeIcon className="esBlue" icon="bell"  style={{cursor: 'pointer'}} /><Badge color="danger" style={{pointerEvents: 'none'}}>{notifCount}</Badge>
               <Tooltip
                 placement="left"
                 isOpen={notifTooltipOpen}
                 target={"notif"}
                 toggle={this.notifTooltip}
+                delay={500}
               >
                 Notifications
               </Tooltip>

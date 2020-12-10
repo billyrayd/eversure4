@@ -73,14 +73,16 @@ export function GetCategoryModels() {
         return modelService.find().then((models) => {
             if(models.data.length > 0){
                 const results = models.data,
-                    data = [];
+                    data = [],
+                    select = []; // data for select options
                 results.forEach((value, index) => {
                     const branch = value.branch ? value.branch.branch_name : 'no branch';
                     const actionBtn = '<button class="btn btn-sm btn-primary edit"><span class="fa fa-edit" /></button> <button class="btn btn-sm btn-danger delete" data-toggle="modal" data-target="#confirm_model_delete1"><span class="fa fa-trash" /> </button>';
                     data.push([value._id, index + 1, value.model_name, value.brand_details.brand_name, actionBtn, value]);
+                    select.push([value._id, value.brand, value.model_name]);
                 });
 
-                dispatch(SetModels(data))
+                dispatch(SetModels(select))
                 return Promise.resolve(data);
             }else{
                 return Promise.resolve(false);

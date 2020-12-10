@@ -49,7 +49,8 @@ export default function category(state = initialState, action) {
                 dataModels.forEach((value, index) => {
                     models.push({
                         value: value[0],
-                        label: value[2]
+                        label: value[2],
+                        brand: value[1]
                     })
                 });
             }
