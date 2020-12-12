@@ -77,7 +77,13 @@ class AddBrandNewUnit extends React.PureComponent {
 			modelOptions: [],
 		}
 	}
-
+	componentWillMount(){
+		const that = this;
+		let { userData } = this.props;
+		let userBranchId = userData.branch_info._id;
+		let userBranchName = userData.branch_info.branch_name;
+		that.setState({selectedBranch: {value: userBranchId, label:userBranchName}})
+	}
 	componentDidMount(){
 		const that = this;
 	}
@@ -196,10 +202,6 @@ class AddBrandNewUnit extends React.PureComponent {
   	let { date_received,dr_date,invoice_date,warranty_booklet,clearances,tba,saveTemplate, }  = this.state;
 
   	switch(state){
-  		case 'dr_date':
-  			that.setState({dr_date: !dr_date}); break;
-  		case 'invoice_date':
-  			that.setState({invoice_date: !invoice_date}); break;
   		case 'warranty_booklet':
   			that.setState({warranty_booklet: !warranty_booklet}); break;
   		case 'clearances':
@@ -213,11 +215,32 @@ class AddBrandNewUnit extends React.PureComponent {
   }
 
   saveUnit = (saveAndAdd) => {
-  	let { date_received } = this.refs;
-
-  	console.log('date_received')
-  	console.log(Date.parse(date_received.value))
-  	console.log(date_received.value)
+  	let { date_received,dr_date,invoice_date, } = this.refs;
+  	if( (date_received.value) === '' ){
+  		toastr.remove();
+  		toastr.info("Please enter date received");
+  		return;
+  	}else{
+  		if( isNaN(Date.parse(date_received.value)) ){
+	  		toastr.remove();
+	  		toastr.info("Please enter a valid date for <br /> Date Received");
+	  		return;
+  		}
+  	}
+  	if( (dr_date.value) !== '' ){
+  		if( isNaN(Date.parse(dr_date.value)) ){
+	  		toastr.remove();
+	  		toastr.info("Please enter a valid date for <br /> Delivery Date");
+	  		return;
+  		}
+  	}
+  	if( (invoice_date.value) !== '' ){
+  		if( isNaN(Date.parse(invoice_date.value)) ){
+	  		toastr.remove();
+	  		toastr.info("Please enter a valid date for <br /> Invoice Date");
+	  		return;
+  		}
+  	}
   }
 
 	render() {
@@ -226,17 +249,6 @@ class AddBrandNewUnit extends React.PureComponent {
 		let { loggingOut,brandsSelect,modelsSelect,branchesSelect, } = this.props;
 		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
 		let brandOptions = brandsSelect.filter((v) => v.value != "all");
-
-		const digit1 = /[0-9]/;
-		const digit2 = /^(?:[5-9]|(?:[1-9][0-9])|(?:[1-4][0-9][0-9])|(?:500))$/;
-		const digit3 = /[0-9]/;
-
-		const firstLetter = /(?!.*[DFIOQU])[A-VXY]/i;
-		const letter = /(?!.*[DFIOQU])[A-Z]/i;
-		const digit = /[0-9]/;
-
-		const mask = [digit1+"/"+digit2+"/"+digit3];
-		const mask2 = [firstLetter, digit, letter, " ", digit, letter, digit];
 		const currentPage = ["Brand New - In Stock","/brand_new_in_stock/"];
 		const permission = true;
 		return (
@@ -250,7 +262,7 @@ class AddBrandNewUnit extends React.PureComponent {
 							permission ?
 							<div>
 								<InventorySubSidebar subpage={currentPage[1]} history={this.props.history} />
-								<Container className="with-subsidebar" fluid style={{paddingBottom: 20}}>
+								<Container className="with-subsidebar" fluid style={{paddingBottom: 50}}>
 									<Row>
 										<Col xs="6">
 											<h1 className="page-title inner">Inventory</h1>
@@ -334,8 +346,8 @@ class AddBrandNewUnit extends React.PureComponent {
 					          		<Input onChange={(e) => this.changeInput(e,'color')} value={color}/>
 											</FormGroup>
 											<FormGroup>
-												<label>Date Received</label><br />
-					          		<InputMask className="form-control" mask="99/99/9999" maskPlaceholder="MM/DD/YYYY" ref="date_received" />
+												<label>Date Received (MM/DD/YYYY)</label><br />
+					          		<InputMask className="form-control" mask="99/99/9999" maskplaceholder="MM/DD/YYYY" ref="date_received" />
 											</FormGroup>
 										</Col>
 										<Col md="6">
@@ -346,14 +358,16 @@ class AddBrandNewUnit extends React.PureComponent {
 					                placeholder="Select Branch"
 					                value={selectedBranch}
 					                onChange={this.handleChangeBranch}
+					                isDisabled={true}
 					              />
+					            	{/*<Input value={selectedBranch.label} disabled />*/}
 											</FormGroup>
 											<FormGroup>
 												<label>Delivery Receipt Number</label><br />
 					          		<Input onChange={(e) => this.changeInput(e,'dr_number')} value={dr_number}/>
 											</FormGroup>
 											<FormGroup>
-												<label>Delivery Receipt Date</label><br />
+												<label>Delivery Receipt Date (MM/DD/YYYY)</label><br />
 					          		<InputMask className="form-control" mask="99/99/9999" maskPlaceholder="MM/DD/YYYY" ref="dr_date" />
 											</FormGroup>
 											<FormGroup>
@@ -361,7 +375,7 @@ class AddBrandNewUnit extends React.PureComponent {
 					          		<Input onChange={(e) => this.changeInput(e,'invoice_number')} value={invoice_number}/>
 											</FormGroup>
 											<FormGroup>
-												<label>Invoice Date</label><br />
+												<label>Invoice Date (MM/DD/YYYY)</label><br />
 					          		<InputMask className="form-control" mask="99/99/9999" maskPlaceholder="MM/DD/YYYY" ref="invoice_date" />
 											</FormGroup>
 											<FormGroup>

@@ -29,6 +29,7 @@ import UsersSubSidebar from 'components/SubSidebars/UsersSubSidebar';
 import NoAccess from 'components/CustomComponents/NoAccess';
 import LoggingOut from 'components/CustomComponents/LoggingOut';
 import AddUser from './Modals/AddUser';
+import ViewUser from './Modals/ViewUser';
 import DeleteUser from './Modals/DeleteUser';
 
 var $ = require( 'jquery' );
@@ -47,6 +48,7 @@ class UsersList extends React.PureComponent {
 			value: '',
 			dtSearch: '',
 			userAddMdlIsOpen: false,
+			userViewMdlIsOpen: false,
 			userEditMdlIsOpen: false,
 			userDeleteMdlIsOpen: false,
 			user: [],
@@ -108,6 +110,12 @@ class UsersList extends React.PureComponent {
 
     	that.setState({user: [userId,userFullName,userUsername]});
     	that.showModal("delete", true);
+    });
+    $(mainTableClass).on("click",".view", function(){
+    	const data = mainTable.row($(this).parents('tr')).data();
+
+    	that.setState({user: data[0]});
+    	that.showModal("view",true);
     });
 
 		// $('.dt-search').keyup(function (event) {
@@ -192,6 +200,8 @@ class UsersList extends React.PureComponent {
 		switch(action){
 			case 'add':
 			that.setState({userAddMdlIsOpen: status}); break;
+			case 'view':
+			that.setState({userViewMdlIsOpen: status}); break;
 			case 'edit':
 			that.setState({userEditMdlIsOpen: status}); break;
 			case 'delete':
@@ -208,7 +218,7 @@ class UsersList extends React.PureComponent {
 	}
 
 	render() {
-		let { value,dtSearch,userAddMdlIsOpen,userEditMdlIsOpen,userDeleteMdlIsOpen,user, } = this.state;
+		let { value,dtSearch,userAddMdlIsOpen,userViewMdlIsOpen,userEditMdlIsOpen,userDeleteMdlIsOpen,user, } = this.state;
 		let { loggingOut } = this.props;
 		const permission = true;
 		return (
@@ -220,6 +230,12 @@ class UsersList extends React.PureComponent {
 					className="es-modal"
 					callBack={this.modalCallback}
 					closeModal={() => this.showModal('add', false)}
+				/>
+				<ViewUser
+					modal={userViewMdlIsOpen}
+					className="es-modal"
+					closeModal={() => this.showModal('view', false)}
+					data={user}
 				/>
 				<DeleteUser
 					modal={userDeleteMdlIsOpen}

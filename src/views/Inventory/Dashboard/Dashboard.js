@@ -239,7 +239,7 @@ class Dashboard extends React.PureComponent {
 					{
 						permission ?
 						<div className="main-panel">
-							<Container fluid>
+							<Container fluid style={{paddingBottom: 120}}>
 								<Row>
 									<Col xs="6" md="9">
 										<h1 className="page-title">Dashboard</h1>

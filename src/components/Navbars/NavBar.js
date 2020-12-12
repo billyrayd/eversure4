@@ -99,7 +99,7 @@ class NavBar extends React.PureComponent {
     const that = this;
     document.addEventListener("visibilitychange", function() {
       if (!document.hidden){
-        that.CheckWhenIdle();
+        // that.CheckWhenIdle();
       }
     });
   }
