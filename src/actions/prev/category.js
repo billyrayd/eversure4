@@ -228,8 +228,8 @@ export function GetAllBranches() {
         let query = {};
         let { userData } = getState().login;
         let session = {
-            branchId: userData.branch_info._id,
-            branchName: userData.branch_info.branch_name,
+            branchId: Object.keys(userData).length > 0 && userData.branch_info._id,
+            branchName: Object.keys(userData).length > 0 && userData.branch_info.branch_name,
         }
 
         if(session.branchName !== _jsonConf.defaults.branch[0]){

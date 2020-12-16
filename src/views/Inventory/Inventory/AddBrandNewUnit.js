@@ -80,8 +80,8 @@ class AddBrandNewUnit extends React.PureComponent {
 	componentWillMount(){
 		const that = this;
 		let { userData } = this.props;
-		let userBranchId = userData.branch_info._id;
-		let userBranchName = userData.branch_info.branch_name;
+		let userBranchId = Object.keys(userData).length > 0 ? userData.branch_info._id : '';
+		let userBranchName = Object.keys(userData).length > 0 ? userData.branch_info.branch_name : '';
 		that.setState({selectedBranch: {value: userBranchId, label:userBranchName}})
 	}
 	componentDidMount(){
@@ -246,7 +246,8 @@ class AddBrandNewUnit extends React.PureComponent {
 	render() {
 		let { value,spinnerIsVisible,confirmDeleteShown,noEvent,isOpen,selectedBrand,selectedModel,engine_number,chassis_number,color,date_received,
 					selectedBranch,dr_number,dr_date,invoice_number,invoice_date,price,warranty_booklet,clearances,tba,saveTemplate,modelOptions, } = this.state;
-		let { loggingOut,brandsSelect,modelsSelect,branchesSelect, } = this.props;
+		let { loggingOut,brandsSelect,modelsSelect,branchesSelect,userData } = this.props;
+		let userBranchName = Object.keys(userData).length > 0 ? userData.branch_info.branch_name : '';
 		let table_class_name = noEvent ? "bn-in-stock-table acustom-disabled" : "bn-in-stock-table";
 		let brandOptions = brandsSelect.filter((v) => v.value != "all");
 		const currentPage = ["Brand New - In Stock","/brand_new_in_stock/"];
@@ -358,7 +359,7 @@ class AddBrandNewUnit extends React.PureComponent {
 					                placeholder="Select Branch"
 					                value={selectedBranch}
 					                onChange={this.handleChangeBranch}
-					                isDisabled={true}
+					                isDisabled={userBranchName == 'MAIN' ? false : true}
 					              />
 					            	{/*<Input value={selectedBranch.label} disabled />*/}
 											</FormGroup>
