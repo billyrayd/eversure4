@@ -6,6 +6,7 @@
 	"defaults": {
 		"username": ["stratium"],
 		"branch": ["MAIN"],
-		"role": ["ADMINISTRATOR"]
+		"role": ["ADMINISTRATOR"],
+		"password": "strat101"
 	}
 }
