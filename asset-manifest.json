@@ -1,0 +1,36 @@
+{
+  "files": {
+    "main.css": "/eversure4/static/css/main.556094b7.chunk.css",
+    "main.js": "/eversure4/static/js/main.21c39fd7.chunk.js",
+    "main.js.map": "/eversure4/static/js/main.21c39fd7.chunk.js.map",
+    "runtime-main.js": "/eversure4/static/js/runtime-main.a37c7e27.js",
+    "runtime-main.js.map": "/eversure4/static/js/runtime-main.a37c7e27.js.map",
+    "xlsx.js": "/eversure4/static/js/xlsx.6bae1302.chunk.js",
+    "xlsx.js.map": "/eversure4/static/js/xlsx.6bae1302.chunk.js.map",
+    "static/css/3.8aa5a7f8.chunk.css": "/eversure4/static/css/3.8aa5a7f8.chunk.css",
+    "static/js/3.4b07b6ae.chunk.js": "/eversure4/static/js/3.4b07b6ae.chunk.js",
+    "static/js/3.4b07b6ae.chunk.js.map": "/eversure4/static/js/3.4b07b6ae.chunk.js.map",
+    "static/js/4.4d7658fa.chunk.js": "/eversure4/static/js/4.4d7658fa.chunk.js",
+    "static/js/4.4d7658fa.chunk.js.map": "/eversure4/static/js/4.4d7658fa.chunk.js.map",
+    "static/js/5.6d3e4d14.chunk.js": "/eversure4/static/js/5.6d3e4d14.chunk.js",
+    "static/js/5.6d3e4d14.chunk.js.map": "/eversure4/static/js/5.6d3e4d14.chunk.js.map",
+    "static/js/6.8a6fc50c.chunk.js": "/eversure4/static/js/6.8a6fc50c.chunk.js",
+    "static/js/6.8a6fc50c.chunk.js.map": "/eversure4/static/js/6.8a6fc50c.chunk.js.map",
+    "index.html": "/eversure4/index.html",
+    "precache-manifest.6ef62d4a9dfd1cb2cd6629d1b0531db2.js": "/eversure4/precache-manifest.6ef62d4a9dfd1cb2cd6629d1b0531db2.js",
+    "service-worker.js": "/eversure4/service-worker.js",
+    "static/css/3.8aa5a7f8.chunk.css.map": "/eversure4/static/css/3.8aa5a7f8.chunk.css.map",
+    "static/css/main.556094b7.chunk.css.map": "/eversure4/static/css/main.556094b7.chunk.css.map",
+    "static/js/3.4b07b6ae.chunk.js.LICENSE.txt": "/eversure4/static/js/3.4b07b6ae.chunk.js.LICENSE.txt",
+    "static/js/6.8a6fc50c.chunk.js.LICENSE.txt": "/eversure4/static/js/6.8a6fc50c.chunk.js.LICENSE.txt",
+    "static/media/template.scss": "/eversure4/static/media/Oxygen-Regular.61d9daf0.ttf",
+    "static/media/eversure_logo.png": "/eversure4/static/media/eversure_logo.e99cef05.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a37c7e27.js",
+    "static/css/3.8aa5a7f8.chunk.css",
+    "static/js/3.4b07b6ae.chunk.js",
+    "static/css/main.556094b7.chunk.css",
+    "static/js/main.21c39fd7.chunk.js"
+  ]
+}
