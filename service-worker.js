@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/eversure4/precache-manifest.d0c9a1917302b24e14ef200a63d1903e.js"
+  "/eversure4/precache-manifest.99e4fb60a3a4165207aaf68c2f235712.js"
 );
 
 self.addEventListener('message', (event) => {
